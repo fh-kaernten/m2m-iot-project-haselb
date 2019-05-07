@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ASCII"?>
+<ResourceModel:Peripheral xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ResourceModel="http://www.infineon.com/Davex/Resource.ecore" URI="http://resources/0.100.3/peripheral/vadc/0" description="VADC Device Description" baseAddress="0x40004000">
+  <provided xsi:type="ResourceModel:ResourceGroup" name="global" URI="http://resources/0.100.3/peripheral/vadc/0/global">
+    <upwardMapList xsi:type="ResourceModel:HWResource" href="../../APPS/GLOBAL_ADC/v4_0_4/GLOBAL_ADC_0.app#//@hwResources.1"/>
+    <resourcesList name="id" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/id"/>
+    <resourcesList name="clc" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/clc"/>
+    <resourcesList name="globtf" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/globtf"/>
+    <resourcesList name="ocs" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/ocs"/>
+    <resourcesList name="globcfg" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/globcfg"/>
+    <resourcesList name="global_signal" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g_global_signal"/>
+    <resourcesList name="varef" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g_varef"/>
+    <resourcesList name="vagnd" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g_vagnd"/>
+    <resourcesList name="vdda" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g_vdda"/>
+    <resourcesList name="vssa" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g_vssa"/>
+  </provided>
+  <provided xsi:type="ResourceModel:ResourceGroup" name="config" URI="http://resources/0.100.3/peripheral/vadc/0/group/2/config">
+    <upwardMapList xsi:type="ResourceModel:HWResource" href="../../APPS/GLOBAL_ADC/v4_0_4/GLOBAL_ADC_0.app#//@hwResources.4"/>
+    <resourcesList name="globcfg_dpcal" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/globcfg/dpcal2"/>
+    <resourcesList name="garbcfg" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g2arbcfg"/>
+    <resourcesList name="gbound" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g2bound"/>
+    <resourcesList name="gemuxctr" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g2emuxctr"/>
+    <resourcesList name="gsract" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g2sract"/>
+    <resourcesList name="gqueuereq" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g2reqqueue"/>
+    <resourcesList name="gscanreq" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g2reqscan"/>
+    <resourcesList name="gsyncreq" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g2reqsync"/>
+    <resourcesList name="global_signal" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g2_confg_global_signal"/>
+    <resourcesList name="select" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g2configselect"/>
+    <resourcesList name="gsample" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g2sample"/>
+    <resourcesList name="garbcnt" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g2arbcnt"/>
+    <resourcesList name="emux0" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g2emux0"/>
+    <resourcesList name="emux1" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g2emux1"/>
+    <resourcesList name="emux2" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g2emux2"/>
+  </provided>
+  <provided xsi:type="ResourceModel:ResourceGroup" name="config" URI="http://resources/0.100.3/peripheral/vadc/0/group/1/config">
+    <upwardMapList xsi:type="ResourceModel:HWResource" href="../../APPS/GLOBAL_ADC/v4_0_4/GLOBAL_ADC_0.app#//@hwResources.3"/>
+    <resourcesList name="globcfg_dpcal" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/globcfg/dpcal1"/>
+    <resourcesList name="garbcfg" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g1arbcfg"/>
+    <resourcesList name="gbound" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g1bound"/>
+    <resourcesList name="gemuxctr" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g1emuxctr"/>
+    <resourcesList name="gsract" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g1sract"/>
+    <resourcesList name="gqueuereq" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g1reqqueue"/>
+    <resourcesList name="gscanreq" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g1reqscan"/>
+    <resourcesList name="gsyncreq" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g1reqsync"/>
+    <resourcesList name="global_signal" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g1_confg_global_signal"/>
+    <resourcesList name="select" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g1configselect"/>
+    <resourcesList name="gsample" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g1sample"/>
+    <resourcesList name="garbcnt" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g1arbcnt"/>
+    <resourcesList name="emux0" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g1emux0"/>
+    <resourcesList name="emux1" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g1emux1"/>
+    <resourcesList name="emux2" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g1emux2"/>
+  </provided>
+  <provided xsi:type="ResourceModel:ResourceGroup" name="config" URI="http://resources/0.100.3/peripheral/vadc/0/group/3/config">
+    <upwardMapList xsi:type="ResourceModel:HWResource" href="../../APPS/GLOBAL_ADC/v4_0_4/GLOBAL_ADC_0.app#//@hwResources.5"/>
+    <resourcesList name="globcfg_dpcal" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/globcfg/dpcal3"/>
+    <resourcesList name="garbcfg" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g3arbcfg"/>
+    <resourcesList name="gbound" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g3bound"/>
+    <resourcesList name="gemuxctr" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g3emuxctr"/>
+    <resourcesList name="gsract" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g3sract"/>
+    <resourcesList name="gqueuereq" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g3reqqueue"/>
+    <resourcesList name="gscanreq" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g3reqscan"/>
+    <resourcesList name="gsyncreq" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g3reqsync"/>
+    <resourcesList name="global_signal" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g3_confg_global_signal"/>
+    <resourcesList name="select" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g3configselect"/>
+    <resourcesList name="gsample" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g3sample"/>
+    <resourcesList name="garbcnt" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g3arbcnt"/>
+    <resourcesList name="emux0" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g3emux0"/>
+    <resourcesList name="emux1" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g3emux1"/>
+    <resourcesList name="emux2" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g3emux2"/>
+  </provided>
+  <provided xsi:type="ResourceModel:ResourceGroup" name="config" URI="http://resources/0.100.3/peripheral/vadc/0/group/0/config">
+    <upwardMapList xsi:type="ResourceModel:HWResource" href="../../APPS/GLOBAL_ADC/v4_0_4/GLOBAL_ADC_0.app#//@hwResources.2"/>
+    <resourcesList name="globcfg_dpcal" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/globcfg/dpcal0"/>
+    <resourcesList name="garbcfg" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g0arbcfg"/>
+    <resourcesList name="gbound" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g0bound"/>
+    <resourcesList name="gemuxctr" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g0emuxctr"/>
+    <resourcesList name="gsract" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g0sract"/>
+    <resourcesList name="gqueuereq" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g0reqqueue"/>
+    <resourcesList name="gscanreq" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g0reqscan"/>
+    <resourcesList name="gsyncreq" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g0reqsync"/>
+    <resourcesList name="global_signal" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g0_confg_global_signal"/>
+    <resourcesList name="select" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g0configselect"/>
+    <resourcesList name="gsample" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g0sample"/>
+    <resourcesList name="garbcnt" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g0arbcnt"/>
+    <resourcesList name="emux0" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g0emux0"/>
+    <resourcesList name="emux1" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g0emux1"/>
+    <resourcesList name="emux2" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/g0emux2"/>
+  </provided>
+  <provided xsi:type="ResourceModel:ResourceGroup" name="global_limits" URI="http://resources/0.100.3/peripheral/vadc/0/global_limits">
+    <upwardMapList xsi:type="ResourceModel:HWResource" href="../../APPS/GLOBAL_ADC/v4_0_4/GLOBAL_ADC_0.app#//@hwResources.0"/>
+    <resourcesList name="globbound" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/globbound"/>
+    <resourcesList name="global_signal" requiredResourceUri="http://resources/0.100.3/peripheral/vadc/0/gl_global_signal"/>
+  </provided>
+  <addressBlock offset="0x0" size="0x4000" usage="registers"/>
+</ResourceModel:Peripheral>

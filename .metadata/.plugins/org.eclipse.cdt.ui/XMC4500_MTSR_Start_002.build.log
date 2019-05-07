@@ -1,0 +1,29 @@
+15:34:04 **** Build of configuration Debug for project XMC4500_MTSR_Start_002 ****
+"\"C:\\DAVEv4-64Bit\\DAVE-IDE-4.4.2-64Bit\\eclipse\\ARM-GCC-49\\bin\\make\"" --output-sync -j4 all 
+'Building file: ../HAL/HAL_i2c.c'
+'Invoking: ARM-GCC C Compiler'
+"C:/DAVEv4-64Bit/DAVE-IDE-4.4.2-64Bit/eclipse/ARM-GCC-49/bin/arm-none-eabi-gcc" -MMD -MT "HAL/HAL_i2c.o" -DXMC4500_F100x1024 -I"C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc" -I"C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include" -I"C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Infineon/XMC4500_series/Include" -I"C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002" -I"C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Dave/Generated" -I"C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries" -O0 -ffunction-sections -fdata-sections -Wall -std=gnu99 -mfloat-abi=soft -Wa,-adhlns="HAL/HAL_i2c.o.lst" -pipe -c -fmessage-length=0 -MMD -MP -MF"HAL/HAL_i2c.d" -MT"HAL/HAL_i2c.d HAL/HAL_i2c.o" -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mthumb -g -gdwarf-2 -o "HAL/HAL_i2c.o" "../HAL/HAL_i2c.c" 
+'Finished building: ../HAL/HAL_i2c.c'
+
+'Building target: XMC4500_MTSR_Start_002.elf'
+'Invoking: ARM-GCC C Linker'
+"C:/DAVEv4-64Bit/DAVE-IDE-4.4.2-64Bit/eclipse/ARM-GCC-49/bin/arm-none-eabi-gcc" -T"../linker_script.ld" -nostartfiles -Xlinker --gc-sections -specs=nano.specs -u _printf_float -Wl,-Map,"XMC4500_MTSR_Start_002.map" -mfloat-abi=soft -mcpu=cortex-m4 -mthumb -g -gdwarf-2 -o "XMC4500_MTSR_Start_002.elf" "@objects.rsp"  -lm
+'Finished building target: XMC4500_MTSR_Start_002.elf'
+
+'Invoking: ARM-GCC Create Flash Image'
+"C:/DAVEv4-64Bit/DAVE-IDE-4.4.2-64Bit/eclipse/ARM-GCC-49/bin/arm-none-eabi-objcopy" -O ihex "XMC4500_MTSR_Start_002.elf" "XMC4500_MTSR_Start_002.hex"
+'Finished building: XMC4500_MTSR_Start_002.hex'
+
+'Invoking: ARM-GCC Print Size'
+"C:/DAVEv4-64Bit/DAVE-IDE-4.4.2-64Bit/eclipse/ARM-GCC-49/bin/arm-none-eabi-size" --format=berkeley "XMC4500_MTSR_Start_002.elf"
+   text	   data	    bss	    dec	    hex	filename
+  32293	    444	   2896	  35633	   8b31	XMC4500_MTSR_Start_002.elf
+'Finished building: XMC4500_MTSR_Start_002.siz'
+
+'Invoking: ARM-GCC Create Listing'
+"C:/DAVEv4-64Bit/DAVE-IDE-4.4.2-64Bit/eclipse/ARM-GCC-49/bin/arm-none-eabi-objdump" -h -S "XMC4500_MTSR_Start_002.elf" > "XMC4500_MTSR_Start_002.lst"
+'Finished building: XMC4500_MTSR_Start_002.lst'
+
+
+15:34:06 Build Finished (took 1s.766ms)
+

@@ -1,0 +1,455 @@
+package Model.APPS.I2C_MASTER.v4_1_4;
+
+/*************** Revision History **********************************************
+ Version       Date        Description //Retain this format
+
+  4.0.0       16-Feb-2015   Initial version for DAVE v4
+  4.0.1       20-Feb-2015   Documentation updated
+  4.0.2       06-Apr-2015   Review comments fixed
+  4.1.2       19-Jun-2015   AbortTransmit and AbortReceive API return type modified  
+  4.1.4       08-Jul-2015   Documentation updated
+*******************************************************************************/
+  
+// Import statements
+import ifx.davex.app.manifest.*
+import java.util.regex.Matcher
+import java.util.regex.Pattern
+
+class  I2C_MASTER extends I2C_MASTER_GUI {
+
+ // Note  : I2C_MASTER properties are mandatory and important
+ // Begin : I2C_MASTER property section
+ def version            = '4.1.4'
+ 
+ def categoriesDescription = ["Communication/General Purpose"]
+
+ // Minimum DAVE version required for the App
+ def minDaveVersion           = '4.0.0'
+ 
+ // Keywords to search in Apps selection view
+ def keywords      = ['Simple I2C',
+					  'Communication',
+					  'I2C',
+					  'USIC',
+					  'Serial',
+					  'all'
+					 ]
+ 
+ def softwareIDs       = [
+
+	 "XMC4.*.*.*.*":"1.0.0",
+	 "XMC1.*.*.*.*":"1.0.0"
+	 ]
+
+
+ def singleton     = false
+ def initProvider  = true
+ def deprecated    = false
+ def sharable      = false
+
+ // App short description
+ def description = "Configures a USIC channel to perform transfer & receive operations using I2C protocol."
+ 
+ // End   : I2C_MASTER property section
+ 
+ // Begin : User variable section
+ 
+ SolverVariable solvrvar_usicmodule = SolverVariable()
+ 
+ MVirtualResourceGroup hwres_usic_channel
+ MVirtualResourceGroup hwres_nvic_node_i2c_tx
+ MVirtualResourceGroup hwres_nvic_node_i2c_rx
+ MVirtualResourceGroup hwres_nvic_node_i2c_error
+ MVirtualResourceGroup hwres_i2c_sda
+ MVirtualResourceGroup hwres_i2c_scl
+ 
+ MVirtualSignal vs_i2c_sdapad
+ MVirtualSignal vs_i2c_sclpad
+ MVirtualSignal vs_i2c_dout0
+ MVirtualSignal vs_i2c_dx0ins
+ MVirtualSignal vs_i2c_dx1ins
+ MVirtualSignal vs_i2c_clkout
+ 
+ MVirtualSignal vs_i2c_std_tx_int
+ MVirtualSignal vs_i2c_std_rx_int
+ MVirtualSignal vs_i2c_alt_rx_int
+
+ MVirtualSignal vs_i2c_fifo_tx_int
+ MVirtualSignal vs_i2c_fifo_rx_int
+ MVirtualSignal vs_i2c_fifo_alt_rx_int
+
+ MVirtualSignal vs_i2c_proto_specfic_int
+ 
+ MVirtualSignal vs_i2c_tx_int
+ MVirtualSignal vs_i2c_rx_int
+ MVirtualSignal vs_i2c_error_int
+ 
+ MRequiredApp appres_clk_xmc1
+ MRequiredApp appres_clk_xmc4
+ MRequiredApp appres_cpu
+ 
+ GFloat gfloat_peripheralclock = GFloat(widgetName:"gfloat_peripheralclock")
+ /* To save the optimized final step value which is used to configure the baud_rate handle in template  */
+ GInteger gint_stepVal         = GInteger(widgetName:"gint_stepVal")
+ /* To save the optimized pdiv value which is used to configure the baud_rate handle in template  */
+ GInteger gint_pdivVal         = GInteger(widgetName:"gint_pdivVal")
+ /* To return the final step, pdiv & real baud rate after calculations */
+ GCombo gcombo_tempbaud        = GCombo(widgetName:"gcombo_tempbaud")
+ /* To extract the Pad class */
+ GString gcombo_temppadclass   = GString(widgetName:"gcombo_temppadclass")
+	 
+ // End   : User variable section
+
+ // I2C_MASTER Constructor
+ public I2C_MASTER(DaveEnv daveEnv) {
+	 
+	 String family = daveEnv.project.selectedDevice.deviceId.family
+	 String fn_regexp = ~/^[^\d\W]\w*\Z/
+	 
+	 MF TXFIFOENABLE  = MF({(gcheck_txfifo.value == true)},Boolean)
+	 MF TXFIFODISABLE = MF({(gcheck_txfifo.value == false)}, Boolean)
+
+	 MF RXFIFOENABLE  = MF({(gcheck_rxfifo.value == true)},Boolean)
+	 MF RXFIFODISABLE = MF({(gcheck_rxfifo.value == false)}, Boolean)
+
+	 /*Check if any error callback function is registered*/
+	 MF IsError_enabled     = MF({(gcheck_nack.value) || (gcheck_arbitration.value) || (gcheck_error.value) }, Boolean)
+	 
+	 MF PINCONFIGENABLE = MF({((gcheck_pinconfig.value == true)&& (family == 'XMC4'))}, Boolean)
+	 MF SPEED_CLASS1    = MF({
+		 						if(gcombo_sda_drive.value == "Weak" || gcombo_sda_drive.value == "Medium" || 
+								   gcombo_sda_drive.value == "Don't Care") 
+								 {
+									 ['A1', 'A1+', 'A2']
+								 }
+								 else if (gcombo_sda_drive.value == "Strong Slow Edge") 
+								 {
+									 ['A1+']
+								 }
+								 else if (gcombo_sda_drive.value == "Strong Soft Edge") 
+								 {
+									 ['A1+', 'A2']
+								 }
+								 else 
+								 {
+									 ['A2']
+								 }
+	 							}, List)
+	 MF SPEED_CLASS2    = MF({
+								 if(gcombo_scl_drive.value == "Weak" || gcombo_scl_drive.value == "Medium" || 
+									gcombo_scl_drive.value == "Don't Care")
+								 {
+									 ['A1', 'A1+', 'A2']
+								 }
+								 else if (gcombo_scl_drive.value == "Strong Slow Edge")
+								 {
+									 ['A1+']
+								 }
+								 else if (gcombo_scl_drive.value == "Strong Soft Edge")
+								 {
+									 ['A1+', 'A2']
+								 }
+								 else
+								 {
+									 ['A2']
+								 }
+								}, List)
+	 
+	 if(family == 'XMC4')
+	 {
+		 appres_clk_xmc4 =  MRequiredApp("CLOCK_XMC4", "CLOCK_XMC4", RSHARABLE, "4.0.2")
+		 appres_cpu = MRequiredApp("CPU_CTRL_XMC4", "CPU APP", RSHARABLE, "4.0.2")
+	 }
+	 else if(family == 'XMC1')
+	 {
+		 appres_clk_xmc1 =  MRequiredApp("CLOCK_XMC1", "CLOCK_XMC1", RSHARABLE, "4.0.2")
+		 appres_cpu = MRequiredApp("CPU_CTRL_XMC1", "CPU APP", RSHARABLE, "4.0.2")
+		 ginterruptprio_tx.subPriorityVisible = false
+		 ginterruptprio_rx.subPriorityVisible = false
+		 ginterruptprio_error.subPriorityVisible = false
+	 }
+	 
+	 /* -------------- Hardware resource consumption -------------------------------- */
+	 hwres_i2c_sda = MVirtualResourceGroup("SDA",["port","p","*","pad","*"])
+	 hwres_i2c_scl = MVirtualResourceGroup("SCL",["port","p","*","pad","*"])
+	 
+	 hwres_usic_channel =  MVirtualResourceGroup("Channel", ["peripheral", "usic", solvrvar_usicmodule, "channel", "*"])
+	 
+	 /* consume NVIC nodes */
+	 hwres_nvic_node_i2c_tx = MVirtualResourceGroup("NVIC Node Tx", ["peripheral", "cpu", "0", "nvic", "interrupt", "*"], true)
+	 hwres_nvic_node_i2c_rx = MVirtualResourceGroup("NVIC Node Rx", ["peripheral", "cpu", "0", "nvic", "interrupt", "*"], true)
+	 hwres_nvic_node_i2c_error = MVirtualResourceGroup("NVIC Node Error", ["peripheral", "cpu", "0", "nvic", "interrupt", "*"], IsError_enabled)
+
+	 addRegisterBitFieldConstraint( hwres_usic_channel, "tbctr_size", MF({[0]}, List), MF({!(gcheck_txfifo.value)}, Boolean))
+	 addRegisterBitFieldConstraint( hwres_usic_channel, "rbctr_size", MF({[0]}, List), MF({!(gcheck_rxfifo.value)}, Boolean))
+	 addRegisterBitFieldConstraint( hwres_usic_channel, "tbctr_size", MF({[gcombo_i2c_tx_fifosize.options.indexOf(gcombo_i2c_tx_fifosize.value) + 1]}, List), MF({(gcheck_txfifo.value)}, Boolean))
+	 addRegisterBitFieldConstraint( hwres_usic_channel, "rbctr_size", MF({[gcombo_i2c_rx_fifosize.options.indexOf(gcombo_i2c_rx_fifosize.value) + 1]}, List), MF({(gcheck_rxfifo.value)}, Boolean))
+
+	 addResourcePropertyConstraint(hwres_i2c_sda, "speed_class of rg_property", SPEED_CLASS1, PINCONFIGENABLE)
+	 addResourcePropertyConstraint(hwres_i2c_scl, "speed_class of rg_property", SPEED_CLASS2, PINCONFIGENABLE)
+	 
+	 
+	 /* -------------- APP IO Signals -------------------------------- */
+	 @AddPin
+	 vs_i2c_sdapad = MVirtualSignal(hwres_i2c_sda,"sda pin","pad",true,false)
+	 
+	 @AddPin
+	 vs_i2c_sclpad = MVirtualSignal(hwres_i2c_scl,"scl pin","pad",true,false)
+	 
+	 vs_i2c_dout0  = MVirtualSignal(hwres_usic_channel, "tx pin", "dout0", true, false)
+	 vs_i2c_dx0ins = MVirtualSignal(hwres_usic_channel, "rx pin", "dx0ins", true, false)
+	 vs_i2c_dx1ins = MVirtualSignal(hwres_usic_channel, "clockin", "dx1ins", true, false)
+	 vs_i2c_clkout = MVirtualSignal(hwres_usic_channel, "clockout", "sclkout", true, false)
+	 
+	 vs_i2c_tx_int    		  =  MVirtualSignal( hwres_nvic_node_i2c_tx, "sr_transmit", "signal_in", true, false)
+	 vs_i2c_rx_int   		  =  MVirtualSignal( hwres_nvic_node_i2c_rx, "sr_receive", "signal_in", true, false)
+	 vs_i2c_error_int         =  MVirtualSignal( hwres_nvic_node_i2c_error, "sr_protocol_events", "signal_in", IsError_enabled, false)
+	 
+	 vs_i2c_std_tx_int        =  MVirtualSignal( hwres_usic_channel, "event_txbuffer_interrupt","transmit_buffer_int", TXFIFODISABLE, false)
+	 vs_i2c_std_rx_int        =  MVirtualSignal( hwres_usic_channel, "event_rxbuffer_interrupt", "standard_receive_int", RXFIFODISABLE, false)
+	 vs_i2c_alt_rx_int        =  MVirtualSignal( hwres_usic_channel, "event_altrx_interrupt",  "alternate_receive_int", RXFIFODISABLE, false)
+
+	 vs_i2c_fifo_tx_int       =  MVirtualSignal( hwres_usic_channel, "event_fifo_txbuffer_interrupt","standard_transmit_buffer_int", TXFIFOENABLE, false)
+	 vs_i2c_fifo_rx_int       =  MVirtualSignal( hwres_usic_channel, "event_fifo_rxbuffer_interrupt", "standard_receive_buffer_int", RXFIFOENABLE,false)
+	 vs_i2c_fifo_alt_rx_int   =  MVirtualSignal( hwres_usic_channel, "event_fifo_altrx_interrupt", "alternate_receive_buffer_int", RXFIFOENABLE, false)
+	 
+	 vs_i2c_proto_specfic_int =  MVirtualSignal( hwres_usic_channel, "event_protocolspecific_interrupt", "protocol_specific_int", IsError_enabled, false)
+	 
+
+
+	 /* ---------------- APP IO Connections -------------------------- */
+	 addConnectionConstraint( vs_i2c_dout0, vs_i2c_sdapad)
+	 addConnectionConstraint( vs_i2c_sdapad, vs_i2c_dx0ins)
+	 addConnectionConstraint( vs_i2c_clkout, vs_i2c_sclpad)
+	 addConnectionConstraint( vs_i2c_sclpad, vs_i2c_dx1ins)
+	 
+	 /* Connect standard transmit interrupt to transmit interrupt */
+	 addConnectionConstraint(vs_i2c_std_tx_int, vs_i2c_tx_int, MF({gcheck_txfifo.value == false},Boolean))
+	 
+	 /* Connect standard receive interrupt to receive interrupt */
+	 addConnectionConstraint(vs_i2c_std_rx_int, vs_i2c_rx_int, MF({gcheck_rxfifo.value == false},Boolean))
+	 
+	 /* Connect alternate receive interrupt to receive interrupt */
+	 addConnectionConstraint(vs_i2c_alt_rx_int, vs_i2c_rx_int, MF({gcheck_rxfifo.value == false},Boolean))
+	 
+	 /* Connect FIFO transmit interrupt to transmit interrupt */
+	 addConnectionConstraint(vs_i2c_fifo_tx_int, vs_i2c_tx_int, MF({gcheck_txfifo.value},Boolean))
+	 
+	 /* Connect FIFO receive interrupt to receive interrupt */
+	 addConnectionConstraint(vs_i2c_fifo_rx_int, vs_i2c_rx_int, MF({gcheck_rxfifo.value},Boolean))
+	 
+	 /* Connect FIFO alternate receive interrupt to receive interrupt */
+	 addConnectionConstraint(vs_i2c_fifo_alt_rx_int, vs_i2c_rx_int, MF({gcheck_rxfifo.value},Boolean))
+	 
+	 /* Connect protocol specific interrupt to error interrupt */
+	 addConnectionConstraint(vs_i2c_proto_specfic_int, vs_i2c_error_int, IsError_enabled)
+	 
+	 /* Set max Priority and Sub-priority value for XMC4 */
+	 if(family == 'XMC4')
+	 {
+		 gfloat_peripheralclock.value = MF({
+											 Float temp = appres_clk_xmc4.getVal(["gfloat_peribusfreq", "value"]) as Float
+											 return temp
+										   }, Float)
+		 
+		 ginterruptprio_tx.maxPriority = MF({appres_cpu.getVal(["gint_maxInterruptPreemptPriority", "value"])}, Integer)
+		 
+		 ginterruptprio_rx.maxPriority = MF({appres_cpu.getVal(["gint_maxInterruptPreemptPriority", "value"])}, Integer)
+		 
+		 ginterruptprio_error.maxPriority = MF({appres_cpu.getVal(["gint_maxInterruptPreemptPriority", "value"])}, Integer)
+		 
+		 ginterruptprio_tx.maxSubPriority = MF({appres_cpu.getVal(["gint_maxInterruptSubPriority", "value"])}, Integer)
+		 ginterruptprio_rx.maxSubPriority = MF({appres_cpu.getVal(["gint_maxInterruptSubPriority", "value"])}, Integer)
+		 ginterruptprio_error.maxSubPriority = MF({appres_cpu.getVal(["gint_maxInterruptSubPriority", "value"])}, Integer)
+	 }
+	 /* Set max Priority value for XMC1 */
+	 else if(family == 'XMC1')
+	 {
+		 gfloat_peripheralclock.value = MF({
+											 Float temp = appres_clk_xmc1.getVal(["gfloat_mclkactfrq", "value"]) as Float
+											 return temp
+											}, Float)
+		 		 
+		 ginterruptprio_tx.priorityValue = 3
+		 ginterruptprio_tx.maxPriority = 3
+		 
+		 ginterruptprio_rx.priorityValue = 3
+		 ginterruptprio_rx.maxPriority = 3
+		 
+		 ginterruptprio_error.priorityValue = 3
+		 ginterruptprio_error.maxPriority = 3
+	 }
+	 
+	 gcombo_i2c_tx_fifosize.enabled = TXFIFOENABLE
+	 gcombo_i2c_rx_fifosize.enabled = RXFIFOENABLE
+	 
+	 glabel_ownaddress.enabled = MF({(gcheck_multimaster.value == true)},Boolean)
+	 ginteger_ownaddress.enabled = MF({(gcheck_multimaster.value == true)},Boolean)
+	 
+	 ggroup_sdaconfig.visible = MF({(gcheck_pinconfig.value == true)},Boolean)
+	 ggroup_sclconfig.visible = MF({(gcheck_pinconfig.value == true)},Boolean)
+	 
+	 glabel_sda_char.enabled = MF({(gcheck_pinconfig.value == true)},Boolean)
+	 gcombo_sda_char.enabled = MF({(gcheck_pinconfig.value == true)},Boolean)
+	 glabel_sda_drive.enabled = PINCONFIGENABLE
+	 gcombo_sda_drive.enabled = PINCONFIGENABLE
+	 
+	 glabel_scl_char.enabled = MF({(gcheck_pinconfig.value == true)},Boolean)
+	 gcombo_scl_char.enabled = MF({(gcheck_pinconfig.value == true)},Boolean)
+	 glabel_scl_drive.enabled = PINCONFIGENABLE
+	 gcombo_scl_drive.enabled = PINCONFIGENABLE
+	 
+	
+	 gstring_end_of_tx_callback.enabled = MF({gcheck_end_of_tx_callback.value}, Boolean)
+	 gstring_end_of_rx_callback.enabled = MF({gcheck_end_of_rx_callback.value}, Boolean)
+	 gstring_nack.enabled = MF({gcheck_nack.value}, Boolean)
+	 gstring_arbitration.enabled = MF({gcheck_arbitration.value}, Boolean)
+	 gstring_error.enabled = MF({gcheck_error.value}, Boolean)
+	 
+	 /* Set visible property based on expression matches for tx_callback */
+	 gmessage_tx_callback.visible = MF({
+										 Matcher matcher_tx = (gstring_end_of_tx_callback.value =~ fn_regexp)
+										 Boolean ExpressionMatch_tx = !matcher_tx.matches()
+										 if(gcheck_end_of_tx_callback.value == true)
+										 { 
+											 return ExpressionMatch_tx
+										 } 
+										 else
+										 { 
+											 return false
+										 }
+										},Boolean)
+	 
+	 /* Set visible property based on expression matches for rx_callback */
+	 gmessage_rx_callback.visible = MF({
+										 Matcher matcher_rx = (gstring_end_of_rx_callback.value =~ fn_regexp)
+										 Boolean ExpressionMatch_rx = !matcher_rx.matches()
+										 if(gcheck_end_of_rx_callback.value == true)
+										 { 
+											 return ExpressionMatch_rx
+										 } 
+										 else
+										 { 
+											 return false
+										 }
+										},Boolean)
+	 
+	 /* Set visible property based on expression matches for nack_callback */
+	 gmessage_nack.visible = MF({
+								 Matcher matcher_nack = (gstring_nack.value =~ fn_regexp)
+								 Boolean ExpressionMatch_nack = !matcher_nack.matches()
+								 if(gcheck_nack.value == true)
+								 { 
+									 return ExpressionMatch_nack
+								 }
+								 else
+								 { 
+									 return false
+								 }
+								},Boolean)
+	 
+	 /* Set visible property based on expression matches for arbitrationlost_callback */
+	 gmessage_arbitration.visible = MF({
+										 Matcher matcher_arbitration = (gstring_arbitration.value =~ fn_regexp)
+										 Boolean ExpressionMatch_arbitration = !matcher_arbitration.matches()
+										 if(gcheck_arbitration.value == true)
+										 { 
+											 return ExpressionMatch_arbitration
+										 } 
+										 else
+										 { 
+											 return false
+										 }
+										},Boolean)
+	 
+	 /* Set visible property based on expression matches for error_callback */
+	 gmessage_error.visible = MF({
+									 Matcher matcher_error = (gstring_error.value =~ fn_regexp)
+									 Boolean ExpressionMatch_error = !matcher_error.matches()
+									 if(gcheck_error.value == true)
+									 { 
+										 return ExpressionMatch_error
+									 }
+									 else
+									 { 
+										 return false
+									 }
+								  },Boolean)
+
+	 gcombo_tempbaud.options = MF({
+									Integer peripheral_clock
+									Integer clock_divider
+									Integer pdiv
+									Integer pdiv_int
+									Integer pdiv_int_min
+									Integer pdiv_frac
+									Integer pdiv_frac_min
+									Integer clock_divider_min
+									Integer rate
+									Integer oversampling
+									Float calBaud
+							
+							 peripheral_clock = (gfloat_peripheralclock.value * 1000000 )/ 100;
+
+							rate = (gint_desiredbaudrate.value * 1000);
+							
+							if(rate <= 100000)
+							{
+								oversampling = 10
+							}
+							else
+							{
+								oversampling = 25
+							}
+
+							rate = rate / 100;
+							
+							clock_divider_min = 1;
+							pdiv_int_min = 1;
+							pdiv_frac_min = 0x3ff;
+							
+							for(clock_divider = 1; clock_divider < 1024; ++clock_divider)
+							{
+							  pdiv = ((peripheral_clock * clock_divider) / (rate * oversampling));
+							  pdiv_int = pdiv >> 10;
+							  pdiv_frac = pdiv & 0x3ff;
+
+							  if ((pdiv_int < 1024) && (pdiv_frac < pdiv_frac_min))
+							  {
+								  pdiv_frac_min = pdiv_frac;
+								  pdiv_int_min = pdiv_int;
+								  clock_divider_min = clock_divider;
+							  }
+							}
+							if(gint_desiredbaudrate.value <= 100)
+							{
+								calBaud = (gfloat_peripheralclock.value * 1000000 * clock_divider_min) / (1024 * 10 * pdiv_int_min)
+								// converting to KHz
+								calBaud = calBaud /1000
+							}
+							else
+							{
+								calBaud = (gfloat_peripheralclock.value * 1000000 * clock_divider_min) / (1024 * 25 * pdiv_int_min)
+								// converting to KHz
+								calBaud = calBaud /1000
+							}
+							return [calBaud, clock_divider_min, pdiv_int_min,""]
+								   
+						},List)
+
+	 gfloat_actualbaud.value = MF({gcombo_tempbaud.options.get(0)}, Float)
+	 gint_stepVal.value    = MF({gcombo_tempbaud.options.get(1).toInteger()}, Integer)
+	 gint_pdivVal.value    = MF({gcombo_tempbaud.options.get(2).toInteger()}, Integer)
+
+ }
+ 
+ // File Generation
+ def generateFiles(){
+	 copy("i2c_master.c", "i2c_master.c")
+	 copy("i2c_master.h", "i2c_master.h")
+	 generate("i2c_master_confc.tmpl", "i2c_master_conf.c")
+	 generate("i2c_master_confh.tmpl", "i2c_master_conf.h")
+	 generate("i2c_master_externh.tmpl", "i2c_master_extern.h")
+ }
+ 
+}

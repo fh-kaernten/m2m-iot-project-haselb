@@ -1,0 +1,50 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .fpu softvfp
+   4              	 .eabi_attribute 20,1
+   5              	 .eabi_attribute 21,1
+   6              	 .eabi_attribute 23,3
+   7              	 .eabi_attribute 24,1
+   8              	 .eabi_attribute 25,1
+   9              	 .eabi_attribute 26,1
+  10              	 .eabi_attribute 30,6
+  11              	 .eabi_attribute 34,1
+  12              	 .eabi_attribute 18,4
+  13              	 .thumb
+  14              	 .file "digital_io_conf.c"
+  15              	 .text
+  16              	.Ltext0:
+  17              	 .cfi_sections .debug_frame
+  18              	 .global DIGITAL_O_HB_LED_config
+  19              	 .section .data.DIGITAL_O_HB_LED_config,"aw",%progbits
+  20              	 .align 2
+  23              	DIGITAL_O_HB_LED_config:
+  24 0000 80       	 .byte -128
+  25 0001 000000   	 .space 3
+  26 0004 00000100 	 .word 65536
+  27 0008 00000000 	 .space 4
+  28              	 .global DIGITAL_O_HB_LED
+  29              	 .section .data.DIGITAL_O_HB_LED,"aw",%progbits
+  30              	 .align 2
+  33              	DIGITAL_O_HB_LED:
+  34 0000 00000000 	 .word DIGITAL_O_HB_LED_config
+  35 0004 00810248 	 .word 1208123648
+  36 0008 01       	 .byte 1
+  37 0009 000000   	 .space 3
+  38              	 .text
+  39              	.Letext0:
+  40              	 .file 1 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+  41              	 .file 2 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+  42              	 .file 3 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc_gpio.h"
+  43              	 .file 4 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc4_gpio.h"
+  44              	 .file 5 "../Dave/Generated/DIGITAL_IO/digital_io.h"
+  45              	 .file 6 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include/core_cm4.h"
+  46              	 .file 7 "../Dave/Generated/DIGITAL_IO/digital_io_conf.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 digital_io_conf.c
+    {standard input}:23     .data.DIGITAL_O_HB_LED_config:00000000 DIGITAL_O_HB_LED_config
+    {standard input}:20     .data.DIGITAL_O_HB_LED_config:00000000 $d
+    {standard input}:33     .data.DIGITAL_O_HB_LED:00000000 DIGITAL_O_HB_LED
+    {standard input}:30     .data.DIGITAL_O_HB_LED:00000000 $d
+
+NO UNDEFINED SYMBOLS

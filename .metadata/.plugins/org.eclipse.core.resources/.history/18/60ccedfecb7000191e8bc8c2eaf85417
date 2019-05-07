@@ -1,0 +1,106 @@
+/*
+ * HAL_i2c.c
+ *
+ *  Created on: Dec 26, 2017
+ *      Author: haselb
+ */
+
+#include <Dave.h>
+#include "HAL_i2c.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+//#include <wchar.h>
+#include "Source/Has_Misc.h"
+
+
+volatile uint8_t tx_completion_0 = 0;
+volatile uint8_t rx_completion_0 = 0;
+volatile bool flag_I2C_NACK=0;
+volatile bool flag_eject_at_I2C_NACK=0;
+uint32_t timer_1_of_8;
+
+
+/*!
+ * @brief 	   IRQ handler initiated by DAVE SYSTIMER_0 and is invoked by Soft_WDG.
+ * @param[in]  *args
+ * @param[out] None
+ * @retval     void
+ * @pre        requires IRQ, initiated by DAVE
+ * @post       Function updates global variables
+ * @attention  checkout Infineon Note SYSTIMER_XMC45.PDF
+ * @note       If I2C-Bus crashes, this handler keeps bus back to life.
+ */
+void SW_IRQ_1 (void *args)
+{
+		f.eject_at_I2C_NACK=1;
+
+		I2C_MASTER_AbortTransmit(&I2C_MASTER_0);
+		I2C_MASTER_AbortReceive(&I2C_MASTER_0);
+//		I2C_MASTER_SendStop(&I2C_MASTER_0);
+		I2C_MASTER_Init(&I2C_MASTER_0);
+}
+
+/*!
+ * @brief 	   Function for starting or stopping a "software Watchdog" to prevent from stucking in a while-loop.
+ * @param[in]  ON or OFF
+ * @param[out] None
+ * @retval     void
+ * @pre        occupies one SYSTIMER_0 (from eight)
+ * @post       time of watchdog depends on SysTick timer period [µs]
+ * @attention  None
+ * @note       This routine is the callback function of DAVE. It is invoked by the ISR generated from DAVE.
+ * It is responsible for assert ADC Result to global struct @ref ADC_B.
+ */
+
+//on_or_off: if 0:off; 1: on
+void Soft_WDG_1 (bool on_or_off)
+{
+	if(on_or_off)
+	{
+		SYSTIMER_StartTimer(timer_1_of_8);
+	}
+	else
+	{
+		SYSTIMER_StopTimer(timer_1_of_8);
+	}
+}
+
+
+//IRQ-Handler of I2C-MASTER-Interface  initiated by DAVE
+void tx_callback_0(void)
+{
+       f.tx_completion = 1;
+}
+
+//IRQ-Handler of I2C-Interface MASTER initiated by DAVE
+void rx_callback_0(void)
+{
+       f.rx_completion = 1;
+}
+
+//IRQ-Handler MASTER for detecting missing/not responding slave  initiated by DAVE
+void I2C_NACK_IRQ_Handler_0(void)
+{
+	f.I2C_NACK = 1;
+	I2C_MASTER_AbortTransmit(&I2C_MASTER_0) ;// before init, abort transmit has to be executed
+	I2C_MASTER_AbortReceive(&I2C_MASTER_0);
+//	I2C_MASTER_SendStop(&I2C_MASTER_0);
+//	I2C_MASTER_Init(&I2C_MASTER_0); // init I2C bus again to respond
+}
+
+//IRQ-Handler MASTER for detecting arbitration lost, initiated by DAVE
+void I2C_ARB_Lost_IRQ_Handler_0 (void)
+{
+	f.I2C_NACK=1;
+}
+
+//IRQ-Handler MASTER for detecting errors, initiated by DAVE
+void I2C_ERR_IRQ_Handler_0 (void)
+{
+	f.I2C_NACK=1;
+}
+
+
+
+

@@ -1,0 +1,498 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .fpu softvfp
+   4              	 .eabi_attribute 20,1
+   5              	 .eabi_attribute 21,1
+   6              	 .eabi_attribute 23,3
+   7              	 .eabi_attribute 24,1
+   8              	 .eabi_attribute 25,1
+   9              	 .eabi_attribute 26,1
+  10              	 .eabi_attribute 30,6
+  11              	 .eabi_attribute 34,1
+  12              	 .eabi_attribute 18,4
+  13              	 .thumb
+  14              	 .file "HAL_i2c.c"
+  15              	 .text
+  16              	.Ltext0:
+  17              	 .cfi_sections .debug_frame
+  18              	 .global tx_completion_0
+  19              	 .section .bss.tx_completion_0,"aw",%nobits
+  22              	tx_completion_0:
+  23 0000 00       	 .space 1
+  24              	 .global rx_completion_0
+  25              	 .section .bss.rx_completion_0,"aw",%nobits
+  28              	rx_completion_0:
+  29 0000 00       	 .space 1
+  30              	 .global flag_I2C_NACK
+  31              	 .section .bss.flag_I2C_NACK,"aw",%nobits
+  34              	flag_I2C_NACK:
+  35 0000 00       	 .space 1
+  36              	 .global flag_eject_at_I2C_NACK
+  37              	 .section .bss.flag_eject_at_I2C_NACK,"aw",%nobits
+  40              	flag_eject_at_I2C_NACK:
+  41 0000 00       	 .space 1
+  42              	 .comm timer_1_of_8,4,4
+  43              	 .section .text.SW_IRQ_1,"ax",%progbits
+  44              	 .align 2
+  45              	 .global SW_IRQ_1
+  46              	 .thumb
+  47              	 .thumb_func
+  49              	SW_IRQ_1:
+  50              	.LFB335:
+  51              	 .file 1 "../HAL_i2c.c"
+   1:../HAL_i2c.c  **** /*
+   2:../HAL_i2c.c  ****  * HAL_i2c.c
+   3:../HAL_i2c.c  ****  *
+   4:../HAL_i2c.c  ****  *  Created on: Dec 26, 2017
+   5:../HAL_i2c.c  ****  *      Author: haselb
+   6:../HAL_i2c.c  ****  */
+   7:../HAL_i2c.c  **** 
+   8:../HAL_i2c.c  **** #include <Dave.h>
+   9:../HAL_i2c.c  **** #include "HAL_i2c.h"
+  10:../HAL_i2c.c  **** #include <stdio.h>
+  11:../HAL_i2c.c  **** #include <string.h>
+  12:../HAL_i2c.c  **** #include <stdlib.h>
+  13:../HAL_i2c.c  **** //#include <wchar.h>
+  14:../HAL_i2c.c  **** #include "Has_Misc.h"
+  15:../HAL_i2c.c  **** 
+  16:../HAL_i2c.c  **** 
+  17:../HAL_i2c.c  **** volatile uint8_t tx_completion_0 = 0;
+  18:../HAL_i2c.c  **** volatile uint8_t rx_completion_0 = 0;
+  19:../HAL_i2c.c  **** volatile bool flag_I2C_NACK=0;
+  20:../HAL_i2c.c  **** volatile bool flag_eject_at_I2C_NACK=0;
+  21:../HAL_i2c.c  **** uint32_t timer_1_of_8;
+  22:../HAL_i2c.c  **** 
+  23:../HAL_i2c.c  **** 
+  24:../HAL_i2c.c  **** /*!
+  25:../HAL_i2c.c  ****  * @brief 	   IRQ handler initiated by DAVE SYSTIMER_0 and is invoked by Soft_WDG.
+  26:../HAL_i2c.c  ****  * @param[in]  *args
+  27:../HAL_i2c.c  ****  * @param[out] None
+  28:../HAL_i2c.c  ****  * @retval     void
+  29:../HAL_i2c.c  ****  * @pre        requires IRQ, initiated by DAVE
+  30:../HAL_i2c.c  ****  * @post       Function updates global variables
+  31:../HAL_i2c.c  ****  * @attention  checkout Infineon Note SYSTIMER_XMC45.PDF
+  32:../HAL_i2c.c  ****  * @note       If I2C-Bus crashes, this handler keeps bus back to life.
+  33:../HAL_i2c.c  ****  */
+  34:../HAL_i2c.c  **** void SW_IRQ_1 (void *args)
+  35:../HAL_i2c.c  **** {
+  52              	 .loc 1 35 0
+  53              	 .cfi_startproc
+  54              	 
+  55              	 
+  56 0000 80B5     	 push {r7,lr}
+  57              	.LCFI0:
+  58              	 .cfi_def_cfa_offset 8
+  59              	 .cfi_offset 7,-8
+  60              	 .cfi_offset 14,-4
+  61 0002 82B0     	 sub sp,sp,#8
+  62              	.LCFI1:
+  63              	 .cfi_def_cfa_offset 16
+  64 0004 00AF     	 add r7,sp,#0
+  65              	.LCFI2:
+  66              	 .cfi_def_cfa_register 7
+  67 0006 7860     	 str r0,[r7,#4]
+  36:../HAL_i2c.c  **** 		f.eject_at_I2C_NACK=1;
+  68              	 .loc 1 36 0
+  69 0008 084B     	 ldr r3,.L2
+  70 000a 1A88     	 ldrh r2,[r3]
+  71 000c 42F08002 	 orr r2,r2,#128
+  72 0010 1A80     	 strh r2,[r3]
+  37:../HAL_i2c.c  **** 
+  38:../HAL_i2c.c  **** 		I2C_MASTER_AbortTransmit(&I2C_MASTER_0);
+  73              	 .loc 1 38 0
+  74 0012 0748     	 ldr r0,.L2+4
+  75 0014 FFF7FEFF 	 bl I2C_MASTER_AbortTransmit
+  39:../HAL_i2c.c  **** 		I2C_MASTER_AbortReceive(&I2C_MASTER_0);
+  76              	 .loc 1 39 0
+  77 0018 0548     	 ldr r0,.L2+4
+  78 001a FFF7FEFF 	 bl I2C_MASTER_AbortReceive
+  40:../HAL_i2c.c  **** //		I2C_MASTER_SendStop(&I2C_MASTER_0);
+  41:../HAL_i2c.c  **** 		I2C_MASTER_Init(&I2C_MASTER_0);
+  79              	 .loc 1 41 0
+  80 001e 0448     	 ldr r0,.L2+4
+  81 0020 FFF7FEFF 	 bl I2C_MASTER_Init
+  42:../HAL_i2c.c  **** }
+  82              	 .loc 1 42 0
+  83 0024 0837     	 adds r7,r7,#8
+  84              	.LCFI3:
+  85              	 .cfi_def_cfa_offset 8
+  86 0026 BD46     	 mov sp,r7
+  87              	.LCFI4:
+  88              	 .cfi_def_cfa_register 13
+  89              	 
+  90 0028 80BD     	 pop {r7,pc}
+  91              	.L3:
+  92 002a 00BF     	 .align 2
+  93              	.L2:
+  94 002c 00000000 	 .word f
+  95 0030 00000000 	 .word I2C_MASTER_0
+  96              	 .cfi_endproc
+  97              	.LFE335:
+  99              	 .section .text.Soft_WDG_1,"ax",%progbits
+ 100              	 .align 2
+ 101              	 .global Soft_WDG_1
+ 102              	 .thumb
+ 103              	 .thumb_func
+ 105              	Soft_WDG_1:
+ 106              	.LFB336:
+  43:../HAL_i2c.c  **** 
+  44:../HAL_i2c.c  **** /*!
+  45:../HAL_i2c.c  ****  * @brief 	   Function for starting or stopping a "software Watchdog" to prevent from stucking in a
+  46:../HAL_i2c.c  ****  * @param[in]  ON or OFF
+  47:../HAL_i2c.c  ****  * @param[out] None
+  48:../HAL_i2c.c  ****  * @retval     void
+  49:../HAL_i2c.c  ****  * @pre        occupies one SYSTIMER_0 (from eight)
+  50:../HAL_i2c.c  ****  * @post       time of watchdog depends on SysTick timer period [µs]
+  51:../HAL_i2c.c  ****  * @attention  None
+  52:../HAL_i2c.c  ****  * @note       This routine is the callback function of DAVE. It is invoked by the ISR generated fr
+  53:../HAL_i2c.c  ****  * It is responsible for assert ADC Result to global struct @ref ADC_B.
+  54:../HAL_i2c.c  ****  */
+  55:../HAL_i2c.c  **** 
+  56:../HAL_i2c.c  **** //on_or_off: if 0:off; 1: on
+  57:../HAL_i2c.c  **** void Soft_WDG_1 (bool on_or_off)
+  58:../HAL_i2c.c  **** {
+ 107              	 .loc 1 58 0
+ 108              	 .cfi_startproc
+ 109              	 
+ 110              	 
+ 111 0000 80B5     	 push {r7,lr}
+ 112              	.LCFI5:
+ 113              	 .cfi_def_cfa_offset 8
+ 114              	 .cfi_offset 7,-8
+ 115              	 .cfi_offset 14,-4
+ 116 0002 82B0     	 sub sp,sp,#8
+ 117              	.LCFI6:
+ 118              	 .cfi_def_cfa_offset 16
+ 119 0004 00AF     	 add r7,sp,#0
+ 120              	.LCFI7:
+ 121              	 .cfi_def_cfa_register 7
+ 122 0006 0346     	 mov r3,r0
+ 123 0008 FB71     	 strb r3,[r7,#7]
+  59:../HAL_i2c.c  **** 	if(on_or_off)
+ 124              	 .loc 1 59 0
+ 125 000a FB79     	 ldrb r3,[r7,#7]
+ 126 000c 002B     	 cmp r3,#0
+ 127 000e 05D0     	 beq .L5
+  60:../HAL_i2c.c  **** 	{
+  61:../HAL_i2c.c  **** 		SYSTIMER_StartTimer(timer_1_of_8);
+ 128              	 .loc 1 61 0
+ 129 0010 064B     	 ldr r3,.L7
+ 130 0012 1B68     	 ldr r3,[r3]
+ 131 0014 1846     	 mov r0,r3
+ 132 0016 FFF7FEFF 	 bl SYSTIMER_StartTimer
+ 133 001a 04E0     	 b .L4
+ 134              	.L5:
+  62:../HAL_i2c.c  **** 	}
+  63:../HAL_i2c.c  **** 	else
+  64:../HAL_i2c.c  **** 	{
+  65:../HAL_i2c.c  **** 		SYSTIMER_StopTimer(timer_1_of_8);
+ 135              	 .loc 1 65 0
+ 136 001c 034B     	 ldr r3,.L7
+ 137 001e 1B68     	 ldr r3,[r3]
+ 138 0020 1846     	 mov r0,r3
+ 139 0022 FFF7FEFF 	 bl SYSTIMER_StopTimer
+ 140              	.L4:
+  66:../HAL_i2c.c  **** 	}
+  67:../HAL_i2c.c  **** }
+ 141              	 .loc 1 67 0
+ 142 0026 0837     	 adds r7,r7,#8
+ 143              	.LCFI8:
+ 144              	 .cfi_def_cfa_offset 8
+ 145 0028 BD46     	 mov sp,r7
+ 146              	.LCFI9:
+ 147              	 .cfi_def_cfa_register 13
+ 148              	 
+ 149 002a 80BD     	 pop {r7,pc}
+ 150              	.L8:
+ 151              	 .align 2
+ 152              	.L7:
+ 153 002c 00000000 	 .word timer_1_of_8
+ 154              	 .cfi_endproc
+ 155              	.LFE336:
+ 157              	 .section .text.tx_callback_0,"ax",%progbits
+ 158              	 .align 2
+ 159              	 .global tx_callback_0
+ 160              	 .thumb
+ 161              	 .thumb_func
+ 163              	tx_callback_0:
+ 164              	.LFB337:
+  68:../HAL_i2c.c  **** 
+  69:../HAL_i2c.c  **** 
+  70:../HAL_i2c.c  **** //IRQ-Handler of I2C-MASTER-Interface  initiated by DAVE
+  71:../HAL_i2c.c  **** void tx_callback_0(void)
+  72:../HAL_i2c.c  **** {
+ 165              	 .loc 1 72 0
+ 166              	 .cfi_startproc
+ 167              	 
+ 168              	 
+ 169              	 
+ 170 0000 80B4     	 push {r7}
+ 171              	.LCFI10:
+ 172              	 .cfi_def_cfa_offset 4
+ 173              	 .cfi_offset 7,-4
+ 174 0002 00AF     	 add r7,sp,#0
+ 175              	.LCFI11:
+ 176              	 .cfi_def_cfa_register 7
+  73:../HAL_i2c.c  ****        f.tx_completion = 1;
+ 177              	 .loc 1 73 0
+ 178 0004 044B     	 ldr r3,.L10
+ 179 0006 1A88     	 ldrh r2,[r3]
+ 180 0008 42F02002 	 orr r2,r2,#32
+ 181 000c 1A80     	 strh r2,[r3]
+  74:../HAL_i2c.c  **** }
+ 182              	 .loc 1 74 0
+ 183 000e BD46     	 mov sp,r7
+ 184              	.LCFI12:
+ 185              	 .cfi_def_cfa_register 13
+ 186              	 
+ 187 0010 5DF8047B 	 ldr r7,[sp],#4
+ 188              	.LCFI13:
+ 189              	 .cfi_restore 7
+ 190              	 .cfi_def_cfa_offset 0
+ 191 0014 7047     	 bx lr
+ 192              	.L11:
+ 193 0016 00BF     	 .align 2
+ 194              	.L10:
+ 195 0018 00000000 	 .word f
+ 196              	 .cfi_endproc
+ 197              	.LFE337:
+ 199              	 .section .text.rx_callback_0,"ax",%progbits
+ 200              	 .align 2
+ 201              	 .global rx_callback_0
+ 202              	 .thumb
+ 203              	 .thumb_func
+ 205              	rx_callback_0:
+ 206              	.LFB338:
+  75:../HAL_i2c.c  **** 
+  76:../HAL_i2c.c  **** //IRQ-Handler of I2C-Interface MASTER initiated by DAVE
+  77:../HAL_i2c.c  **** void rx_callback_0(void)
+  78:../HAL_i2c.c  **** {
+ 207              	 .loc 1 78 0
+ 208              	 .cfi_startproc
+ 209              	 
+ 210              	 
+ 211              	 
+ 212 0000 80B4     	 push {r7}
+ 213              	.LCFI14:
+ 214              	 .cfi_def_cfa_offset 4
+ 215              	 .cfi_offset 7,-4
+ 216 0002 00AF     	 add r7,sp,#0
+ 217              	.LCFI15:
+ 218              	 .cfi_def_cfa_register 7
+  79:../HAL_i2c.c  ****        f.rx_completion = 1;
+ 219              	 .loc 1 79 0
+ 220 0004 044B     	 ldr r3,.L13
+ 221 0006 1A88     	 ldrh r2,[r3]
+ 222 0008 42F01002 	 orr r2,r2,#16
+ 223 000c 1A80     	 strh r2,[r3]
+  80:../HAL_i2c.c  **** }
+ 224              	 .loc 1 80 0
+ 225 000e BD46     	 mov sp,r7
+ 226              	.LCFI16:
+ 227              	 .cfi_def_cfa_register 13
+ 228              	 
+ 229 0010 5DF8047B 	 ldr r7,[sp],#4
+ 230              	.LCFI17:
+ 231              	 .cfi_restore 7
+ 232              	 .cfi_def_cfa_offset 0
+ 233 0014 7047     	 bx lr
+ 234              	.L14:
+ 235 0016 00BF     	 .align 2
+ 236              	.L13:
+ 237 0018 00000000 	 .word f
+ 238              	 .cfi_endproc
+ 239              	.LFE338:
+ 241              	 .section .text.I2C_NACK_IRQ_Handler_0,"ax",%progbits
+ 242              	 .align 2
+ 243              	 .global I2C_NACK_IRQ_Handler_0
+ 244              	 .thumb
+ 245              	 .thumb_func
+ 247              	I2C_NACK_IRQ_Handler_0:
+ 248              	.LFB339:
+  81:../HAL_i2c.c  **** 
+  82:../HAL_i2c.c  **** //IRQ-Handler MASTER for detecting missing/not responding slave  initiated by DAVE
+  83:../HAL_i2c.c  **** void I2C_NACK_IRQ_Handler_0(void)
+  84:../HAL_i2c.c  **** {
+ 249              	 .loc 1 84 0
+ 250              	 .cfi_startproc
+ 251              	 
+ 252              	 
+ 253 0000 80B5     	 push {r7,lr}
+ 254              	.LCFI18:
+ 255              	 .cfi_def_cfa_offset 8
+ 256              	 .cfi_offset 7,-8
+ 257              	 .cfi_offset 14,-4
+ 258 0002 00AF     	 add r7,sp,#0
+ 259              	.LCFI19:
+ 260              	 .cfi_def_cfa_register 7
+  85:../HAL_i2c.c  **** 	f.I2C_NACK = 1;
+ 261              	 .loc 1 85 0
+ 262 0004 054B     	 ldr r3,.L16
+ 263 0006 1A88     	 ldrh r2,[r3]
+ 264 0008 42F04002 	 orr r2,r2,#64
+ 265 000c 1A80     	 strh r2,[r3]
+  86:../HAL_i2c.c  **** 	I2C_MASTER_AbortTransmit(&I2C_MASTER_0) ;// before init, abort transmit has to be executed
+ 266              	 .loc 1 86 0
+ 267 000e 0448     	 ldr r0,.L16+4
+ 268 0010 FFF7FEFF 	 bl I2C_MASTER_AbortTransmit
+  87:../HAL_i2c.c  **** 	I2C_MASTER_AbortReceive(&I2C_MASTER_0);
+ 269              	 .loc 1 87 0
+ 270 0014 0248     	 ldr r0,.L16+4
+ 271 0016 FFF7FEFF 	 bl I2C_MASTER_AbortReceive
+  88:../HAL_i2c.c  **** //	I2C_MASTER_SendStop(&I2C_MASTER_0);
+  89:../HAL_i2c.c  **** //	I2C_MASTER_Init(&I2C_MASTER_0); // init I2C bus again to respond
+  90:../HAL_i2c.c  **** }
+ 272              	 .loc 1 90 0
+ 273 001a 80BD     	 pop {r7,pc}
+ 274              	.L17:
+ 275              	 .align 2
+ 276              	.L16:
+ 277 001c 00000000 	 .word f
+ 278 0020 00000000 	 .word I2C_MASTER_0
+ 279              	 .cfi_endproc
+ 280              	.LFE339:
+ 282              	 .section .text.I2C_ARB_Lost_IRQ_Handler_0,"ax",%progbits
+ 283              	 .align 2
+ 284              	 .global I2C_ARB_Lost_IRQ_Handler_0
+ 285              	 .thumb
+ 286              	 .thumb_func
+ 288              	I2C_ARB_Lost_IRQ_Handler_0:
+ 289              	.LFB340:
+  91:../HAL_i2c.c  **** 
+  92:../HAL_i2c.c  **** //IRQ-Handler MASTER for detecting arbitration lost, initiated by DAVE
+  93:../HAL_i2c.c  **** void I2C_ARB_Lost_IRQ_Handler_0 (void)
+  94:../HAL_i2c.c  **** {
+ 290              	 .loc 1 94 0
+ 291              	 .cfi_startproc
+ 292              	 
+ 293              	 
+ 294              	 
+ 295 0000 80B4     	 push {r7}
+ 296              	.LCFI20:
+ 297              	 .cfi_def_cfa_offset 4
+ 298              	 .cfi_offset 7,-4
+ 299 0002 00AF     	 add r7,sp,#0
+ 300              	.LCFI21:
+ 301              	 .cfi_def_cfa_register 7
+  95:../HAL_i2c.c  **** 	f.I2C_NACK=1;
+ 302              	 .loc 1 95 0
+ 303 0004 044B     	 ldr r3,.L19
+ 304 0006 1A88     	 ldrh r2,[r3]
+ 305 0008 42F04002 	 orr r2,r2,#64
+ 306 000c 1A80     	 strh r2,[r3]
+  96:../HAL_i2c.c  **** }
+ 307              	 .loc 1 96 0
+ 308 000e BD46     	 mov sp,r7
+ 309              	.LCFI22:
+ 310              	 .cfi_def_cfa_register 13
+ 311              	 
+ 312 0010 5DF8047B 	 ldr r7,[sp],#4
+ 313              	.LCFI23:
+ 314              	 .cfi_restore 7
+ 315              	 .cfi_def_cfa_offset 0
+ 316 0014 7047     	 bx lr
+ 317              	.L20:
+ 318 0016 00BF     	 .align 2
+ 319              	.L19:
+ 320 0018 00000000 	 .word f
+ 321              	 .cfi_endproc
+ 322              	.LFE340:
+ 324              	 .section .text.I2C_ERR_IRQ_Handler_0,"ax",%progbits
+ 325              	 .align 2
+ 326              	 .global I2C_ERR_IRQ_Handler_0
+ 327              	 .thumb
+ 328              	 .thumb_func
+ 330              	I2C_ERR_IRQ_Handler_0:
+ 331              	.LFB341:
+  97:../HAL_i2c.c  **** 
+  98:../HAL_i2c.c  **** //IRQ-Handler MASTER for detecting errors, initiated by DAVE
+  99:../HAL_i2c.c  **** void I2C_ERR_IRQ_Handler_0 (void)
+ 100:../HAL_i2c.c  **** {
+ 332              	 .loc 1 100 0
+ 333              	 .cfi_startproc
+ 334              	 
+ 335              	 
+ 336              	 
+ 337 0000 80B4     	 push {r7}
+ 338              	.LCFI24:
+ 339              	 .cfi_def_cfa_offset 4
+ 340              	 .cfi_offset 7,-4
+ 341 0002 00AF     	 add r7,sp,#0
+ 342              	.LCFI25:
+ 343              	 .cfi_def_cfa_register 7
+ 101:../HAL_i2c.c  **** 	f.I2C_NACK=1;
+ 344              	 .loc 1 101 0
+ 345 0004 044B     	 ldr r3,.L22
+ 346 0006 1A88     	 ldrh r2,[r3]
+ 347 0008 42F04002 	 orr r2,r2,#64
+ 348 000c 1A80     	 strh r2,[r3]
+ 102:../HAL_i2c.c  **** }
+ 349              	 .loc 1 102 0
+ 350 000e BD46     	 mov sp,r7
+ 351              	.LCFI26:
+ 352              	 .cfi_def_cfa_register 13
+ 353              	 
+ 354 0010 5DF8047B 	 ldr r7,[sp],#4
+ 355              	.LCFI27:
+ 356              	 .cfi_restore 7
+ 357              	 .cfi_def_cfa_offset 0
+ 358 0014 7047     	 bx lr
+ 359              	.L23:
+ 360 0016 00BF     	 .align 2
+ 361              	.L22:
+ 362 0018 00000000 	 .word f
+ 363              	 .cfi_endproc
+ 364              	.LFE341:
+ 366              	 .text
+ 367              	.Letext0:
+ 368              	 .file 2 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 369              	 .file 3 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 370              	 .file 4 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc_usic.h"
+ 371              	 .file 5 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc_i2c.h"
+ 372              	 .file 6 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Dave/Generated/I2C_MASTER/i2c_master.h"
+ 373              	 .file 7 "../Has_Misc.h"
+ 374              	 .file 8 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include/core_cm4.h"
+ 375              	 .file 9 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Infineon/XMC4500_series/Include/system_XMC4500.h"
+ 376              	 .file 10 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Dave/Generated/I2C_MASTER/i2c_master_extern.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 HAL_i2c.c
+    {standard input}:22     .bss.tx_completion_0:00000000 tx_completion_0
+    {standard input}:23     .bss.tx_completion_0:00000000 $d
+    {standard input}:28     .bss.rx_completion_0:00000000 rx_completion_0
+    {standard input}:29     .bss.rx_completion_0:00000000 $d
+    {standard input}:34     .bss.flag_I2C_NACK:00000000 flag_I2C_NACK
+    {standard input}:35     .bss.flag_I2C_NACK:00000000 $d
+    {standard input}:40     .bss.flag_eject_at_I2C_NACK:00000000 flag_eject_at_I2C_NACK
+    {standard input}:41     .bss.flag_eject_at_I2C_NACK:00000000 $d
+                            *COM*:00000004 timer_1_of_8
+    {standard input}:44     .text.SW_IRQ_1:00000000 $t
+    {standard input}:49     .text.SW_IRQ_1:00000000 SW_IRQ_1
+    {standard input}:94     .text.SW_IRQ_1:0000002c $d
+    {standard input}:100    .text.Soft_WDG_1:00000000 $t
+    {standard input}:105    .text.Soft_WDG_1:00000000 Soft_WDG_1
+    {standard input}:153    .text.Soft_WDG_1:0000002c $d
+    {standard input}:158    .text.tx_callback_0:00000000 $t
+    {standard input}:163    .text.tx_callback_0:00000000 tx_callback_0
+    {standard input}:195    .text.tx_callback_0:00000018 $d
+    {standard input}:200    .text.rx_callback_0:00000000 $t
+    {standard input}:205    .text.rx_callback_0:00000000 rx_callback_0
+    {standard input}:237    .text.rx_callback_0:00000018 $d
+    {standard input}:242    .text.I2C_NACK_IRQ_Handler_0:00000000 $t
+    {standard input}:247    .text.I2C_NACK_IRQ_Handler_0:00000000 I2C_NACK_IRQ_Handler_0
+    {standard input}:277    .text.I2C_NACK_IRQ_Handler_0:0000001c $d
+    {standard input}:283    .text.I2C_ARB_Lost_IRQ_Handler_0:00000000 $t
+    {standard input}:288    .text.I2C_ARB_Lost_IRQ_Handler_0:00000000 I2C_ARB_Lost_IRQ_Handler_0
+    {standard input}:320    .text.I2C_ARB_Lost_IRQ_Handler_0:00000018 $d
+    {standard input}:325    .text.I2C_ERR_IRQ_Handler_0:00000000 $t
+    {standard input}:330    .text.I2C_ERR_IRQ_Handler_0:00000000 I2C_ERR_IRQ_Handler_0
+    {standard input}:362    .text.I2C_ERR_IRQ_Handler_0:00000018 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+I2C_MASTER_AbortTransmit
+I2C_MASTER_AbortReceive
+I2C_MASTER_Init
+f
+I2C_MASTER_0
+SYSTIMER_StartTimer
+SYSTIMER_StopTimer

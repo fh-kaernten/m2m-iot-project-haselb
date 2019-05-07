@@ -1,0 +1,201 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .fpu softvfp
+   4              	 .eabi_attribute 20,1
+   5              	 .eabi_attribute 21,1
+   6              	 .eabi_attribute 23,3
+   7              	 .eabi_attribute 24,1
+   8              	 .eabi_attribute 25,1
+   9              	 .eabi_attribute 26,1
+  10              	 .eabi_attribute 30,6
+  11              	 .eabi_attribute 34,1
+  12              	 .eabi_attribute 18,4
+  13              	 .thumb
+  14              	 .file "INIT.c"
+  15              	 .text
+  16              	.Ltext0:
+  17              	 .cfi_sections .debug_frame
+  18              	 .comm timer_1_of_16,4,4
+  19              	 .comm timer_2_of_16,4,4
+  20              	 .comm timer_3_of_16,4,4
+  21              	 .section .rodata
+  22              	 .align 2
+  23              	.LC0:
+  24 0000 4D545352 	 .ascii "MTSR V%d.%d.%d, hm,2019\000"
+  24      20562564 
+  24      2E25642E 
+  24      25642C20 
+  24      686D2C32 
+  25              	 .section .text.init,"ax",%progbits
+  26              	 .align 2
+  27              	 .global init
+  28              	 .thumb
+  29              	 .thumb_func
+  31              	init:
+  32              	.LFB335:
+  33              	 .file 1 "../Source/INIT.c"
+   1:../Source/INIT.c **** /*
+   2:../Source/INIT.c ****  * INIT.c
+   3:../Source/INIT.c **** 
+   4:../Source/INIT.c ****  *
+   5:../Source/INIT.c ****  *  Created on: Jan 4, 2018
+   6:../Source/INIT.c ****  *      Author: haselb
+   7:../Source/INIT.c ****  */
+   8:../Source/INIT.c **** 
+   9:../Source/INIT.c **** #include <stdio.h>
+  10:../Source/INIT.c **** #include "Actors_Displays/LCD.h"
+  11:../Source/INIT.c **** #include "doxygen/doxy.h"
+  12:../Source/INIT.c **** #include "HAL/hal_i2c.h"
+  13:../Source/INIT.c **** #include "Source/HAS_MISC.h"
+  14:../Source/INIT.c **** #include "INIT.h"
+  15:../Source/INIT.c **** 
+  16:../Source/INIT.c **** 
+  17:../Source/INIT.c **** 
+  18:../Source/INIT.c **** 
+  19:../Source/INIT.c **** uint32_t volatile timer_1_of_16;
+  20:../Source/INIT.c **** uint32_t volatile timer_2_of_16;
+  21:../Source/INIT.c **** uint32_t volatile timer_3_of_16;
+  22:../Source/INIT.c **** 
+  23:../Source/INIT.c **** /*!
+  24:../Source/INIT.c ****  * @brief 	   Function to initialize all non DAVE devices.
+  25:../Source/INIT.c ****  * @param[in]  None
+  26:../Source/INIT.c ****  * @param[out] None
+  27:../Source/INIT.c ****  * @retval     void
+  28:../Source/INIT.c ****  * @pre        None
+  29:../Source/INIT.c ****  * @post       None
+  30:../Source/INIT.c ****  * @attention  None
+  31:../Source/INIT.c ****  * @note       None
+  32:../Source/INIT.c ****  */
+  33:../Source/INIT.c **** void init(void)
+  34:../Source/INIT.c **** {
+  34              	 .loc 1 34 0
+  35              	 .cfi_startproc
+  36              	 
+  37              	 
+  38 0000 80B5     	 push {r7,lr}
+  39              	.LCFI0:
+  40              	 .cfi_def_cfa_offset 8
+  41              	 .cfi_offset 7,-8
+  42              	 .cfi_offset 14,-4
+  43 0002 82B0     	 sub sp,sp,#8
+  44              	.LCFI1:
+  45              	 .cfi_def_cfa_offset 16
+  46 0004 02AF     	 add r7,sp,#8
+  47              	.LCFI2:
+  48              	 .cfi_def_cfa 7,8
+  35:../Source/INIT.c **** 
+  36:../Source/INIT.c **** 	//IRQ-Handler for SYSTIMER, initiated by function Soft_WDG (checkout SYSTIMER_XMC45.PDF)
+  37:../Source/INIT.c **** 	timer_1_of_16 = SYSTIMER_CreateTimer(100000, SYSTIMER_MODE_ONE_SHOT, (void *)SW_IRQ_1, NULL);
+  49              	 .loc 1 37 0
+  50 0006 1A48     	 ldr r0,.L2
+  51 0008 0021     	 movs r1,#0
+  52 000a 1A4A     	 ldr r2,.L2+4
+  53 000c 0023     	 movs r3,#0
+  54 000e FFF7FEFF 	 bl SYSTIMER_CreateTimer
+  55 0012 0246     	 mov r2,r0
+  56 0014 184B     	 ldr r3,.L2+8
+  57 0016 1A60     	 str r2,[r3]
+  38:../Source/INIT.c **** 	/* Initialize and start Mainloop system timer 100ms (Timer 2 of 16)*/
+  39:../Source/INIT.c **** 	timer_2_of_16 = SYSTIMER_CreateTimer(100000, SYSTIMER_MODE_PERIODIC, (void *)MAINLOOP_IRQ, NULL);
+  58              	 .loc 1 39 0
+  59 0018 1548     	 ldr r0,.L2
+  60 001a 0121     	 movs r1,#1
+  61 001c 174A     	 ldr r2,.L2+12
+  62 001e 0023     	 movs r3,#0
+  63 0020 FFF7FEFF 	 bl SYSTIMER_CreateTimer
+  64 0024 0246     	 mov r2,r0
+  65 0026 164B     	 ldr r3,.L2+16
+  66 0028 1A60     	 str r2,[r3]
+  40:../Source/INIT.c **** 	SYSTIMER_StartTimer(timer_2_of_16);
+  67              	 .loc 1 40 0
+  68 002a 154B     	 ldr r3,.L2+16
+  69 002c 1B68     	 ldr r3,[r3]
+  70 002e 1846     	 mov r0,r3
+  71 0030 FFF7FEFF 	 bl SYSTIMER_StartTimer
+  41:../Source/INIT.c **** 	/* Initialize and start lwip system timer 100ms (Timer 3 of 16)*/
+  42:../Source/INIT.c **** //	timer_3_of_16 = SYSTIMER_CreateTimer(100000, SYSTIMER_MODE_PERIODIC , tim_sys_check_timeouts_wra
+  43:../Source/INIT.c **** //	SYSTIMER_StartTimer(timer_3_of_16);
+  44:../Source/INIT.c **** 	delay100us(10000);  // POR is too fast for OLED...
+  72              	 .loc 1 44 0
+  73 0034 42F21070 	 movw r0,#10000
+  74 0038 FFF7FEFF 	 bl delay100us
+  45:../Source/INIT.c **** 	LCD_init();
+  75              	 .loc 1 45 0
+  76 003c FFF7FEFF 	 bl LCD_init
+  46:../Source/INIT.c **** 	LCD_clearlines();
+  77              	 .loc 1 46 0
+  78 0040 FFF7FEFF 	 bl LCD_clearlines
+  47:../Source/INIT.c **** 	sprintf(LCDBuffer,"MTSR V%d.%d.%d, hm,2019",MAJOR_VERSION,MINOR_VERSION,PATCH_VERSION);  // define
+  79              	 .loc 1 47 0
+  80 0044 0223     	 movs r3,#2
+  81 0046 0093     	 str r3,[sp]
+  82 0048 0E48     	 ldr r0,.L2+20
+  83 004a 0F49     	 ldr r1,.L2+24
+  84 004c 0022     	 movs r2,#0
+  85 004e 0223     	 movs r3,#2
+  86 0050 FFF7FEFF 	 bl sprintf
+  48:../Source/INIT.c **** 	LCD_text(0,0,LCDBuffer);
+  87              	 .loc 1 48 0
+  88 0054 0020     	 movs r0,#0
+  89 0056 0021     	 movs r1,#0
+  90 0058 0A4A     	 ldr r2,.L2+20
+  91 005a FFF7FEFF 	 bl LCD_text
+  49:../Source/INIT.c **** 	delay100us(10000);
+  92              	 .loc 1 49 0
+  93 005e 42F21070 	 movw r0,#10000
+  94 0062 FFF7FEFF 	 bl delay100us
+  50:../Source/INIT.c **** 	RTC_init();
+  95              	 .loc 1 50 0
+  96 0066 FFF7FEFF 	 bl RTC_init
+  51:../Source/INIT.c **** 
+  52:../Source/INIT.c **** }
+  97              	 .loc 1 52 0
+  98 006a BD46     	 mov sp,r7
+  99              	.LCFI3:
+ 100              	 .cfi_def_cfa_register 13
+ 101              	 
+ 102 006c 80BD     	 pop {r7,pc}
+ 103              	.L3:
+ 104 006e 00BF     	 .align 2
+ 105              	.L2:
+ 106 0070 A0860100 	 .word 100000
+ 107 0074 00000000 	 .word SW_IRQ_1
+ 108 0078 00000000 	 .word timer_1_of_16
+ 109 007c 00000000 	 .word MAINLOOP_IRQ
+ 110 0080 00000000 	 .word timer_2_of_16
+ 111 0084 00000000 	 .word LCDBuffer
+ 112 0088 00000000 	 .word .LC0
+ 113              	 .cfi_endproc
+ 114              	.LFE335:
+ 116              	 .text
+ 117              	.Letext0:
+ 118              	 .file 2 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 119              	 .file 3 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 120              	 .file 4 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc_usic.h"
+ 121              	 .file 5 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Dave/Generated/SYSTIMER/systimer.h"
+ 122              	 .file 6 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include/core_cm4.h"
+ 123              	 .file 7 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Infineon/XMC4500_series/Include/system_XMC4500.h"
+ 124              	 .file 8 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Actors_Displays/LCD.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 INIT.c
+                            *COM*:00000004 timer_1_of_16
+                            *COM*:00000004 timer_2_of_16
+                            *COM*:00000004 timer_3_of_16
+    {standard input}:22     .rodata:00000000 $d
+    {standard input}:26     .text.init:00000000 $t
+    {standard input}:31     .text.init:00000000 init
+    {standard input}:106    .text.init:00000070 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+SYSTIMER_CreateTimer
+SYSTIMER_StartTimer
+delay100us
+LCD_init
+LCD_clearlines
+sprintf
+LCD_text
+RTC_init
+SW_IRQ_1
+MAINLOOP_IRQ
+LCDBuffer

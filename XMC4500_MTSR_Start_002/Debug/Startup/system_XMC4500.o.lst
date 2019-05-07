@@ -1,0 +1,2175 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .fpu softvfp
+   4              	 .eabi_attribute 20,1
+   5              	 .eabi_attribute 21,1
+   6              	 .eabi_attribute 23,3
+   7              	 .eabi_attribute 24,1
+   8              	 .eabi_attribute 25,1
+   9              	 .eabi_attribute 26,1
+  10              	 .eabi_attribute 30,6
+  11              	 .eabi_attribute 34,1
+  12              	 .eabi_attribute 18,4
+  13              	 .thumb
+  14              	 .file "system_XMC4500.c"
+  15              	 .text
+  16              	.Ltext0:
+  17              	 .cfi_sections .debug_frame
+  18              	 .global SystemCoreClock
+  19              	 .section .no_init,"aw",%progbits
+  20              	 .align 2
+  23              	SystemCoreClock:
+  24 0000 00000000 	 .space 4
+  25              	 .global g_chipid
+  26              	 .align 2
+  29              	g_chipid:
+  30 0004 00000000 	 .space 16
+  30      00000000 
+  30      00000000 
+  30      00000000 
+  31              	 .section .text.delay,"ax",%progbits
+  32              	 .align 2
+  33              	 .thumb
+  34              	 .thumb_func
+  36              	delay:
+  37              	.LFB123:
+  38              	 .file 1 "../Startup/system_XMC4500.c"
+   1:../Startup/system_XMC4500.c **** /******************************************************************************
+   2:../Startup/system_XMC4500.c ****  * @file     system_XMC4500.c
+   3:../Startup/system_XMC4500.c ****  * @brief    CMSIS Cortex-M4 Device Peripheral Access Layer Header File
+   4:../Startup/system_XMC4500.c ****  *           for the Infineon XMC4500 Device Series
+   5:../Startup/system_XMC4500.c ****  * @version  V3.1.0
+   6:../Startup/system_XMC4500.c ****  * @date     20. Dec 2014
+   7:../Startup/system_XMC4500.c ****  *
+   8:../Startup/system_XMC4500.c ****  * Copyright (C) 2014 Infineon Technologies AG. All rights reserved.
+   9:../Startup/system_XMC4500.c ****  *
+  10:../Startup/system_XMC4500.c ****  *
+  11:../Startup/system_XMC4500.c ****  * @par
+  12:../Startup/system_XMC4500.c ****  * Infineon Technologies AG (Infineon) is supplying this software for use with 
+  13:../Startup/system_XMC4500.c ****  * Infineon's microcontrollers.  This file can be freely distributed
+  14:../Startup/system_XMC4500.c ****  * within development tools that are supporting such microcontrollers.
+  15:../Startup/system_XMC4500.c ****  *
+  16:../Startup/system_XMC4500.c ****  * @par
+  17:../Startup/system_XMC4500.c ****  * THIS SOFTWARE IS PROVIDED AS IS.  NO WARRANTIES, WHETHER EXPRESS, IMPLIED
+  18:../Startup/system_XMC4500.c ****  * OR STATUTORY, INCLUDING, BUT NOT LIMITED TO, IMPLIED WARRANTIES OF
+  19:../Startup/system_XMC4500.c ****  * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE APPLY TO THIS SOFTWARE.
+  20:../Startup/system_XMC4500.c ****  * ARM SHALL NOT, IN ANY CIRCUMSTANCES, BE LIABLE FOR SPECIAL, INCIDENTAL, OR
+  21:../Startup/system_XMC4500.c ****  * CONSEQUENTIAL DAMAGES, FOR ANY REASON WHATSOEVER.
+  22:../Startup/system_XMC4500.c ****  *
+  23:../Startup/system_XMC4500.c ****  ******************************************************************************/
+  24:../Startup/system_XMC4500.c **** 
+  25:../Startup/system_XMC4500.c **** /********************** Version History ***************************************
+  26:../Startup/system_XMC4500.c ****  * V3.1.0, Dec 2014, Added options to configure clock settings
+  27:../Startup/system_XMC4500.c ****  ******************************************************************************/
+  28:../Startup/system_XMC4500.c **** 
+  29:../Startup/system_XMC4500.c **** /*******************************************************************************
+  30:../Startup/system_XMC4500.c ****  * HEADER FILES
+  31:../Startup/system_XMC4500.c ****  *******************************************************************************/
+  32:../Startup/system_XMC4500.c **** #include <string.h>
+  33:../Startup/system_XMC4500.c **** 
+  34:../Startup/system_XMC4500.c **** #include <XMC4500.h>
+  35:../Startup/system_XMC4500.c **** #include "system_XMC4500.h"
+  36:../Startup/system_XMC4500.c **** 
+  37:../Startup/system_XMC4500.c **** /*******************************************************************************
+  38:../Startup/system_XMC4500.c ****  * MACROS
+  39:../Startup/system_XMC4500.c ****  *******************************************************************************/
+  40:../Startup/system_XMC4500.c **** 
+  41:../Startup/system_XMC4500.c **** #define CHIPID_LOC ((uint8_t *)0x20000000UL)
+  42:../Startup/system_XMC4500.c **** 
+  43:../Startup/system_XMC4500.c **** /* Define WEAK attribute */
+  44:../Startup/system_XMC4500.c **** #if !defined(__WEAK)
+  45:../Startup/system_XMC4500.c **** #if defined ( __CC_ARM )
+  46:../Startup/system_XMC4500.c **** #define __WEAK __attribute__ ((weak))
+  47:../Startup/system_XMC4500.c **** #elif defined ( __ICCARM__ )
+  48:../Startup/system_XMC4500.c **** #define __WEAK __weak
+  49:../Startup/system_XMC4500.c **** #elif defined ( __GNUC__ )
+  50:../Startup/system_XMC4500.c **** #define __WEAK __attribute__ ((weak))
+  51:../Startup/system_XMC4500.c **** #elif defined ( __TASKING__ )
+  52:../Startup/system_XMC4500.c **** #define __WEAK __attribute__ ((weak))
+  53:../Startup/system_XMC4500.c **** #endif
+  54:../Startup/system_XMC4500.c **** #endif
+  55:../Startup/system_XMC4500.c **** 
+  56:../Startup/system_XMC4500.c **** #define PMU_FLASH_WS          (0x3U)
+  57:../Startup/system_XMC4500.c **** 
+  58:../Startup/system_XMC4500.c **** #define FPLL_FREQUENCY        (120000000U)
+  59:../Startup/system_XMC4500.c **** #define FOSCREF               (2500000U)
+  60:../Startup/system_XMC4500.c **** #define DELAY_CNT_50US_50MHZ  (2500UL)
+  61:../Startup/system_XMC4500.c **** #define DELAY_CNT_150US_50MHZ (7500UL)
+  62:../Startup/system_XMC4500.c **** #define DELAY_CNT_50US_60MHZ  (3000UL)
+  63:../Startup/system_XMC4500.c **** #define DELAY_CNT_50US_90MHZ  (4500UL)
+  64:../Startup/system_XMC4500.c **** #define DELAY_CNT_50US_120MHZ (6000UL)
+  65:../Startup/system_XMC4500.c **** 
+  66:../Startup/system_XMC4500.c **** #define SCU_PLL_PLLSTAT_OSC_USABLE  (SCU_PLL_PLLSTAT_PLLHV_Msk | \
+  67:../Startup/system_XMC4500.c ****                                      SCU_PLL_PLLSTAT_PLLLV_Msk | \
+  68:../Startup/system_XMC4500.c ****                                      SCU_PLL_PLLSTAT_PLLSP_Msk)
+  69:../Startup/system_XMC4500.c **** 
+  70:../Startup/system_XMC4500.c **** /*
+  71:../Startup/system_XMC4500.c **** //-------- <<< Use Configuration Wizard in Context Menu >>> ------------------
+  72:../Startup/system_XMC4500.c **** */
+  73:../Startup/system_XMC4500.c **** 
+  74:../Startup/system_XMC4500.c **** /*
+  75:../Startup/system_XMC4500.c **** // <h> Clock configuration
+  76:../Startup/system_XMC4500.c **** */
+  77:../Startup/system_XMC4500.c **** 
+  78:../Startup/system_XMC4500.c **** /*
+  79:../Startup/system_XMC4500.c **** //    <o> External crystal frequency [Hz]
+  80:../Startup/system_XMC4500.c **** //       <8000000=> 8MHz
+  81:../Startup/system_XMC4500.c **** //       <12000000=> 12MHz
+  82:../Startup/system_XMC4500.c **** //       <16000000=> 16MHz
+  83:../Startup/system_XMC4500.c **** //    <i> Defines external crystal frequency
+  84:../Startup/system_XMC4500.c **** //    <i> Default: 8MHz
+  85:../Startup/system_XMC4500.c **** */
+  86:../Startup/system_XMC4500.c **** #define OSCHP_FREQUENCY (12000000U)
+  87:../Startup/system_XMC4500.c **** 
+  88:../Startup/system_XMC4500.c **** #if OSCHP_FREQUENCY == 8000000U
+  89:../Startup/system_XMC4500.c **** #define USB_PDIV (1U)
+  90:../Startup/system_XMC4500.c **** #define USB_NDIV (95U)
+  91:../Startup/system_XMC4500.c **** #define USB_DIV (3U)
+  92:../Startup/system_XMC4500.c **** 
+  93:../Startup/system_XMC4500.c **** #elif OSCHP_FREQUENCY == 12000000U
+  94:../Startup/system_XMC4500.c **** #define USB_PDIV (1U)
+  95:../Startup/system_XMC4500.c **** #define USB_NDIV (63U)
+  96:../Startup/system_XMC4500.c **** #define USB_DIV (3U)
+  97:../Startup/system_XMC4500.c **** 
+  98:../Startup/system_XMC4500.c **** #elif OSCHP_FREQUENCY == 16000000U
+  99:../Startup/system_XMC4500.c **** #define USB_PDIV (1U)
+ 100:../Startup/system_XMC4500.c **** #define USB_NDIV (47U)
+ 101:../Startup/system_XMC4500.c **** #define USB_DIV (3U)
+ 102:../Startup/system_XMC4500.c **** 
+ 103:../Startup/system_XMC4500.c **** #else
+ 104:../Startup/system_XMC4500.c **** #error "External crystal frequency not supported"
+ 105:../Startup/system_XMC4500.c **** 
+ 106:../Startup/system_XMC4500.c **** #endif
+ 107:../Startup/system_XMC4500.c **** 
+ 108:../Startup/system_XMC4500.c **** /*
+ 109:../Startup/system_XMC4500.c **** //    <o> System clock (fSYS) source selection
+ 110:../Startup/system_XMC4500.c **** //       <0=> Backup clock (24MHz)
+ 111:../Startup/system_XMC4500.c **** //       <1=> Maximum clock frequency using PLL (120MHz)
+ 112:../Startup/system_XMC4500.c **** //    <i> Default: Maximum clock frequency using PLL (120MHz)
+ 113:../Startup/system_XMC4500.c **** */
+ 114:../Startup/system_XMC4500.c **** #define SYS_CLOCK_SRC 1
+ 115:../Startup/system_XMC4500.c **** #define SYS_CLOCK_SRC_OFI 0
+ 116:../Startup/system_XMC4500.c **** #define SYS_CLOCK_SRC_PLL 1
+ 117:../Startup/system_XMC4500.c **** 
+ 118:../Startup/system_XMC4500.c **** /*
+ 119:../Startup/system_XMC4500.c **** //    <o> Backup clock calibration mode
+ 120:../Startup/system_XMC4500.c **** //       <0=> Factory calibration
+ 121:../Startup/system_XMC4500.c **** //       <1=> Automatic calibration
+ 122:../Startup/system_XMC4500.c **** //    <i> Default: Automatic calibration
+ 123:../Startup/system_XMC4500.c **** */
+ 124:../Startup/system_XMC4500.c **** #define FOFI_CALIBRATION_MODE 1
+ 125:../Startup/system_XMC4500.c **** #define FOFI_CALIBRATION_MODE_FACTORY 0
+ 126:../Startup/system_XMC4500.c **** #define FOFI_CALIBRATION_MODE_AUTOMATIC 1
+ 127:../Startup/system_XMC4500.c **** 
+ 128:../Startup/system_XMC4500.c **** /*
+ 129:../Startup/system_XMC4500.c **** //    <o> Standby clock (fSTDBY) source selection
+ 130:../Startup/system_XMC4500.c **** //       <0=> Internal slow oscillator (32768Hz)
+ 131:../Startup/system_XMC4500.c **** //       <1=> External crystal (32768Hz)
+ 132:../Startup/system_XMC4500.c **** //    <i> Default: Internal slow oscillator (32768Hz)
+ 133:../Startup/system_XMC4500.c **** */
+ 134:../Startup/system_XMC4500.c **** #define STDBY_CLOCK_SRC 0
+ 135:../Startup/system_XMC4500.c **** #define STDBY_CLOCK_SRC_OSI 0
+ 136:../Startup/system_XMC4500.c **** #define STDBY_CLOCK_SRC_OSCULP 1
+ 137:../Startup/system_XMC4500.c **** 
+ 138:../Startup/system_XMC4500.c **** /*
+ 139:../Startup/system_XMC4500.c **** //    <o> PLL clock source selection
+ 140:../Startup/system_XMC4500.c **** //       <0=> External crystal
+ 141:../Startup/system_XMC4500.c **** //       <1=> External direct input
+ 142:../Startup/system_XMC4500.c **** //       <2=> Internal fast oscillator
+ 143:../Startup/system_XMC4500.c **** //    <i> Default: External crystal
+ 144:../Startup/system_XMC4500.c **** */
+ 145:../Startup/system_XMC4500.c **** #define PLL_CLOCK_SRC 0
+ 146:../Startup/system_XMC4500.c **** #define PLL_CLOCK_SRC_EXT_XTAL 0
+ 147:../Startup/system_XMC4500.c **** #define PLL_CLOCK_SRC_EXT_DIRECT 1
+ 148:../Startup/system_XMC4500.c **** #define PLL_CLOCK_SRC_OFI 2
+ 149:../Startup/system_XMC4500.c **** 
+ 150:../Startup/system_XMC4500.c **** #if PLL_CLOCK_SRC == PLL_CLOCK_SRC_EXT_XTAL
+ 151:../Startup/system_XMC4500.c **** #if OSCHP_FREQUENCY == 8000000U
+ 152:../Startup/system_XMC4500.c **** #define PLL_PDIV (1U)
+ 153:../Startup/system_XMC4500.c **** #define PLL_NDIV (89U)
+ 154:../Startup/system_XMC4500.c **** #define PLL_K2DIV (2U)
+ 155:../Startup/system_XMC4500.c **** 
+ 156:../Startup/system_XMC4500.c **** #elif OSCHP_FREQUENCY == 12000000U
+ 157:../Startup/system_XMC4500.c **** #define PLL_PDIV (1U)
+ 158:../Startup/system_XMC4500.c **** #define PLL_NDIV (79U)
+ 159:../Startup/system_XMC4500.c **** #define PLL_K2DIV (3U)
+ 160:../Startup/system_XMC4500.c **** 
+ 161:../Startup/system_XMC4500.c **** #elif OSCHP_FREQUENCY == 16000000U
+ 162:../Startup/system_XMC4500.c **** #define PLL_PDIV (1U)
+ 163:../Startup/system_XMC4500.c **** #define PLL_NDIV (59U)
+ 164:../Startup/system_XMC4500.c **** #define PLL_K2DIV (3U)
+ 165:../Startup/system_XMC4500.c **** 
+ 166:../Startup/system_XMC4500.c **** #else
+ 167:../Startup/system_XMC4500.c **** #error "External crystal frequency not supported"
+ 168:../Startup/system_XMC4500.c **** 
+ 169:../Startup/system_XMC4500.c **** #endif
+ 170:../Startup/system_XMC4500.c **** 
+ 171:../Startup/system_XMC4500.c **** #define VCO ((OSCHP_FREQUENCY / (PLL_PDIV + 1UL)) * (PLL_NDIV + 1UL))
+ 172:../Startup/system_XMC4500.c **** 
+ 173:../Startup/system_XMC4500.c **** #else /* PLL_CLOCK_SRC == PLL_CLOCK_SRC_EXT_XTAL */
+ 174:../Startup/system_XMC4500.c **** 
+ 175:../Startup/system_XMC4500.c **** #define PLL_PDIV (1U)
+ 176:../Startup/system_XMC4500.c **** #define PLL_NDIV (39U)
+ 177:../Startup/system_XMC4500.c **** #define PLL_K2DIV (3U)
+ 178:../Startup/system_XMC4500.c **** 
+ 179:../Startup/system_XMC4500.c **** #define VCO ((OFI_FREQUENCY / (PLL_PDIV + 1UL)) * (PLL_NDIV + 1UL))
+ 180:../Startup/system_XMC4500.c **** 
+ 181:../Startup/system_XMC4500.c **** #endif /* PLL_CLOCK_SRC == PLL_CLOCK_SRC_OFI */
+ 182:../Startup/system_XMC4500.c **** 
+ 183:../Startup/system_XMC4500.c **** #define PLL_K2DIV_0 ((VCO / OFI_FREQUENCY) - 1UL)
+ 184:../Startup/system_XMC4500.c **** #define PLL_K2DIV_1 ((VCO / 60000000U) - 1UL)
+ 185:../Startup/system_XMC4500.c **** #define PLL_K2DIV_2 ((VCO / 90000000U) - 1UL)
+ 186:../Startup/system_XMC4500.c **** 
+ 187:../Startup/system_XMC4500.c **** #define SCU_CLK_CLKCLR_ENABLE_USBCLK SCU_CLK_CLKCLR_USBCDI_Msk
+ 188:../Startup/system_XMC4500.c **** #define SCU_CLK_CLKCLR_ENABLE_MMCCLK SCU_CLK_CLKCLR_MMCCDI_Msk
+ 189:../Startup/system_XMC4500.c **** #define SCU_CLK_CLKCLR_ENABLE_ETHCLK SCU_CLK_CLKCLR_USBCDI_Msk
+ 190:../Startup/system_XMC4500.c **** #define SCU_CLK_CLKCLR_ENABLE_EBUCLK SCU_CLK_CLKCLR_EBUCDI_Msk
+ 191:../Startup/system_XMC4500.c **** #define SCU_CLK_CLKCLR_ENABLE_CCUCLK SCU_CLK_CLKCLR_CCUCDI_Msk
+ 192:../Startup/system_XMC4500.c **** 
+ 193:../Startup/system_XMC4500.c **** #define SCU_CLK_USBCLKCR_USBSEL_USBPLL (0U << SCU_CLK_USBCLKCR_USBSEL_Pos)
+ 194:../Startup/system_XMC4500.c **** #define SCU_CLK_USBCLKCR_USBSEL_PLL    (1U << SCU_CLK_USBCLKCR_USBSEL_Pos)
+ 195:../Startup/system_XMC4500.c **** 
+ 196:../Startup/system_XMC4500.c **** #define SCU_CLK_WDTCLKCR_WDTSEL_OFI      (0U << SCU_CLK_WDTCLKCR_WDTSEL_Pos)
+ 197:../Startup/system_XMC4500.c **** #define SCU_CLK_WDTCLKCR_WDTSEL_STANDBY  (1U << SCU_CLK_WDTCLKCR_WDTSEL_Pos)
+ 198:../Startup/system_XMC4500.c **** #define SCU_CLK_WDTCLKCR_WDTSEL_PLL      (2U << SCU_CLK_WDTCLKCR_WDTSEL_Pos)
+ 199:../Startup/system_XMC4500.c **** 
+ 200:../Startup/system_XMC4500.c **** #define SCU_CLK_EXTCLKCR_ECKSEL_SYS      (0U << SCU_CLK_EXTCLKCR_ECKSEL_Pos)
+ 201:../Startup/system_XMC4500.c **** #define SCU_CLK_EXTCLKCR_ECKSEL_USBPLL   (2U << SCU_CLK_EXTCLKCR_ECKSEL_Pos)
+ 202:../Startup/system_XMC4500.c **** #define SCU_CLK_EXTCLKCR_ECKSEL_PLL      (3U << SCU_CLK_EXTCLKCR_ECKSEL_Pos)
+ 203:../Startup/system_XMC4500.c **** 
+ 204:../Startup/system_XMC4500.c **** #define EXTCLK_PIN_P0_8  (0)
+ 205:../Startup/system_XMC4500.c **** #define EXTCLK_PIN_P1_15 (1)
+ 206:../Startup/system_XMC4500.c **** 
+ 207:../Startup/system_XMC4500.c **** /*
+ 208:../Startup/system_XMC4500.c **** //    <h> Clock tree
+ 209:../Startup/system_XMC4500.c **** //        <o1.0> CPU clock divider
+ 210:../Startup/system_XMC4500.c **** //                   <0=> fCPU = fSYS
+ 211:../Startup/system_XMC4500.c **** //                   <1=> fCPU = fSYS / 2
+ 212:../Startup/system_XMC4500.c **** //        <o2.0>  Peripheral clock divider
+ 213:../Startup/system_XMC4500.c **** //                     <0=> fPB	= fCPU
+ 214:../Startup/system_XMC4500.c **** //                     <1=> fPB	= fCPU / 2
+ 215:../Startup/system_XMC4500.c **** //        <e.4> Enable CCU clock
+ 216:../Startup/system_XMC4500.c **** //             <o3.0>  CCU clock divider
+ 217:../Startup/system_XMC4500.c **** //                     <0=> fCCU = fCPU
+ 218:../Startup/system_XMC4500.c **** //                     <1=> fCCU = fCPU / 2
+ 219:../Startup/system_XMC4500.c **** //        </e>
+ 220:../Startup/system_XMC4500.c **** //        <e.5> Enable WDT clock
+ 221:../Startup/system_XMC4500.c **** //             <o4.0..7>  WDT clock divider <1-256><#-1>
+ 222:../Startup/system_XMC4500.c **** //             <o4.16..17> WDT clock source <0=> fOFI
+ 223:../Startup/system_XMC4500.c **** //                                          <1=> fSTDBY
+ 224:../Startup/system_XMC4500.c **** //                                          <2=> fPLL
+ 225:../Startup/system_XMC4500.c **** //        </e>
+ 226:../Startup/system_XMC4500.c **** //        <e.3> Enable EBU clock
+ 227:../Startup/system_XMC4500.c **** //             <o5.0..5>  EBU clock divider  <1-64><#-1>
+ 228:../Startup/system_XMC4500.c **** //        </e>
+ 229:../Startup/system_XMC4500.c **** //        <e.2> Enable ETH clock
+ 230:../Startup/system_XMC4500.c **** //        </e>
+ 231:../Startup/system_XMC4500.c **** //        <e.1> Enable MMC clock
+ 232:../Startup/system_XMC4500.c **** //        </e>
+ 233:../Startup/system_XMC4500.c **** //        <e.0> Enable USB clock
+ 234:../Startup/system_XMC4500.c **** //             <o6.16> USB clock source <0=> USBPLL
+ 235:../Startup/system_XMC4500.c **** //                                      <1=> PLL
+ 236:../Startup/system_XMC4500.c **** //        </e>
+ 237:../Startup/system_XMC4500.c **** //        <e7> External Clock configuration
+ 238:../Startup/system_XMC4500.c **** //            <o8.0..1> External Clock Source Selection
+ 239:../Startup/system_XMC4500.c **** //                  <0=> System clock
+ 240:../Startup/system_XMC4500.c **** //                  <2=> USB PLL clock
+ 241:../Startup/system_XMC4500.c **** //                  <3=> PLL clock
+ 242:../Startup/system_XMC4500.c **** //            <o8.16..24> External Clock divider <1-512><#-1>
+ 243:../Startup/system_XMC4500.c **** //            <i> Only valid for USB PLL and PLL clocks
+ 244:../Startup/system_XMC4500.c **** //            <o9.0> External Clock Pin Selection
+ 245:../Startup/system_XMC4500.c **** //                  <0=> P0.8
+ 246:../Startup/system_XMC4500.c **** //                  <1=> P1.15
+ 247:../Startup/system_XMC4500.c **** //        </e>
+ 248:../Startup/system_XMC4500.c **** //    </h>
+ 249:../Startup/system_XMC4500.c **** */
+ 250:../Startup/system_XMC4500.c **** #define ENABLE_SCUCLK (0U)
+ 251:../Startup/system_XMC4500.c **** #define CPUCLKDIV (0U)
+ 252:../Startup/system_XMC4500.c **** #define PBCLKDIV (0U)
+ 253:../Startup/system_XMC4500.c **** #define CCUCLKDIV (0U)
+ 254:../Startup/system_XMC4500.c **** #define WDTCLKDIV (0U | SCU_CLK_WDTCLKCR_WDTSEL_OFI)
+ 255:../Startup/system_XMC4500.c **** #define EBUCLKDIV (0U)
+ 256:../Startup/system_XMC4500.c **** #define USBCLKDIV (0U | SCU_CLK_USBCLKCR_USBSEL_USBPLL | USB_DIV)
+ 257:../Startup/system_XMC4500.c **** 
+ 258:../Startup/system_XMC4500.c **** #define ENABLE_EXTCLK (0U)
+ 259:../Startup/system_XMC4500.c **** #define EXTCLKDIV (0U | SCU_CLK_EXTCLKCR_ECKSEL_SYS)
+ 260:../Startup/system_XMC4500.c **** #define EXTCLK_PIN (0U)
+ 261:../Startup/system_XMC4500.c **** 
+ 262:../Startup/system_XMC4500.c **** #define ENABLE_PLL \
+ 263:../Startup/system_XMC4500.c ****     (SYS_CLOCK_SRC == SYS_CLOCK_SRC_PLL) || \
+ 264:../Startup/system_XMC4500.c ****     ((ENABLE_SCUCLK & SCU_CLK_CLKSET_EBUCEN_Msk) != 0) || \
+ 265:../Startup/system_XMC4500.c ****     (((ENABLE_SCUCLK & SCU_CLK_CLKSET_USBCEN_Msk) != 0) && ((USBCLKDIV & SCU_CLK_USBCLKCR_USBSEL_Ms
+ 266:../Startup/system_XMC4500.c ****     (((ENABLE_SCUCLK & SCU_CLK_CLKSET_WDTCEN_Msk) != 0) && ((WDTCLKDIV & SCU_CLK_WDTCLKCR_WDTSEL_Ms
+ 267:../Startup/system_XMC4500.c **** 
+ 268:../Startup/system_XMC4500.c **** /*
+ 269:../Startup/system_XMC4500.c **** // </h>
+ 270:../Startup/system_XMC4500.c **** */
+ 271:../Startup/system_XMC4500.c **** 
+ 272:../Startup/system_XMC4500.c **** /*
+ 273:../Startup/system_XMC4500.c **** //-------- <<< end of configuration section >>> ------------------
+ 274:../Startup/system_XMC4500.c **** */
+ 275:../Startup/system_XMC4500.c ****                                      
+ 276:../Startup/system_XMC4500.c **** /*******************************************************************************
+ 277:../Startup/system_XMC4500.c ****  * GLOBAL VARIABLES
+ 278:../Startup/system_XMC4500.c ****  *******************************************************************************/
+ 279:../Startup/system_XMC4500.c **** #if defined ( __CC_ARM )
+ 280:../Startup/system_XMC4500.c **** uint32_t SystemCoreClock __attribute__((at(0x2000FFC0)));
+ 281:../Startup/system_XMC4500.c **** uint8_t g_chipid[16] __attribute__((at(0x2000FFC4)));
+ 282:../Startup/system_XMC4500.c **** #elif defined ( __ICCARM__ )
+ 283:../Startup/system_XMC4500.c **** __no_init uint32_t SystemCoreClock;
+ 284:../Startup/system_XMC4500.c **** __no_init uint8_t g_chipid[16];
+ 285:../Startup/system_XMC4500.c **** #elif defined ( __GNUC__ )
+ 286:../Startup/system_XMC4500.c **** uint32_t SystemCoreClock __attribute__((section(".no_init")));
+ 287:../Startup/system_XMC4500.c **** uint8_t g_chipid[16] __attribute__((section(".no_init")));
+ 288:../Startup/system_XMC4500.c **** #elif defined ( __TASKING__ )
+ 289:../Startup/system_XMC4500.c **** uint32_t SystemCoreClock __at( 0x2000FFC0 );
+ 290:../Startup/system_XMC4500.c **** uint8_t g_chipid[16] __at( 0x2000FFC4 );
+ 291:../Startup/system_XMC4500.c **** #endif
+ 292:../Startup/system_XMC4500.c **** 
+ 293:../Startup/system_XMC4500.c **** extern uint32_t __Vectors;
+ 294:../Startup/system_XMC4500.c **** 
+ 295:../Startup/system_XMC4500.c **** /*******************************************************************************
+ 296:../Startup/system_XMC4500.c ****  * LOCAL FUNCTIONS
+ 297:../Startup/system_XMC4500.c ****  *******************************************************************************/
+ 298:../Startup/system_XMC4500.c **** static void delay(uint32_t cycles)
+ 299:../Startup/system_XMC4500.c **** {
+  39              	 .loc 1 299 0
+  40              	 .cfi_startproc
+  41              	 
+  42              	 
+  43              	 
+  44 0000 80B4     	 push {r7}
+  45              	.LCFI0:
+  46              	 .cfi_def_cfa_offset 4
+  47              	 .cfi_offset 7,-4
+  48 0002 85B0     	 sub sp,sp,#20
+  49              	.LCFI1:
+  50              	 .cfi_def_cfa_offset 24
+  51 0004 00AF     	 add r7,sp,#0
+  52              	.LCFI2:
+  53              	 .cfi_def_cfa_register 7
+  54 0006 7860     	 str r0,[r7,#4]
+ 300:../Startup/system_XMC4500.c ****   volatile uint32_t i;
+ 301:../Startup/system_XMC4500.c **** 
+ 302:../Startup/system_XMC4500.c ****   for(i = 0UL; i < cycles ;++i)
+  55              	 .loc 1 302 0
+  56 0008 0023     	 movs r3,#0
+  57 000a FB60     	 str r3,[r7,#12]
+  58 000c 03E0     	 b .L2
+  59              	.L3:
+  60              	.LBB10:
+  61              	.LBB11:
+  62              	 .file 2 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include/core_cmInstr.h"
+   1:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /**************************************************************************//**
+   2:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  * @file     core_cmInstr.h
+   3:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  * @brief    CMSIS Cortex-M Core Instruction Access Header File
+   4:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  * @version  V4.00
+   5:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  * @date     28. August 2014
+   6:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  *
+   7:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  * @note
+   8:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  *
+   9:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  ******************************************************************************/
+  10:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /* Copyright (c) 2009 - 2014 ARM LIMITED
+  11:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  12:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    All rights reserved.
+  13:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    Redistribution and use in source and binary forms, with or without
+  14:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    modification, are permitted provided that the following conditions are met:
+  15:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    - Redistributions of source code must retain the above copyright
+  16:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****      notice, this list of conditions and the following disclaimer.
+  17:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    - Redistributions in binary form must reproduce the above copyright
+  18:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****      notice, this list of conditions and the following disclaimer in the
+  19:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****      documentation and/or other materials provided with the distribution.
+  20:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    - Neither the name of ARM nor the names of its contributors may be used
+  21:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****      to endorse or promote products derived from this software without
+  22:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****      specific prior written permission.
+  23:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    *
+  24:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  25:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  26:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  27:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    ARE DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS AND CONTRIBUTORS BE
+  28:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  29:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  30:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  31:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  32:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  33:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  34:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    POSSIBILITY OF SUCH DAMAGE.
+  35:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****    ---------------------------------------------------------------------------*/
+  36:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  37:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  38:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #ifndef __CORE_CMINSTR_H
+  39:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __CORE_CMINSTR_H
+  40:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  41:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  42:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /* ##########################  Core Instruction Access  ######################### */
+  43:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \defgroup CMSIS_Core_InstructionInterface CMSIS Core Instruction Interface
+  44:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   Access to dedicated instructions
+  45:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   @{
+  46:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** */
+  47:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  48:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #if   defined ( __CC_ARM ) /*------------------RealView Compiler -----------------*/
+  49:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /* ARM armcc specific functions */
+  50:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  51:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #if (__ARMCC_VERSION < 400677)
+  52:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   #error "Please use ARM Compiler Toolchain V4.0.677 or later!"
+  53:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #endif
+  54:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  55:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  56:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  No Operation
+  57:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  58:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     No Operation does nothing. This instruction can be used for code alignment purposes.
+  59:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+  60:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __NOP                             __nop
+  61:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  62:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  63:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Wait For Interrupt
+  64:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  65:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     Wait For Interrupt is a hint instruction that suspends execution
+  66:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     until one of a number of events occurs.
+  67:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+  68:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __WFI                             __wfi
+  69:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  70:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  71:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Wait For Event
+  72:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  73:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     Wait For Event is a hint instruction that permits the processor to enter
+  74:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     a low-power state until one of a number of events occurs.
+  75:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+  76:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __WFE                             __wfe
+  77:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  78:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  79:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Send Event
+  80:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  81:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     Send Event is a hint instruction. It causes an event to be signaled to the CPU.
+  82:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+  83:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __SEV                             __sev
+  84:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  85:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  86:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Instruction Synchronization Barrier
+  87:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  88:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     Instruction Synchronization Barrier flushes the pipeline in the processor,
+  89:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     so that all instructions following the ISB are fetched from cache or
+  90:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     memory, after the instruction has been completed.
+  91:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+  92:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __ISB()                           __isb(0xF)
+  93:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  94:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  95:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Data Synchronization Barrier
+  96:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+  97:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function acts as a special kind of Data Memory Barrier.
+  98:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     It completes when all explicit memory accesses before this instruction complete.
+  99:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 100:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __DSB()                           __dsb(0xF)
+ 101:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 102:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 103:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Data Memory Barrier
+ 104:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 105:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function ensures the apparent order of the explicit memory operations before
+ 106:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     and after the instruction, without ensuring their completion.
+ 107:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 108:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __DMB()                           __dmb(0xF)
+ 109:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 110:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 111:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Reverse byte order (32 bit)
+ 112:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 113:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function reverses the byte order in integer value.
+ 114:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 115:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 116:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return               Reversed value
+ 117:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 118:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __REV                             __rev
+ 119:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 120:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 121:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Reverse byte order (16 bit)
+ 122:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 123:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function reverses the byte order in two unsigned short values.
+ 124:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 125:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 126:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return               Reversed value
+ 127:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 128:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #ifndef __NO_EMBEDDED_ASM
+ 129:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** __attribute__((section(".rev16_text"))) __STATIC_INLINE __ASM uint32_t __REV16(uint32_t value)
+ 130:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** {
+ 131:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   rev16 r0, r0
+ 132:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   bx lr
+ 133:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** }
+ 134:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #endif
+ 135:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 136:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Reverse byte order in signed short value
+ 137:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 138:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function reverses the byte order in a signed short value with sign extension to integer.
+ 139:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 140:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 141:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return               Reversed value
+ 142:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 143:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #ifndef __NO_EMBEDDED_ASM
+ 144:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** __attribute__((section(".revsh_text"))) __STATIC_INLINE __ASM int32_t __REVSH(int32_t value)
+ 145:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** {
+ 146:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   revsh r0, r0
+ 147:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   bx lr
+ 148:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** }
+ 149:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #endif
+ 150:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 151:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 152:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Rotate Right in unsigned value (32 bit)
+ 153:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 154:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function Rotate Right (immediate) provides the value of the contents of a register rotated
+ 155:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 156:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    value  Value to rotate
+ 157:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    value  Number of Bits to rotate
+ 158:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return               Rotated value
+ 159:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 160:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __ROR                             __ror
+ 161:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 162:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 163:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Breakpoint
+ 164:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 165:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function causes the processor to enter Debug state.
+ 166:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     Debug tools can use this to investigate system state when the instruction at a particular addre
+ 167:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 168:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    value  is ignored by the processor.
+ 169:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****                    If required, a debugger can use it to store additional information about the bre
+ 170:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 171:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __BKPT(value)                       __breakpoint(value)
+ 172:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 173:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 174:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #if       (__CORTEX_M >= 0x03) || (__CORTEX_SC >= 300)
+ 175:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 176:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Reverse bit order of value
+ 177:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 178:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function reverses the bit order of the given value.
+ 179:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 180:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    value  Value to reverse
+ 181:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return               Reversed value
+ 182:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 183:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __RBIT                            __rbit
+ 184:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 185:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 186:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  LDR Exclusive (8 bit)
+ 187:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 188:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function executes a exclusive LDR instruction for 8 bit value.
+ 189:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 190:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 191:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return             value of type uint8_t at (*ptr)
+ 192:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 193:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __LDREXB(ptr)                     ((uint8_t ) __ldrex(ptr))
+ 194:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 195:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 196:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  LDR Exclusive (16 bit)
+ 197:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 198:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function executes a exclusive LDR instruction for 16 bit values.
+ 199:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 200:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 201:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return        value of type uint16_t at (*ptr)
+ 202:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 203:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __LDREXH(ptr)                     ((uint16_t) __ldrex(ptr))
+ 204:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 205:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 206:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  LDR Exclusive (32 bit)
+ 207:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 208:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function executes a exclusive LDR instruction for 32 bit values.
+ 209:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 210:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 211:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return        value of type uint32_t at (*ptr)
+ 212:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 213:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __LDREXW(ptr)                     ((uint32_t ) __ldrex(ptr))
+ 214:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 215:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 216:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  STR Exclusive (8 bit)
+ 217:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 218:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function executes a exclusive STR instruction for 8 bit values.
+ 219:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 220:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]  value  Value to store
+ 221:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 222:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return          0  Function succeeded
+ 223:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return          1  Function failed
+ 224:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 225:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __STREXB(value, ptr)              __strex(value, ptr)
+ 226:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 227:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 228:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  STR Exclusive (16 bit)
+ 229:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 230:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function executes a exclusive STR instruction for 16 bit values.
+ 231:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 232:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]  value  Value to store
+ 233:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 234:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return          0  Function succeeded
+ 235:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return          1  Function failed
+ 236:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 237:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __STREXH(value, ptr)              __strex(value, ptr)
+ 238:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 239:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 240:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  STR Exclusive (32 bit)
+ 241:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 242:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function executes a exclusive STR instruction for 32 bit values.
+ 243:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 244:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]  value  Value to store
+ 245:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 246:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return          0  Function succeeded
+ 247:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return          1  Function failed
+ 248:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 249:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __STREXW(value, ptr)              __strex(value, ptr)
+ 250:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 251:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 252:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Remove the exclusive lock
+ 253:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 254:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function removes the exclusive lock which is created by LDREX.
+ 255:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 256:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 257:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __CLREX                           __clrex
+ 258:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 259:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 260:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Signed Saturate
+ 261:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 262:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function saturates a signed value.
+ 263:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 264:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]  value  Value to be saturated
+ 265:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    sat  Bit position to saturate to (1..32)
+ 266:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return             Saturated value
+ 267:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 268:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __SSAT                            __ssat
+ 269:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 270:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 271:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Unsigned Saturate
+ 272:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 273:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function saturates an unsigned value.
+ 274:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 275:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]  value  Value to be saturated
+ 276:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    sat  Bit position to saturate to (0..31)
+ 277:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return             Saturated value
+ 278:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 279:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __USAT                            __usat
+ 280:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 281:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 282:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Count leading zeros
+ 283:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 284:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function counts the number of leading zeros of a data value.
+ 285:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 286:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]  value  Value to count the leading zeros
+ 287:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return             number of leading zeros in value
+ 288:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 289:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __CLZ                             __clz
+ 290:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 291:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 292:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Rotate Right with Extend (32 bit)
+ 293:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 294:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function moves each bit of a bitstring right by one bit. The carry input is shifted in at 
+ 295:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 296:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    value  Value to rotate
+ 297:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return               Rotated value
+ 298:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 299:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #ifndef __NO_EMBEDDED_ASM
+ 300:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** __attribute__((section(".rrx_text"))) __STATIC_INLINE __ASM uint32_t __RRX(uint32_t value)
+ 301:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** {
+ 302:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   rrx r0, r0
+ 303:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   bx lr
+ 304:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** }
+ 305:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #endif
+ 306:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 307:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 308:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  LDRT Unprivileged (8 bit)
+ 309:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 310:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function executes a Unprivileged LDRT instruction for 8 bit value.
+ 311:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 312:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 313:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return             value of type uint8_t at (*ptr)
+ 314:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 315:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __LDRBT(ptr)                      ((uint8_t )  __ldrt(ptr))
+ 316:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 317:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 318:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  LDRT Unprivileged (16 bit)
+ 319:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 320:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function executes a Unprivileged LDRT instruction for 16 bit values.
+ 321:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 322:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 323:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return        value of type uint16_t at (*ptr)
+ 324:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 325:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __LDRHT(ptr)                      ((uint16_t)  __ldrt(ptr))
+ 326:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 327:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 328:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  LDRT Unprivileged (32 bit)
+ 329:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 330:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function executes a Unprivileged LDRT instruction for 32 bit values.
+ 331:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 332:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    ptr  Pointer to data
+ 333:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \return        value of type uint32_t at (*ptr)
+ 334:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 335:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __LDRT(ptr)                       ((uint32_t ) __ldrt(ptr))
+ 336:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 337:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 338:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  STRT Unprivileged (8 bit)
+ 339:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 340:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function executes a Unprivileged STRT instruction for 8 bit values.
+ 341:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 342:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]  value  Value to store
+ 343:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 344:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 345:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __STRBT(value, ptr)               __strt(value, ptr)
+ 346:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 347:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 348:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  STRT Unprivileged (16 bit)
+ 349:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 350:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function executes a Unprivileged STRT instruction for 16 bit values.
+ 351:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 352:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]  value  Value to store
+ 353:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 354:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 355:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __STRHT(value, ptr)               __strt(value, ptr)
+ 356:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 357:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 358:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  STRT Unprivileged (32 bit)
+ 359:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 360:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function executes a Unprivileged STRT instruction for 32 bit values.
+ 361:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 362:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]  value  Value to store
+ 363:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     \param [in]    ptr  Pointer to location
+ 364:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 365:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __STRT(value, ptr)                __strt(value, ptr)
+ 366:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 367:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #endif /* (__CORTEX_M >= 0x03) || (__CORTEX_SC >= 300) */
+ 368:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 369:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 370:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #elif defined ( __GNUC__ ) /*------------------ GNU Compiler ---------------------*/
+ 371:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /* GNU gcc specific functions */
+ 372:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 373:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /* Define macros for porting to both thumb1 and thumb2.
+ 374:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  * For thumb1, use low register (r0-r7), specified by constrant "l"
+ 375:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  * Otherwise, use general registers, specified by constrant "r" */
+ 376:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #if defined (__thumb__) && !defined (__thumb2__)
+ 377:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __CMSIS_GCC_OUT_REG(r) "=l" (r)
+ 378:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __CMSIS_GCC_USE_REG(r) "l" (r)
+ 379:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #else
+ 380:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __CMSIS_GCC_OUT_REG(r) "=r" (r)
+ 381:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #define __CMSIS_GCC_USE_REG(r) "r" (r)
+ 382:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** #endif
+ 383:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 384:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  No Operation
+ 385:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 386:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     No Operation does nothing. This instruction can be used for code alignment purposes.
+ 387:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 388:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __NOP(void)
+ 389:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** {
+ 390:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   __ASM volatile ("nop");
+  63              	 .loc 2 390 0 discriminator 3
+  64              	
+  65 000e 00BF     	 nop
+  66              	
+  67              	 .thumb
+  68              	.LBE11:
+  69              	.LBE10:
+  70              	 .loc 1 302 0 discriminator 3
+  71 0010 FB68     	 ldr r3,[r7,#12]
+  72 0012 0133     	 adds r3,r3,#1
+  73 0014 FB60     	 str r3,[r7,#12]
+  74              	.L2:
+  75              	 .loc 1 302 0 is_stmt 0 discriminator 1
+  76 0016 FA68     	 ldr r2,[r7,#12]
+  77 0018 7B68     	 ldr r3,[r7,#4]
+  78 001a 9A42     	 cmp r2,r3
+  79 001c F7D3     	 bcc .L3
+ 303:../Startup/system_XMC4500.c ****   {
+ 304:../Startup/system_XMC4500.c ****     __NOP();
+ 305:../Startup/system_XMC4500.c ****   }
+ 306:../Startup/system_XMC4500.c **** }
+  80              	 .loc 1 306 0 is_stmt 1
+  81 001e 1437     	 adds r7,r7,#20
+  82              	.LCFI3:
+  83              	 .cfi_def_cfa_offset 4
+  84 0020 BD46     	 mov sp,r7
+  85              	.LCFI4:
+  86              	 .cfi_def_cfa_register 13
+  87              	 
+  88 0022 5DF8047B 	 ldr r7,[sp],#4
+  89              	.LCFI5:
+  90              	 .cfi_restore 7
+  91              	 .cfi_def_cfa_offset 0
+  92 0026 7047     	 bx lr
+  93              	 .cfi_endproc
+  94              	.LFE123:
+  96              	 .section .text.SystemInit,"ax",%progbits
+  97              	 .align 2
+  98              	 .weak SystemInit
+  99              	 .thumb
+ 100              	 .thumb_func
+ 102              	SystemInit:
+ 103              	.LFB124:
+ 307:../Startup/system_XMC4500.c **** 
+ 308:../Startup/system_XMC4500.c **** /*******************************************************************************
+ 309:../Startup/system_XMC4500.c ****  * API IMPLEMENTATION
+ 310:../Startup/system_XMC4500.c ****  *******************************************************************************/
+ 311:../Startup/system_XMC4500.c **** 
+ 312:../Startup/system_XMC4500.c **** __WEAK void SystemInit(void)
+ 313:../Startup/system_XMC4500.c **** {
+ 104              	 .loc 1 313 0
+ 105              	 .cfi_startproc
+ 106              	 
+ 107              	 
+ 108 0000 98B5     	 push {r3,r4,r7,lr}
+ 109              	.LCFI6:
+ 110              	 .cfi_def_cfa_offset 16
+ 111              	 .cfi_offset 3,-16
+ 112              	 .cfi_offset 4,-12
+ 113              	 .cfi_offset 7,-8
+ 114              	 .cfi_offset 14,-4
+ 115 0002 00AF     	 add r7,sp,#0
+ 116              	.LCFI7:
+ 117              	 .cfi_def_cfa_register 7
+ 314:../Startup/system_XMC4500.c ****   memcpy(g_chipid, CHIPID_LOC, 16);
+ 118              	 .loc 1 314 0
+ 119 0004 054A     	 ldr r2,.L5
+ 120 0006 4FF00053 	 mov r3,#536870912
+ 121 000a 1446     	 mov r4,r2
+ 122 000c 0FCB     	 ldmia r3,{r0,r1,r2,r3}
+ 123 000e 84E80F00 	 stmia r4,{r0,r1,r2,r3}
+ 315:../Startup/system_XMC4500.c **** 
+ 316:../Startup/system_XMC4500.c ****   SystemCoreSetup();
+ 124              	 .loc 1 316 0
+ 125 0012 FFF7FEFF 	 bl SystemCoreSetup
+ 317:../Startup/system_XMC4500.c ****   SystemCoreClockSetup(); 
+ 126              	 .loc 1 317 0
+ 127 0016 FFF7FEFF 	 bl SystemCoreClockSetup
+ 318:../Startup/system_XMC4500.c **** }
+ 128              	 .loc 1 318 0
+ 129 001a 98BD     	 pop {r3,r4,r7,pc}
+ 130              	.L6:
+ 131              	 .align 2
+ 132              	.L5:
+ 133 001c 00000000 	 .word g_chipid
+ 134              	 .cfi_endproc
+ 135              	.LFE124:
+ 137              	 .section .text.SystemCoreSetup,"ax",%progbits
+ 138              	 .align 2
+ 139              	 .weak SystemCoreSetup
+ 140              	 .thumb
+ 141              	 .thumb_func
+ 143              	SystemCoreSetup:
+ 144              	.LFB125:
+ 319:../Startup/system_XMC4500.c **** 
+ 320:../Startup/system_XMC4500.c **** __WEAK void SystemCoreSetup(void)
+ 321:../Startup/system_XMC4500.c **** {
+ 145              	 .loc 1 321 0
+ 146              	 .cfi_startproc
+ 147              	 
+ 148              	 
+ 149              	 
+ 150 0000 80B4     	 push {r7}
+ 151              	.LCFI8:
+ 152              	 .cfi_def_cfa_offset 4
+ 153              	 .cfi_offset 7,-4
+ 154 0002 83B0     	 sub sp,sp,#12
+ 155              	.LCFI9:
+ 156              	 .cfi_def_cfa_offset 16
+ 157 0004 00AF     	 add r7,sp,#0
+ 158              	.LCFI10:
+ 159              	 .cfi_def_cfa_register 7
+ 160              	.LBB12:
+ 161              	.LBB13:
+ 162              	 .file 3 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include/core_cmFunc.h"
+   1:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /**************************************************************************//**
+   2:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  * @file     core_cmFunc.h
+   3:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  * @brief    CMSIS Cortex-M Core Function Access Header File
+   4:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  * @version  V4.00
+   5:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  * @date     28. August 2014
+   6:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  *
+   7:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  * @note
+   8:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  *
+   9:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  ******************************************************************************/
+  10:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /* Copyright (c) 2009 - 2014 ARM LIMITED
+  11:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  12:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    All rights reserved.
+  13:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    Redistribution and use in source and binary forms, with or without
+  14:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    modification, are permitted provided that the following conditions are met:
+  15:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    - Redistributions of source code must retain the above copyright
+  16:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****      notice, this list of conditions and the following disclaimer.
+  17:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    - Redistributions in binary form must reproduce the above copyright
+  18:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****      notice, this list of conditions and the following disclaimer in the
+  19:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****      documentation and/or other materials provided with the distribution.
+  20:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    - Neither the name of ARM nor the names of its contributors may be used
+  21:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****      to endorse or promote products derived from this software without
+  22:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****      specific prior written permission.
+  23:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    *
+  24:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  25:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  26:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  27:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    ARE DISCLAIMED. IN NO EVENT SHALL COPYRIGHT HOLDERS AND CONTRIBUTORS BE
+  28:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  29:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  30:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  31:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  32:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  33:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  34:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    POSSIBILITY OF SUCH DAMAGE.
+  35:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    ---------------------------------------------------------------------------*/
+  36:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  37:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  38:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #ifndef __CORE_CMFUNC_H
+  39:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #define __CORE_CMFUNC_H
+  40:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  41:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  42:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /* ###########################  Core Function Access  ########################### */
+  43:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \ingroup  CMSIS_Core_FunctionInterface
+  44:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \defgroup CMSIS_Core_RegAccFunctions CMSIS Core Register Access Functions
+  45:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   @{
+  46:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+  47:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  48:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #if   defined ( __CC_ARM ) /*------------------RealView Compiler -----------------*/
+  49:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /* ARM armcc specific functions */
+  50:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  51:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #if (__ARMCC_VERSION < 400677)
+  52:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   #error "Please use ARM Compiler Toolchain V4.0.677 or later!"
+  53:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #endif
+  54:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  55:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /* intrinsic void __enable_irq();     */
+  56:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /* intrinsic void __disable_irq();    */
+  57:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  58:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Get Control Register
+  59:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  60:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function returns the content of the Control Register.
+  61:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  62:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \return               Control Register value
+  63:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+  64:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE uint32_t __get_CONTROL(void)
+  65:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+  66:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regControl         __ASM("control");
+  67:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   return(__regControl);
+  68:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+  69:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  70:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  71:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Set Control Register
+  72:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  73:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function writes the given value to the Control Register.
+  74:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  75:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \param [in]    control  Control Register value to set
+  76:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+  77:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE void __set_CONTROL(uint32_t control)
+  78:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+  79:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regControl         __ASM("control");
+  80:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   __regControl = control;
+  81:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+  82:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  83:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  84:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Get IPSR Register
+  85:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  86:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function returns the content of the IPSR Register.
+  87:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  88:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \return               IPSR Register value
+  89:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+  90:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE uint32_t __get_IPSR(void)
+  91:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+  92:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regIPSR          __ASM("ipsr");
+  93:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   return(__regIPSR);
+  94:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+  95:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  96:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  97:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Get APSR Register
+  98:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+  99:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function returns the content of the APSR Register.
+ 100:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 101:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \return               APSR Register value
+ 102:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 103:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE uint32_t __get_APSR(void)
+ 104:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 105:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regAPSR          __ASM("apsr");
+ 106:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   return(__regAPSR);
+ 107:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 108:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 109:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 110:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Get xPSR Register
+ 111:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 112:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function returns the content of the xPSR Register.
+ 113:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 114:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \return               xPSR Register value
+ 115:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 116:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE uint32_t __get_xPSR(void)
+ 117:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 118:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regXPSR          __ASM("xpsr");
+ 119:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   return(__regXPSR);
+ 120:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 121:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 122:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 123:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Get Process Stack Pointer
+ 124:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 125:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function returns the current value of the Process Stack Pointer (PSP).
+ 126:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 127:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \return               PSP Register value
+ 128:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 129:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE uint32_t __get_PSP(void)
+ 130:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 131:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regProcessStackPointer  __ASM("psp");
+ 132:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   return(__regProcessStackPointer);
+ 133:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 134:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 135:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 136:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Set Process Stack Pointer
+ 137:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 138:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function assigns the given value to the Process Stack Pointer (PSP).
+ 139:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 140:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \param [in]    topOfProcStack  Process Stack Pointer value to set
+ 141:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 142:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE void __set_PSP(uint32_t topOfProcStack)
+ 143:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 144:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regProcessStackPointer  __ASM("psp");
+ 145:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   __regProcessStackPointer = topOfProcStack;
+ 146:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 147:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 148:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 149:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Get Main Stack Pointer
+ 150:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 151:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function returns the current value of the Main Stack Pointer (MSP).
+ 152:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 153:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \return               MSP Register value
+ 154:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 155:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE uint32_t __get_MSP(void)
+ 156:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 157:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regMainStackPointer     __ASM("msp");
+ 158:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   return(__regMainStackPointer);
+ 159:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 160:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 161:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 162:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Set Main Stack Pointer
+ 163:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 164:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function assigns the given value to the Main Stack Pointer (MSP).
+ 165:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 166:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \param [in]    topOfMainStack  Main Stack Pointer value to set
+ 167:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 168:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE void __set_MSP(uint32_t topOfMainStack)
+ 169:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 170:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regMainStackPointer     __ASM("msp");
+ 171:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   __regMainStackPointer = topOfMainStack;
+ 172:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 173:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 174:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 175:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Get Priority Mask
+ 176:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 177:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function returns the current state of the priority mask bit from the Priority Mask Registe
+ 178:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 179:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \return               Priority Mask value
+ 180:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 181:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE uint32_t __get_PRIMASK(void)
+ 182:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 183:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regPriMask         __ASM("primask");
+ 184:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   return(__regPriMask);
+ 185:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 186:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 187:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 188:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Set Priority Mask
+ 189:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 190:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function assigns the given value to the Priority Mask Register.
+ 191:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 192:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \param [in]    priMask  Priority Mask
+ 193:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 194:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE void __set_PRIMASK(uint32_t priMask)
+ 195:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 196:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regPriMask         __ASM("primask");
+ 197:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   __regPriMask = (priMask);
+ 198:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 199:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 200:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 201:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #if       (__CORTEX_M >= 0x03) || (__CORTEX_SC >= 300)
+ 202:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 203:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Enable FIQ
+ 204:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 205:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function enables FIQ interrupts by clearing the F-bit in the CPSR.
+ 206:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     Can only be executed in Privileged modes.
+ 207:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 208:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #define __enable_fault_irq                __enable_fiq
+ 209:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 210:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 211:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Disable FIQ
+ 212:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 213:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function disables FIQ interrupts by setting the F-bit in the CPSR.
+ 214:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     Can only be executed in Privileged modes.
+ 215:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 216:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #define __disable_fault_irq               __disable_fiq
+ 217:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 218:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 219:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Get Base Priority
+ 220:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 221:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function returns the current value of the Base Priority register.
+ 222:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 223:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \return               Base Priority register value
+ 224:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 225:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE uint32_t  __get_BASEPRI(void)
+ 226:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 227:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regBasePri         __ASM("basepri");
+ 228:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   return(__regBasePri);
+ 229:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 230:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 231:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 232:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Set Base Priority
+ 233:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 234:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function assigns the given value to the Base Priority register.
+ 235:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 236:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \param [in]    basePri  Base Priority value to set
+ 237:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 238:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE void __set_BASEPRI(uint32_t basePri)
+ 239:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 240:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regBasePri         __ASM("basepri");
+ 241:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   __regBasePri = (basePri & 0xff);
+ 242:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 243:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 244:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 245:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Get Fault Mask
+ 246:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 247:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function returns the current value of the Fault Mask register.
+ 248:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 249:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \return               Fault Mask register value
+ 250:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 251:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE uint32_t __get_FAULTMASK(void)
+ 252:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 253:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regFaultMask       __ASM("faultmask");
+ 254:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   return(__regFaultMask);
+ 255:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 256:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 257:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 258:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Set Fault Mask
+ 259:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 260:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function assigns the given value to the Fault Mask register.
+ 261:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 262:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \param [in]    faultMask  Fault Mask value to set
+ 263:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 264:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE void __set_FAULTMASK(uint32_t faultMask)
+ 265:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 266:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regFaultMask       __ASM("faultmask");
+ 267:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   __regFaultMask = (faultMask & (uint32_t)1);
+ 268:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 269:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 270:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #endif /* (__CORTEX_M >= 0x03) || (__CORTEX_SC >= 300) */
+ 271:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 272:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 273:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #if       (__CORTEX_M == 0x04) || (__CORTEX_M == 0x07)
+ 274:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 275:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Get FPSCR
+ 276:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 277:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function returns the current value of the Floating Point Status/Control register.
+ 278:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 279:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \return               Floating Point Status/Control register value
+ 280:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 281:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE uint32_t __get_FPSCR(void)
+ 282:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 283:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
+ 284:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regfpscr         __ASM("fpscr");
+ 285:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   return(__regfpscr);
+ 286:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #else
+ 287:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****    return(0);
+ 288:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #endif
+ 289:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 290:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 291:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 292:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Set FPSCR
+ 293:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 294:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     This function assigns the given value to the Floating Point Status/Control register.
+ 295:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 296:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****     \param [in]    fpscr  Floating Point Status/Control value to set
+ 297:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 298:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __STATIC_INLINE void __set_FPSCR(uint32_t fpscr)
+ 299:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 300:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
+ 301:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   register uint32_t __regfpscr         __ASM("fpscr");
+ 302:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   __regfpscr = (fpscr);
+ 303:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #endif
+ 304:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 305:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 306:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #endif /* (__CORTEX_M == 0x04) || (__CORTEX_M == 0x07) */
+ 307:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 308:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 309:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** #elif defined ( __GNUC__ ) /*------------------ GNU Compiler ---------------------*/
+ 310:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /* GNU gcc specific functions */
+ 311:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 312:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Enable IRQ Interrupts
+ 313:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 314:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   This function enables IRQ interrupts by clearing the I-bit in the CPSR.
+ 315:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   Can only be executed in Privileged modes.
+ 316:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 317:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __enable_irq(void)
+ 318:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 319:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   __ASM volatile ("cpsie i" : : : "memory");
+ 320:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 321:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 322:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 323:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** /** \brief  Disable IRQ Interrupts
+ 324:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** 
+ 325:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   This function disables IRQ interrupts by setting the I-bit in the CPSR.
+ 326:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   Can only be executed in Privileged modes.
+ 327:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****  */
+ 328:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __disable_irq(void)
+ 329:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** {
+ 330:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h ****   __ASM volatile ("cpsid i" : : : "memory");
+ 163              	 .loc 3 330 0
+ 164              	
+ 165 0006 72B6     	 cpsid i
+ 166              	
+ 167              	 .thumb
+ 168              	.LBE13:
+ 169              	.LBE12:
+ 322:../Startup/system_XMC4500.c ****   uint32_t temp;
+ 323:../Startup/system_XMC4500.c **** 	
+ 324:../Startup/system_XMC4500.c ****   /* relocate vector table */
+ 325:../Startup/system_XMC4500.c ****   __disable_irq();
+ 326:../Startup/system_XMC4500.c ****   SCB->VTOR = (uint32_t)(&__Vectors);
+ 170              	 .loc 1 326 0
+ 171 0008 124B     	 ldr r3,.L8
+ 172 000a 134A     	 ldr r2,.L8+4
+ 173 000c 9A60     	 str r2,[r3,#8]
+ 174              	.LBB14:
+ 175              	.LBB15:
+ 391:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** }
+ 392:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 393:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 394:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Wait For Interrupt
+ 395:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 396:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     Wait For Interrupt is a hint instruction that suspends execution
+ 397:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     until one of a number of events occurs.
+ 398:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 399:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __WFI(void)
+ 400:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** {
+ 401:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   __ASM volatile ("wfi");
+ 402:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** }
+ 403:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 404:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 405:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Wait For Event
+ 406:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 407:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     Wait For Event is a hint instruction that permits the processor to enter
+ 408:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     a low-power state until one of a number of events occurs.
+ 409:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 410:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __WFE(void)
+ 411:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** {
+ 412:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   __ASM volatile ("wfe");
+ 413:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** }
+ 414:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 415:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 416:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Send Event
+ 417:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 418:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     Send Event is a hint instruction. It causes an event to be signaled to the CPU.
+ 419:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 420:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __SEV(void)
+ 421:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** {
+ 422:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   __ASM volatile ("sev");
+ 423:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** }
+ 424:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 425:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 426:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Instruction Synchronization Barrier
+ 427:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 428:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     Instruction Synchronization Barrier flushes the pipeline in the processor,
+ 429:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     so that all instructions following the ISB are fetched from cache or
+ 430:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     memory, after the instruction has been completed.
+ 431:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 432:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __ISB(void)
+ 433:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** {
+ 434:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   __ASM volatile ("isb");
+ 435:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** }
+ 436:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 437:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 438:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** /** \brief  Data Synchronization Barrier
+ 439:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** 
+ 440:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     This function acts as a special kind of Data Memory Barrier.
+ 441:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****     It completes when all explicit memory accesses before this instruction complete.
+ 442:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****  */
+ 443:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** __attribute__( ( always_inline ) ) __STATIC_INLINE void __DSB(void)
+ 444:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h **** {
+ 445:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmInstr.h ****   __ASM volatile ("dsb");
+ 176              	 .loc 2 445 0
+ 177              	
+ 178 000e BFF34F8F 	 dsb
+ 179              	
+ 180              	 .thumb
+ 181              	.LBE15:
+ 182              	.LBE14:
+ 183              	.LBB16:
+ 184              	.LBB17:
+ 319:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include\core_cmFunc.h **** }
+ 185              	 .loc 3 319 0
+ 186              	
+ 187 0012 62B6     	 cpsie i
+ 188              	
+ 189              	 .thumb
+ 190              	.LBE17:
+ 191              	.LBE16:
+ 327:../Startup/system_XMC4500.c ****   __DSB();
+ 328:../Startup/system_XMC4500.c ****   __enable_irq();
+ 329:../Startup/system_XMC4500.c ****     
+ 330:../Startup/system_XMC4500.c **** #if ((__FPU_PRESENT == 1) && (__FPU_USED == 1))
+ 331:../Startup/system_XMC4500.c ****   SCB->CPACR |= ((3UL << 10*2) |                 /* set CP10 Full Access */
+ 332:../Startup/system_XMC4500.c ****                  (3UL << 11*2)  );               /* set CP11 Full Access */
+ 333:../Startup/system_XMC4500.c **** #endif
+ 334:../Startup/system_XMC4500.c **** 
+ 335:../Startup/system_XMC4500.c ****   /* Enable unaligned memory access - SCB_CCR.UNALIGN_TRP = 0 */
+ 336:../Startup/system_XMC4500.c ****   SCB->CCR &= ~(SCB_CCR_UNALIGN_TRP_Msk);
+ 192              	 .loc 1 336 0
+ 193 0014 0F4A     	 ldr r2,.L8
+ 194 0016 0F4B     	 ldr r3,.L8
+ 195 0018 5B69     	 ldr r3,[r3,#20]
+ 196 001a 23F00803 	 bic r3,r3,#8
+ 197 001e 5361     	 str r3,[r2,#20]
+ 337:../Startup/system_XMC4500.c **** 
+ 338:../Startup/system_XMC4500.c ****   temp = FLASH0->FCON;
+ 198              	 .loc 1 338 0
+ 199 0020 0E4B     	 ldr r3,.L8+8
+ 200 0022 03F58053 	 add r3,r3,#4096
+ 201 0026 1433     	 adds r3,r3,#20
+ 202 0028 1B68     	 ldr r3,[r3]
+ 203 002a 7B60     	 str r3,[r7,#4]
+ 339:../Startup/system_XMC4500.c ****   temp &= ~FLASH_FCON_WSPFLASH_Msk;
+ 204              	 .loc 1 339 0
+ 205 002c 7B68     	 ldr r3,[r7,#4]
+ 206 002e 23F00F03 	 bic r3,r3,#15
+ 207 0032 7B60     	 str r3,[r7,#4]
+ 340:../Startup/system_XMC4500.c ****   temp |= PMU_FLASH_WS;
+ 208              	 .loc 1 340 0
+ 209 0034 7B68     	 ldr r3,[r7,#4]
+ 210 0036 43F00303 	 orr r3,r3,#3
+ 211 003a 7B60     	 str r3,[r7,#4]
+ 341:../Startup/system_XMC4500.c ****   FLASH0->FCON = temp;
+ 212              	 .loc 1 341 0
+ 213 003c 074B     	 ldr r3,.L8+8
+ 214 003e 03F58053 	 add r3,r3,#4096
+ 215 0042 1433     	 adds r3,r3,#20
+ 216 0044 7A68     	 ldr r2,[r7,#4]
+ 217 0046 1A60     	 str r2,[r3]
+ 342:../Startup/system_XMC4500.c **** }
+ 218              	 .loc 1 342 0
+ 219 0048 0C37     	 adds r7,r7,#12
+ 220              	.LCFI11:
+ 221              	 .cfi_def_cfa_offset 4
+ 222 004a BD46     	 mov sp,r7
+ 223              	.LCFI12:
+ 224              	 .cfi_def_cfa_register 13
+ 225              	 
+ 226 004c 5DF8047B 	 ldr r7,[sp],#4
+ 227              	.LCFI13:
+ 228              	 .cfi_restore 7
+ 229              	 .cfi_def_cfa_offset 0
+ 230 0050 7047     	 bx lr
+ 231              	.L9:
+ 232 0052 00BF     	 .align 2
+ 233              	.L8:
+ 234 0054 00ED00E0 	 .word -536810240
+ 235 0058 00000000 	 .word __Vectors
+ 236 005c 00100058 	 .word 1476399104
+ 237              	 .cfi_endproc
+ 238              	.LFE125:
+ 240              	 .section .text.SystemCoreClockSetup,"ax",%progbits
+ 241              	 .align 2
+ 242              	 .weak SystemCoreClockSetup
+ 243              	 .thumb
+ 244              	 .thumb_func
+ 246              	SystemCoreClockSetup:
+ 247              	.LFB126:
+ 343:../Startup/system_XMC4500.c **** 
+ 344:../Startup/system_XMC4500.c **** __WEAK void SystemCoreClockSetup(void)
+ 345:../Startup/system_XMC4500.c **** {
+ 248              	 .loc 1 345 0
+ 249              	 .cfi_startproc
+ 250              	 
+ 251              	 
+ 252 0000 80B5     	 push {r7,lr}
+ 253              	.LCFI14:
+ 254              	 .cfi_def_cfa_offset 8
+ 255              	 .cfi_offset 7,-8
+ 256              	 .cfi_offset 14,-4
+ 257 0002 00AF     	 add r7,sp,#0
+ 258              	.LCFI15:
+ 259              	 .cfi_def_cfa_register 7
+ 346:../Startup/system_XMC4500.c **** #if FOFI_CALIBRATION_MODE == FOFI_CALIBRATION_MODE_FACTORY
+ 347:../Startup/system_XMC4500.c ****   /* Enable factory calibration */
+ 348:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON0 |= SCU_PLL_PLLCON0_FOTR_Msk;
+ 349:../Startup/system_XMC4500.c **** #else
+ 350:../Startup/system_XMC4500.c ****   /* Automatic calibration uses the fSTDBY */
+ 351:../Startup/system_XMC4500.c **** 
+ 352:../Startup/system_XMC4500.c ****   /* Enable HIB domain */
+ 353:../Startup/system_XMC4500.c ****   /* Power up HIB domain if and only if it is currently powered down */
+ 354:../Startup/system_XMC4500.c ****   if((SCU_POWER->PWRSTAT & SCU_POWER_PWRSTAT_HIBEN_Msk) == 0)
+ 260              	 .loc 1 354 0
+ 261 0004 744B     	 ldr r3,.L21
+ 262 0006 1B68     	 ldr r3,[r3]
+ 263 0008 03F00103 	 and r3,r3,#1
+ 264 000c 002B     	 cmp r3,#0
+ 265 000e 0CD1     	 bne .L11
+ 355:../Startup/system_XMC4500.c ****   {
+ 356:../Startup/system_XMC4500.c ****     SCU_POWER->PWRSET |= SCU_POWER_PWRSET_HIB_Msk;
+ 266              	 .loc 1 356 0
+ 267 0010 714A     	 ldr r2,.L21
+ 268 0012 714B     	 ldr r3,.L21
+ 269 0014 5B68     	 ldr r3,[r3,#4]
+ 270 0016 43F00103 	 orr r3,r3,#1
+ 271 001a 5360     	 str r3,[r2,#4]
+ 357:../Startup/system_XMC4500.c **** 
+ 358:../Startup/system_XMC4500.c ****     while((SCU_POWER->PWRSTAT & SCU_POWER_PWRSTAT_HIBEN_Msk) == 0)
+ 272              	 .loc 1 358 0
+ 273 001c 00BF     	 nop
+ 274              	.L12:
+ 275              	 .loc 1 358 0 is_stmt 0 discriminator 1
+ 276 001e 6E4B     	 ldr r3,.L21
+ 277 0020 1B68     	 ldr r3,[r3]
+ 278 0022 03F00103 	 and r3,r3,#1
+ 279 0026 002B     	 cmp r3,#0
+ 280 0028 F9D0     	 beq .L12
+ 281              	.L11:
+ 359:../Startup/system_XMC4500.c ****     {
+ 360:../Startup/system_XMC4500.c ****       /* wait until HIB domain is enabled */
+ 361:../Startup/system_XMC4500.c ****     }
+ 362:../Startup/system_XMC4500.c ****   }
+ 363:../Startup/system_XMC4500.c **** 
+ 364:../Startup/system_XMC4500.c ****   /* Remove the reset only if HIB domain were in a state of reset */
+ 365:../Startup/system_XMC4500.c ****   if((SCU_RESET->RSTSTAT) & SCU_RESET_RSTSTAT_HIBRS_Msk)
+ 282              	 .loc 1 365 0 is_stmt 1
+ 283 002a 6C4B     	 ldr r3,.L21+4
+ 284 002c 1B68     	 ldr r3,[r3]
+ 285 002e 03F40073 	 and r3,r3,#512
+ 286 0032 002B     	 cmp r3,#0
+ 287 0034 09D0     	 beq .L13
+ 366:../Startup/system_XMC4500.c ****   {
+ 367:../Startup/system_XMC4500.c ****     SCU_RESET->RSTCLR |= SCU_RESET_RSTCLR_HIBRS_Msk;
+ 288              	 .loc 1 367 0
+ 289 0036 694A     	 ldr r2,.L21+4
+ 290 0038 684B     	 ldr r3,.L21+4
+ 291 003a 9B68     	 ldr r3,[r3,#8]
+ 292 003c 43F40073 	 orr r3,r3,#512
+ 293 0040 9360     	 str r3,[r2,#8]
+ 368:../Startup/system_XMC4500.c ****     delay(DELAY_CNT_150US_50MHZ);
+ 294              	 .loc 1 368 0
+ 295 0042 41F64C50 	 movw r0,#7500
+ 296 0046 FFF7FEFF 	 bl delay
+ 297              	.L13:
+ 369:../Startup/system_XMC4500.c ****   }
+ 370:../Startup/system_XMC4500.c ****   
+ 371:../Startup/system_XMC4500.c **** #if STDBY_CLOCK_SRC == STDBY_CLOCK_SRC_OSCULP
+ 372:../Startup/system_XMC4500.c ****   /* Enable OSC_ULP */
+ 373:../Startup/system_XMC4500.c ****   if ((SCU_HIBERNATE->OSCULCTRL & SCU_HIBERNATE_OSCULCTRL_MODE_Msk) != 0UL)
+ 374:../Startup/system_XMC4500.c ****   {
+ 375:../Startup/system_XMC4500.c ****     /*enable OSC_ULP*/
+ 376:../Startup/system_XMC4500.c ****     while (SCU_GENERAL->MIRRSTS & SCU_GENERAL_MIRRSTS_OSCULCTRL_Msk)
+ 377:../Startup/system_XMC4500.c ****     {
+ 378:../Startup/system_XMC4500.c ****       /* check SCU_MIRRSTS to ensure that no transfer over serial interface is pending */
+ 379:../Startup/system_XMC4500.c ****     }
+ 380:../Startup/system_XMC4500.c ****     SCU_HIBERNATE->OSCULCTRL &= ~SCU_HIBERNATE_OSCULCTRL_MODE_Msk;
+ 381:../Startup/system_XMC4500.c **** 
+ 382:../Startup/system_XMC4500.c ****     /* Check if the clock is OK using OSCULP Oscillator Watchdog*/
+ 383:../Startup/system_XMC4500.c ****     while (SCU_GENERAL->MIRRSTS & SCU_GENERAL_MIRRSTS_HDCR_Msk)
+ 384:../Startup/system_XMC4500.c ****     {
+ 385:../Startup/system_XMC4500.c ****       /* check SCU_MIRRSTS to ensure that no transfer over serial interface is pending */
+ 386:../Startup/system_XMC4500.c ****     }
+ 387:../Startup/system_XMC4500.c ****     SCU_HIBERNATE->HDCR |= SCU_HIBERNATE_HDCR_ULPWDGEN_Msk;
+ 388:../Startup/system_XMC4500.c **** 
+ 389:../Startup/system_XMC4500.c ****     /* wait till clock is stable */
+ 390:../Startup/system_XMC4500.c ****     do
+ 391:../Startup/system_XMC4500.c ****     {
+ 392:../Startup/system_XMC4500.c ****       while (SCU_GENERAL->MIRRSTS & SCU_GENERAL_MIRRSTS_HDCLR_Msk)
+ 393:../Startup/system_XMC4500.c ****       {
+ 394:../Startup/system_XMC4500.c ****         /* check SCU_MIRRSTS to ensure that no transfer over serial interface is pending */
+ 395:../Startup/system_XMC4500.c ****       }
+ 396:../Startup/system_XMC4500.c ****       SCU_HIBERNATE->HDCLR |= SCU_HIBERNATE_HDCLR_ULPWDG_Msk;
+ 397:../Startup/system_XMC4500.c **** 
+ 398:../Startup/system_XMC4500.c ****       delay(DELAY_CNT_50US_50MHZ);
+ 399:../Startup/system_XMC4500.c **** 
+ 400:../Startup/system_XMC4500.c ****     } while ((SCU_HIBERNATE->HDSTAT & SCU_HIBERNATE_HDSTAT_ULPWDG_Msk) != 0UL);
+ 401:../Startup/system_XMC4500.c **** 
+ 402:../Startup/system_XMC4500.c ****   }
+ 403:../Startup/system_XMC4500.c **** 
+ 404:../Startup/system_XMC4500.c ****   /* now OSC_ULP is running and can be used*/
+ 405:../Startup/system_XMC4500.c ****   /* Select OSC_ULP as the clock source for RTC and STDBY*/
+ 406:../Startup/system_XMC4500.c ****   while (SCU_GENERAL->MIRRSTS & SCU_GENERAL_MIRRSTS_HDCR_Msk)
+ 407:../Startup/system_XMC4500.c ****   {
+ 408:../Startup/system_XMC4500.c ****     /* check SCU_MIRRSTS to ensure that no transfer over serial interface is pending */
+ 409:../Startup/system_XMC4500.c ****   }
+ 410:../Startup/system_XMC4500.c ****   SCU_HIBERNATE->HDCR |= SCU_HIBERNATE_HDCR_RCS_Msk | SCU_HIBERNATE_HDCR_STDBYSEL_Msk;
+ 411:../Startup/system_XMC4500.c **** 
+ 412:../Startup/system_XMC4500.c **** #endif /* STDBY_CLOCK_SRC == STDBY_CLOCK_SRC_OSCULP */
+ 413:../Startup/system_XMC4500.c **** 
+ 414:../Startup/system_XMC4500.c ****   /* Enable automatic calibration of internal fast oscillator */
+ 415:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON0 |= SCU_PLL_PLLCON0_AOTREN_Msk;
+ 298              	 .loc 1 415 0
+ 299 004a 654A     	 ldr r2,.L21+8
+ 300 004c 644B     	 ldr r3,.L21+8
+ 301 004e 5B68     	 ldr r3,[r3,#4]
+ 302 0050 43F40023 	 orr r3,r3,#524288
+ 303 0054 5360     	 str r3,[r2,#4]
+ 416:../Startup/system_XMC4500.c **** #endif /* FOFI_CALIBRATION_MODE == FOFI_CALIBRATION_MODE_AUTOMATIC */
+ 417:../Startup/system_XMC4500.c **** 
+ 418:../Startup/system_XMC4500.c ****   delay(DELAY_CNT_50US_50MHZ);
+ 304              	 .loc 1 418 0
+ 305 0056 40F6C410 	 movw r0,#2500
+ 306 005a FFF7FEFF 	 bl delay
+ 419:../Startup/system_XMC4500.c **** 
+ 420:../Startup/system_XMC4500.c **** #if ENABLE_PLL
+ 421:../Startup/system_XMC4500.c **** 
+ 422:../Startup/system_XMC4500.c ****   /* enable PLL */
+ 423:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON0 &= ~(SCU_PLL_PLLCON0_VCOPWD_Msk | SCU_PLL_PLLCON0_PLLPWD_Msk);
+ 307              	 .loc 1 423 0
+ 308 005e 604A     	 ldr r2,.L21+8
+ 309 0060 5F4B     	 ldr r3,.L21+8
+ 310 0062 5B68     	 ldr r3,[r3,#4]
+ 311 0064 23F48033 	 bic r3,r3,#65536
+ 312 0068 23F00203 	 bic r3,r3,#2
+ 313 006c 5360     	 str r3,[r2,#4]
+ 424:../Startup/system_XMC4500.c **** 
+ 425:../Startup/system_XMC4500.c **** #if PLL_CLOCK_SRC != PLL_CLOCK_SRC_OFI
+ 426:../Startup/system_XMC4500.c ****   /* enable OSC_HP */
+ 427:../Startup/system_XMC4500.c ****   if ((SCU_OSC->OSCHPCTRL & SCU_OSC_OSCHPCTRL_MODE_Msk) != 0U)
+ 314              	 .loc 1 427 0
+ 315 006e 5D4B     	 ldr r3,.L21+12
+ 316 0070 5B68     	 ldr r3,[r3,#4]
+ 317 0072 03F03003 	 and r3,r3,#48
+ 318 0076 002B     	 cmp r3,#0
+ 319 0078 27D0     	 beq .L14
+ 428:../Startup/system_XMC4500.c ****   {
+ 429:../Startup/system_XMC4500.c ****     SCU_OSC->OSCHPCTRL &= ~(SCU_OSC_OSCHPCTRL_MODE_Msk | SCU_OSC_OSCHPCTRL_OSCVAL_Pos);
+ 320              	 .loc 1 429 0
+ 321 007a 5A4A     	 ldr r2,.L21+12
+ 322 007c 594B     	 ldr r3,.L21+12
+ 323 007e 5B68     	 ldr r3,[r3,#4]
+ 324 0080 23F03003 	 bic r3,r3,#48
+ 325 0084 5360     	 str r3,[r2,#4]
+ 430:../Startup/system_XMC4500.c ****     SCU_OSC->OSCHPCTRL |= ((OSCHP_GetFrequency() / FOSCREF) - 1UL) << SCU_OSC_OSCHPCTRL_OSCVAL_Pos;
+ 326              	 .loc 1 430 0
+ 327 0086 FFF7FEFF 	 bl OSCHP_GetFrequency
+ 328 008a 0246     	 mov r2,r0
+ 329 008c 564B     	 ldr r3,.L21+16
+ 330 008e A3FB0223 	 umull r2,r3,r3,r2
+ 331 0092 1B0D     	 lsrs r3,r3,#20
+ 332 0094 013B     	 subs r3,r3,#1
+ 333 0096 1B04     	 lsls r3,r3,#16
+ 334 0098 5249     	 ldr r1,.L21+12
+ 335 009a 524A     	 ldr r2,.L21+12
+ 336 009c 5268     	 ldr r2,[r2,#4]
+ 337 009e 1343     	 orrs r3,r3,r2
+ 338 00a0 4B60     	 str r3,[r1,#4]
+ 431:../Startup/system_XMC4500.c **** 
+ 432:../Startup/system_XMC4500.c ****     /* select OSC_HP clock as PLL input */
+ 433:../Startup/system_XMC4500.c ****     SCU_PLL->PLLCON2 &= ~SCU_PLL_PLLCON2_PINSEL_Msk;
+ 339              	 .loc 1 433 0
+ 340 00a2 4F4A     	 ldr r2,.L21+8
+ 341 00a4 4E4B     	 ldr r3,.L21+8
+ 342 00a6 DB68     	 ldr r3,[r3,#12]
+ 343 00a8 23F00103 	 bic r3,r3,#1
+ 344 00ac D360     	 str r3,[r2,#12]
+ 434:../Startup/system_XMC4500.c **** 
+ 435:../Startup/system_XMC4500.c ****     /* restart OSC Watchdog */
+ 436:../Startup/system_XMC4500.c ****     SCU_PLL->PLLCON0 &= ~SCU_PLL_PLLCON0_OSCRES_Msk;
+ 345              	 .loc 1 436 0
+ 346 00ae 4C4A     	 ldr r2,.L21+8
+ 347 00b0 4B4B     	 ldr r3,.L21+8
+ 348 00b2 5B68     	 ldr r3,[r3,#4]
+ 349 00b4 23F40033 	 bic r3,r3,#131072
+ 350 00b8 5360     	 str r3,[r2,#4]
+ 437:../Startup/system_XMC4500.c **** 
+ 438:../Startup/system_XMC4500.c ****     while ((SCU_PLL->PLLSTAT & SCU_PLL_PLLSTAT_OSC_USABLE) != SCU_PLL_PLLSTAT_OSC_USABLE)
+ 351              	 .loc 1 438 0
+ 352 00ba 00BF     	 nop
+ 353              	.L15:
+ 354              	 .loc 1 438 0 is_stmt 0 discriminator 1
+ 355 00bc 484B     	 ldr r3,.L21+8
+ 356 00be 1B68     	 ldr r3,[r3]
+ 357 00c0 03F46073 	 and r3,r3,#896
+ 358 00c4 B3F5607F 	 cmp r3,#896
+ 359 00c8 F8D1     	 bne .L15
+ 360              	.L14:
+ 439:../Startup/system_XMC4500.c ****     {
+ 440:../Startup/system_XMC4500.c ****       /* wait till OSC_HP output frequency is usable */
+ 441:../Startup/system_XMC4500.c ****     }
+ 442:../Startup/system_XMC4500.c ****   }
+ 443:../Startup/system_XMC4500.c **** #else /* PLL_CLOCK_SRC != PLL_CLOCK_SRC_OFI */
+ 444:../Startup/system_XMC4500.c **** 
+ 445:../Startup/system_XMC4500.c ****   /* select backup clock as PLL input */
+ 446:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON2 |= SCU_PLL_PLLCON2_PINSEL_Msk;
+ 447:../Startup/system_XMC4500.c **** #endif
+ 448:../Startup/system_XMC4500.c **** 
+ 449:../Startup/system_XMC4500.c ****   /* Go to bypass the Main PLL */
+ 450:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON0 |= SCU_PLL_PLLCON0_VCOBYP_Msk;
+ 361              	 .loc 1 450 0 is_stmt 1
+ 362 00ca 454A     	 ldr r2,.L21+8
+ 363 00cc 444B     	 ldr r3,.L21+8
+ 364 00ce 5B68     	 ldr r3,[r3,#4]
+ 365 00d0 43F00103 	 orr r3,r3,#1
+ 366 00d4 5360     	 str r3,[r2,#4]
+ 451:../Startup/system_XMC4500.c **** 
+ 452:../Startup/system_XMC4500.c ****   /* disconnect Oscillator from PLL */
+ 453:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON0 |= SCU_PLL_PLLCON0_FINDIS_Msk;
+ 367              	 .loc 1 453 0
+ 368 00d6 424A     	 ldr r2,.L21+8
+ 369 00d8 414B     	 ldr r3,.L21+8
+ 370 00da 5B68     	 ldr r3,[r3,#4]
+ 371 00dc 43F01003 	 orr r3,r3,#16
+ 372 00e0 5360     	 str r3,[r2,#4]
+ 454:../Startup/system_XMC4500.c **** 
+ 455:../Startup/system_XMC4500.c ****   /* Setup divider settings for main PLL */
+ 456:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON1 = ((PLL_NDIV << SCU_PLL_PLLCON1_NDIV_Pos) |
+ 373              	 .loc 1 456 0
+ 374 00e2 3F4B     	 ldr r3,.L21+8
+ 375 00e4 414A     	 ldr r2,.L21+20
+ 376 00e6 9A60     	 str r2,[r3,#8]
+ 457:../Startup/system_XMC4500.c ****                       (PLL_K2DIV_0 << SCU_PLL_PLLCON1_K2DIV_Pos) |
+ 458:../Startup/system_XMC4500.c ****                       (PLL_PDIV << SCU_PLL_PLLCON1_PDIV_Pos));
+ 459:../Startup/system_XMC4500.c **** 
+ 460:../Startup/system_XMC4500.c ****   /* Set OSCDISCDIS */
+ 461:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON0 |= SCU_PLL_PLLCON0_OSCDISCDIS_Msk;
+ 377              	 .loc 1 461 0
+ 378 00e8 3D4A     	 ldr r2,.L21+8
+ 379 00ea 3D4B     	 ldr r3,.L21+8
+ 380 00ec 5B68     	 ldr r3,[r3,#4]
+ 381 00ee 43F04003 	 orr r3,r3,#64
+ 382 00f2 5360     	 str r3,[r2,#4]
+ 462:../Startup/system_XMC4500.c **** 
+ 463:../Startup/system_XMC4500.c ****   /* connect Oscillator to PLL */
+ 464:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON0 &= ~SCU_PLL_PLLCON0_FINDIS_Msk;
+ 383              	 .loc 1 464 0
+ 384 00f4 3A4A     	 ldr r2,.L21+8
+ 385 00f6 3A4B     	 ldr r3,.L21+8
+ 386 00f8 5B68     	 ldr r3,[r3,#4]
+ 387 00fa 23F01003 	 bic r3,r3,#16
+ 388 00fe 5360     	 str r3,[r2,#4]
+ 465:../Startup/system_XMC4500.c **** 
+ 466:../Startup/system_XMC4500.c ****   /* restart PLL Lock detection */
+ 467:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON0 |= SCU_PLL_PLLCON0_RESLD_Msk;
+ 389              	 .loc 1 467 0
+ 390 0100 374A     	 ldr r2,.L21+8
+ 391 0102 374B     	 ldr r3,.L21+8
+ 392 0104 5B68     	 ldr r3,[r3,#4]
+ 393 0106 43F48023 	 orr r3,r3,#262144
+ 394 010a 5360     	 str r3,[r2,#4]
+ 468:../Startup/system_XMC4500.c **** 
+ 469:../Startup/system_XMC4500.c ****   while ((SCU_PLL->PLLSTAT & SCU_PLL_PLLSTAT_VCOLOCK_Msk) == 0U)
+ 395              	 .loc 1 469 0
+ 396 010c 00BF     	 nop
+ 397              	.L16:
+ 398              	 .loc 1 469 0 is_stmt 0 discriminator 1
+ 399 010e 344B     	 ldr r3,.L21+8
+ 400 0110 1B68     	 ldr r3,[r3]
+ 401 0112 03F00403 	 and r3,r3,#4
+ 402 0116 002B     	 cmp r3,#0
+ 403 0118 F9D0     	 beq .L16
+ 470:../Startup/system_XMC4500.c ****   {
+ 471:../Startup/system_XMC4500.c ****     /* wait for PLL Lock */
+ 472:../Startup/system_XMC4500.c ****   }
+ 473:../Startup/system_XMC4500.c **** 
+ 474:../Startup/system_XMC4500.c ****   /* Disable bypass- put PLL clock back */
+ 475:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON0 &= ~SCU_PLL_PLLCON0_VCOBYP_Msk;
+ 404              	 .loc 1 475 0 is_stmt 1
+ 405 011a 314A     	 ldr r2,.L21+8
+ 406 011c 304B     	 ldr r3,.L21+8
+ 407 011e 5B68     	 ldr r3,[r3,#4]
+ 408 0120 23F00103 	 bic r3,r3,#1
+ 409 0124 5360     	 str r3,[r2,#4]
+ 476:../Startup/system_XMC4500.c ****   while ((SCU_PLL->PLLSTAT & SCU_PLL_PLLSTAT_VCOBYST_Msk) != 0U)
+ 410              	 .loc 1 476 0
+ 411 0126 00BF     	 nop
+ 412              	.L17:
+ 413              	 .loc 1 476 0 is_stmt 0 discriminator 1
+ 414 0128 2D4B     	 ldr r3,.L21+8
+ 415 012a 1B68     	 ldr r3,[r3]
+ 416 012c 03F00103 	 and r3,r3,#1
+ 417 0130 002B     	 cmp r3,#0
+ 418 0132 F9D1     	 bne .L17
+ 477:../Startup/system_XMC4500.c ****   {
+ 478:../Startup/system_XMC4500.c ****     /* wait for normal mode */
+ 479:../Startup/system_XMC4500.c ****   }
+ 480:../Startup/system_XMC4500.c **** #endif /* ENABLE_PLL */
+ 481:../Startup/system_XMC4500.c **** 
+ 482:../Startup/system_XMC4500.c **** #if (SYS_CLOCK_SRC == SYS_CLOCK_SRC_PLL)
+ 483:../Startup/system_XMC4500.c ****   /* Switch system clock to PLL */
+ 484:../Startup/system_XMC4500.c ****   SCU_CLK->SYSCLKCR |= SCU_CLK_SYSCLKCR_SYSSEL_Msk;
+ 419              	 .loc 1 484 0 is_stmt 1
+ 420 0134 2E4A     	 ldr r2,.L21+24
+ 421 0136 2E4B     	 ldr r3,.L21+24
+ 422 0138 DB68     	 ldr r3,[r3,#12]
+ 423 013a 43F48033 	 orr r3,r3,#65536
+ 424 013e D360     	 str r3,[r2,#12]
+ 485:../Startup/system_XMC4500.c **** #else
+ 486:../Startup/system_XMC4500.c ****   /* Switch system clock to backup clock */
+ 487:../Startup/system_XMC4500.c ****   SCU_CLK->SYSCLKCR &= ~SCU_CLK_SYSCLKCR_SYSSEL_Msk;
+ 488:../Startup/system_XMC4500.c **** #endif
+ 489:../Startup/system_XMC4500.c **** 
+ 490:../Startup/system_XMC4500.c ****   /* Before scaling to final frequency we need to setup the clock dividers */
+ 491:../Startup/system_XMC4500.c ****   SCU_CLK->PBCLKCR = PBCLKDIV;
+ 425              	 .loc 1 491 0
+ 426 0140 2B4B     	 ldr r3,.L21+24
+ 427 0142 0022     	 movs r2,#0
+ 428 0144 5A61     	 str r2,[r3,#20]
+ 492:../Startup/system_XMC4500.c ****   SCU_CLK->CPUCLKCR = CPUCLKDIV;
+ 429              	 .loc 1 492 0
+ 430 0146 2A4B     	 ldr r3,.L21+24
+ 431 0148 0022     	 movs r2,#0
+ 432 014a 1A61     	 str r2,[r3,#16]
+ 493:../Startup/system_XMC4500.c ****   SCU_CLK->CCUCLKCR = CCUCLKDIV;
+ 433              	 .loc 1 493 0
+ 434 014c 284B     	 ldr r3,.L21+24
+ 435 014e 0022     	 movs r2,#0
+ 436 0150 1A62     	 str r2,[r3,#32]
+ 494:../Startup/system_XMC4500.c ****   SCU_CLK->WDTCLKCR = WDTCLKDIV;
+ 437              	 .loc 1 494 0
+ 438 0152 274B     	 ldr r3,.L21+24
+ 439 0154 0022     	 movs r2,#0
+ 440 0156 5A62     	 str r2,[r3,#36]
+ 495:../Startup/system_XMC4500.c ****   SCU_CLK->EBUCLKCR = EBUCLKDIV;
+ 441              	 .loc 1 495 0
+ 442 0158 254B     	 ldr r3,.L21+24
+ 443 015a 0022     	 movs r2,#0
+ 444 015c DA61     	 str r2,[r3,#28]
+ 496:../Startup/system_XMC4500.c ****   SCU_CLK->USBCLKCR = USBCLKDIV;
+ 445              	 .loc 1 496 0
+ 446 015e 244B     	 ldr r3,.L21+24
+ 447 0160 0322     	 movs r2,#3
+ 448 0162 9A61     	 str r2,[r3,#24]
+ 497:../Startup/system_XMC4500.c **** 
+ 498:../Startup/system_XMC4500.c **** #if ENABLE_PLL
+ 499:../Startup/system_XMC4500.c ****   /* PLL frequency stepping...*/
+ 500:../Startup/system_XMC4500.c ****   /* Reset OSCDISCDIS */
+ 501:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON0 &= ~SCU_PLL_PLLCON0_OSCDISCDIS_Msk;
+ 449              	 .loc 1 501 0
+ 450 0164 1E4A     	 ldr r2,.L21+8
+ 451 0166 1E4B     	 ldr r3,.L21+8
+ 452 0168 5B68     	 ldr r3,[r3,#4]
+ 453 016a 23F04003 	 bic r3,r3,#64
+ 454 016e 5360     	 str r3,[r2,#4]
+ 502:../Startup/system_XMC4500.c **** 
+ 503:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON1 = ((PLL_NDIV << SCU_PLL_PLLCON1_NDIV_Pos) |
+ 455              	 .loc 1 503 0
+ 456 0170 1B4B     	 ldr r3,.L21+8
+ 457 0172 204A     	 ldr r2,.L21+28
+ 458 0174 9A60     	 str r2,[r3,#8]
+ 504:../Startup/system_XMC4500.c **** 	                    (PLL_K2DIV_1 << SCU_PLL_PLLCON1_K2DIV_Pos) |
+ 505:../Startup/system_XMC4500.c **** 	                    (PLL_PDIV << SCU_PLL_PLLCON1_PDIV_Pos));
+ 506:../Startup/system_XMC4500.c **** 
+ 507:../Startup/system_XMC4500.c **** 
+ 508:../Startup/system_XMC4500.c ****   delay(DELAY_CNT_50US_60MHZ);
+ 459              	 .loc 1 508 0
+ 460 0176 40F6B830 	 movw r0,#3000
+ 461 017a FFF7FEFF 	 bl delay
+ 509:../Startup/system_XMC4500.c ****   while ((SCU_PLL->PLLSTAT & SCU_PLL_PLLSTAT_VCOLOCK_Msk) == 0U)
+ 462              	 .loc 1 509 0
+ 463 017e 00BF     	 nop
+ 464              	.L18:
+ 465              	 .loc 1 509 0 is_stmt 0 discriminator 1
+ 466 0180 174B     	 ldr r3,.L21+8
+ 467 0182 1B68     	 ldr r3,[r3]
+ 468 0184 03F00403 	 and r3,r3,#4
+ 469 0188 002B     	 cmp r3,#0
+ 470 018a F9D0     	 beq .L18
+ 510:../Startup/system_XMC4500.c ****   {
+ 511:../Startup/system_XMC4500.c ****     /* wait for PLL Lock */
+ 512:../Startup/system_XMC4500.c ****   }
+ 513:../Startup/system_XMC4500.c **** 
+ 514:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON1 = ((PLL_NDIV << SCU_PLL_PLLCON1_NDIV_Pos) |
+ 471              	 .loc 1 514 0 is_stmt 1
+ 472 018c 144B     	 ldr r3,.L21+8
+ 473 018e 1A4A     	 ldr r2,.L21+32
+ 474 0190 9A60     	 str r2,[r3,#8]
+ 515:../Startup/system_XMC4500.c **** 	                    (PLL_K2DIV_2 << SCU_PLL_PLLCON1_K2DIV_Pos) |
+ 516:../Startup/system_XMC4500.c **** 	                    (PLL_PDIV << SCU_PLL_PLLCON1_PDIV_Pos));
+ 517:../Startup/system_XMC4500.c **** 
+ 518:../Startup/system_XMC4500.c **** 
+ 519:../Startup/system_XMC4500.c ****   delay(DELAY_CNT_50US_90MHZ);
+ 475              	 .loc 1 519 0
+ 476 0192 41F29410 	 movw r0,#4500
+ 477 0196 FFF7FEFF 	 bl delay
+ 520:../Startup/system_XMC4500.c ****   while ((SCU_PLL->PLLSTAT & SCU_PLL_PLLSTAT_VCOLOCK_Msk) == 0U)
+ 478              	 .loc 1 520 0
+ 479 019a 00BF     	 nop
+ 480              	.L19:
+ 481              	 .loc 1 520 0 is_stmt 0 discriminator 1
+ 482 019c 104B     	 ldr r3,.L21+8
+ 483 019e 1B68     	 ldr r3,[r3]
+ 484 01a0 03F00403 	 and r3,r3,#4
+ 485 01a4 002B     	 cmp r3,#0
+ 486 01a6 F9D0     	 beq .L19
+ 521:../Startup/system_XMC4500.c ****   {
+ 522:../Startup/system_XMC4500.c ****     /* wait for PLL Lock */
+ 523:../Startup/system_XMC4500.c ****   }
+ 524:../Startup/system_XMC4500.c **** 
+ 525:../Startup/system_XMC4500.c ****   SCU_PLL->PLLCON1 = ((PLL_NDIV << SCU_PLL_PLLCON1_NDIV_Pos) |
+ 487              	 .loc 1 525 0 is_stmt 1
+ 488 01a8 0D4B     	 ldr r3,.L21+8
+ 489 01aa 144A     	 ldr r2,.L21+36
+ 490 01ac 9A60     	 str r2,[r3,#8]
+ 526:../Startup/system_XMC4500.c **** 	                    (PLL_K2DIV << SCU_PLL_PLLCON1_K2DIV_Pos) |
+ 527:../Startup/system_XMC4500.c **** 	                    (PLL_PDIV << SCU_PLL_PLLCON1_PDIV_Pos));
+ 528:../Startup/system_XMC4500.c **** 
+ 529:../Startup/system_XMC4500.c **** 
+ 530:../Startup/system_XMC4500.c ****   delay(DELAY_CNT_50US_120MHZ);
+ 491              	 .loc 1 530 0
+ 492 01ae 41F27070 	 movw r0,#6000
+ 493 01b2 FFF7FEFF 	 bl delay
+ 531:../Startup/system_XMC4500.c ****   while ((SCU_PLL->PLLSTAT & SCU_PLL_PLLSTAT_VCOLOCK_Msk) == 0U)
+ 494              	 .loc 1 531 0
+ 495 01b6 00BF     	 nop
+ 496              	.L20:
+ 497              	 .loc 1 531 0 is_stmt 0 discriminator 1
+ 498 01b8 094B     	 ldr r3,.L21+8
+ 499 01ba 1B68     	 ldr r3,[r3]
+ 500 01bc 03F00403 	 and r3,r3,#4
+ 501 01c0 002B     	 cmp r3,#0
+ 502 01c2 F9D0     	 beq .L20
+ 532:../Startup/system_XMC4500.c ****   {
+ 533:../Startup/system_XMC4500.c ****     /* wait for PLL Lock */
+ 534:../Startup/system_XMC4500.c ****   }
+ 535:../Startup/system_XMC4500.c **** 
+ 536:../Startup/system_XMC4500.c ****   SCU_TRAP->TRAPCLR = SCU_TRAP_TRAPCLR_SOSCWDGT_Msk | SCU_TRAP_TRAPCLR_SVCOLCKT_Msk;
+ 503              	 .loc 1 536 0 is_stmt 1
+ 504 01c4 0E4B     	 ldr r3,.L21+40
+ 505 01c6 0522     	 movs r2,#5
+ 506 01c8 DA60     	 str r2,[r3,#12]
+ 537:../Startup/system_XMC4500.c **** #endif /* ENABLE_PLL */
+ 538:../Startup/system_XMC4500.c **** 
+ 539:../Startup/system_XMC4500.c **** #if (((ENABLE_SCUCLK & SCU_CLK_CLKSET_USBCEN_Msk) != 0) && ((USBCLKDIV & SCU_CLK_USBCLKCR_USBSEL_Ms
+ 540:../Startup/system_XMC4500.c ****   /* enable USB PLL first */
+ 541:../Startup/system_XMC4500.c ****   SCU_PLL->USBPLLCON &= ~(SCU_PLL_USBPLLCON_VCOPWD_Msk | SCU_PLL_USBPLLCON_PLLPWD_Msk);
+ 542:../Startup/system_XMC4500.c **** 
+ 543:../Startup/system_XMC4500.c ****   /* USB PLL uses as clock input the OSC_HP */
+ 544:../Startup/system_XMC4500.c ****   /* check and if not already running enable OSC_HP */
+ 545:../Startup/system_XMC4500.c ****   if ((SCU_OSC->OSCHPCTRL & SCU_OSC_OSCHPCTRL_MODE_Msk) != 0U)
+ 546:../Startup/system_XMC4500.c ****   {
+ 547:../Startup/system_XMC4500.c ****     /* check if Main PLL is switched on for OSC WDG*/
+ 548:../Startup/system_XMC4500.c ****     if ((SCU_PLL->PLLCON0 &(SCU_PLL_PLLCON0_VCOPWD_Msk | SCU_PLL_PLLCON0_PLLPWD_Msk)) != 0UL)
+ 549:../Startup/system_XMC4500.c ****     {
+ 550:../Startup/system_XMC4500.c ****       /* enable PLL first */
+ 551:../Startup/system_XMC4500.c ****       SCU_PLL->PLLCON0 &= ~(SCU_PLL_PLLCON0_VCOPWD_Msk | SCU_PLL_PLLCON0_PLLPWD_Msk);
+ 552:../Startup/system_XMC4500.c ****     }
+ 553:../Startup/system_XMC4500.c **** 
+ 554:../Startup/system_XMC4500.c ****     SCU_OSC->OSCHPCTRL &= ~(SCU_OSC_OSCHPCTRL_MODE_Msk | SCU_OSC_OSCHPCTRL_OSCVAL_Pos);
+ 555:../Startup/system_XMC4500.c ****     SCU_OSC->OSCHPCTRL |= ((OSCHP_GetFrequency() / FOSCREF) - 1UL) << SCU_OSC_OSCHPCTRL_OSCVAL_Pos;
+ 556:../Startup/system_XMC4500.c **** 
+ 557:../Startup/system_XMC4500.c ****     /* restart OSC Watchdog */
+ 558:../Startup/system_XMC4500.c ****     SCU_PLL->PLLCON0 &= ~SCU_PLL_PLLCON0_OSCRES_Msk;
+ 559:../Startup/system_XMC4500.c **** 
+ 560:../Startup/system_XMC4500.c ****     while ((SCU_PLL->PLLSTAT & SCU_PLL_PLLSTAT_OSC_USABLE) != SCU_PLL_PLLSTAT_OSC_USABLE)
+ 561:../Startup/system_XMC4500.c ****     {
+ 562:../Startup/system_XMC4500.c ****       /* wait till OSC_HP output frequency is usable */
+ 563:../Startup/system_XMC4500.c ****     }
+ 564:../Startup/system_XMC4500.c ****   }
+ 565:../Startup/system_XMC4500.c **** 
+ 566:../Startup/system_XMC4500.c ****   /* Setup USB PLL */
+ 567:../Startup/system_XMC4500.c ****   /* Go to bypass the USB PLL */
+ 568:../Startup/system_XMC4500.c ****   SCU_PLL->USBPLLCON |= SCU_PLL_USBPLLCON_VCOBYP_Msk;
+ 569:../Startup/system_XMC4500.c **** 
+ 570:../Startup/system_XMC4500.c ****   /* disconnect Oscillator from USB PLL */
+ 571:../Startup/system_XMC4500.c ****   SCU_PLL->USBPLLCON |= SCU_PLL_USBPLLCON_FINDIS_Msk;
+ 572:../Startup/system_XMC4500.c **** 
+ 573:../Startup/system_XMC4500.c ****   /* Setup Divider settings for USB PLL */
+ 574:../Startup/system_XMC4500.c ****   SCU_PLL->USBPLLCON = ((USB_NDIV << SCU_PLL_USBPLLCON_NDIV_Pos) |
+ 575:../Startup/system_XMC4500.c ****                         (USB_PDIV << SCU_PLL_USBPLLCON_PDIV_Pos));
+ 576:../Startup/system_XMC4500.c **** 
+ 577:../Startup/system_XMC4500.c ****   /* Set OSCDISCDIS */
+ 578:../Startup/system_XMC4500.c ****   SCU_PLL->USBPLLCON |= SCU_PLL_USBPLLCON_OSCDISCDIS_Msk;
+ 579:../Startup/system_XMC4500.c **** 
+ 580:../Startup/system_XMC4500.c ****   /* connect Oscillator to USB PLL */
+ 581:../Startup/system_XMC4500.c ****   SCU_PLL->USBPLLCON &= ~SCU_PLL_USBPLLCON_FINDIS_Msk;
+ 582:../Startup/system_XMC4500.c **** 
+ 583:../Startup/system_XMC4500.c ****   /* restart PLL Lock detection */
+ 584:../Startup/system_XMC4500.c ****   SCU_PLL->USBPLLCON |= SCU_PLL_USBPLLCON_RESLD_Msk;
+ 585:../Startup/system_XMC4500.c **** 
+ 586:../Startup/system_XMC4500.c ****   while ((SCU_PLL->USBPLLSTAT & SCU_PLL_USBPLLSTAT_VCOLOCK_Msk) == 0U)
+ 587:../Startup/system_XMC4500.c ****   {
+ 588:../Startup/system_XMC4500.c ****     /* wait for PLL Lock */
+ 589:../Startup/system_XMC4500.c ****   }
+ 590:../Startup/system_XMC4500.c **** #endif /* (USBCLKDIV & SCU_CLK_USBCLKCR_USBSEL_Msk) */
+ 591:../Startup/system_XMC4500.c **** 
+ 592:../Startup/system_XMC4500.c ****   /* Enable selected clocks */
+ 593:../Startup/system_XMC4500.c ****   SCU_CLK->CLKSET = ENABLE_SCUCLK;
+ 507              	 .loc 1 593 0
+ 508 01ca 094B     	 ldr r3,.L21+24
+ 509 01cc 0022     	 movs r2,#0
+ 510 01ce 5A60     	 str r2,[r3,#4]
+ 594:../Startup/system_XMC4500.c **** 
+ 595:../Startup/system_XMC4500.c **** #if ENABLE_EXTCLK == 1
+ 596:../Startup/system_XMC4500.c ****   /* Configure external clock */
+ 597:../Startup/system_XMC4500.c ****   SCU_CLK->EXTCLKCR = EXTCLKDIV;
+ 598:../Startup/system_XMC4500.c **** 
+ 599:../Startup/system_XMC4500.c **** #if EXTCLK_PIN == EXTCLK_PIN_P1_15
+ 600:../Startup/system_XMC4500.c ****   /* P1.15 */
+ 601:../Startup/system_XMC4500.c ****   PORT1->PDR1 &= ~PORT1_PDR1_PD15_Msk;
+ 602:../Startup/system_XMC4500.c ****   PORT1->IOCR12 = (PORT1->IOCR12 & ~PORT0_IOCR12_PC15_Msk) | (0x11U << PORT0_IOCR12_PC15_Pos);
+ 603:../Startup/system_XMC4500.c **** #else
+ 604:../Startup/system_XMC4500.c ****   /* P0.8 */
+ 605:../Startup/system_XMC4500.c ****   PORT0->HWSEL &= ~PORT0_HWSEL_HW8_Msk;
+ 606:../Startup/system_XMC4500.c ****   PORT0->PDR1 &= ~PORT0_PDR1_PD8_Msk;
+ 607:../Startup/system_XMC4500.c ****   PORT0->IOCR8 = (PORT0->IOCR8 & ~PORT0_IOCR8_PC8_Msk) | (0x11U << PORT0_IOCR8_PC8_Pos);
+ 608:../Startup/system_XMC4500.c **** #endif
+ 609:../Startup/system_XMC4500.c **** 
+ 610:../Startup/system_XMC4500.c **** #endif  /* ENABLE_EXTCLK == 1  */
+ 611:../Startup/system_XMC4500.c **** 
+ 612:../Startup/system_XMC4500.c ****   SystemCoreClockUpdate();
+ 511              	 .loc 1 612 0
+ 512 01d0 FFF7FEFF 	 bl SystemCoreClockUpdate
+ 613:../Startup/system_XMC4500.c **** }
+ 513              	 .loc 1 613 0
+ 514 01d4 80BD     	 pop {r7,pc}
+ 515              	.L22:
+ 516 01d6 00BF     	 .align 2
+ 517              	.L21:
+ 518 01d8 00420050 	 .word 1342194176
+ 519 01dc 00440050 	 .word 1342194688
+ 520 01e0 10470050 	 .word 1342195472
+ 521 01e4 00470050 	 .word 1342195456
+ 522 01e8 6BCA5F6B 	 .word 1801439851
+ 523 01ec 004F1301 	 .word 18042624
+ 524 01f0 00460050 	 .word 1342195200
+ 525 01f4 004F0701 	 .word 17256192
+ 526 01f8 004F0401 	 .word 17059584
+ 527 01fc 004F0301 	 .word 16994048
+ 528 0200 60410050 	 .word 1342194016
+ 529              	 .cfi_endproc
+ 530              	.LFE126:
+ 532              	 .section .text.SystemCoreClockUpdate,"ax",%progbits
+ 533              	 .align 2
+ 534              	 .weak SystemCoreClockUpdate
+ 535              	 .thumb
+ 536              	 .thumb_func
+ 538              	SystemCoreClockUpdate:
+ 539              	.LFB127:
+ 614:../Startup/system_XMC4500.c **** 
+ 615:../Startup/system_XMC4500.c **** __WEAK void SystemCoreClockUpdate(void)
+ 616:../Startup/system_XMC4500.c **** {
+ 540              	 .loc 1 616 0
+ 541              	 .cfi_startproc
+ 542              	 
+ 543              	 
+ 544 0000 80B5     	 push {r7,lr}
+ 545              	.LCFI16:
+ 546              	 .cfi_def_cfa_offset 8
+ 547              	 .cfi_offset 7,-8
+ 548              	 .cfi_offset 14,-4
+ 549 0002 84B0     	 sub sp,sp,#16
+ 550              	.LCFI17:
+ 551              	 .cfi_def_cfa_offset 24
+ 552 0004 00AF     	 add r7,sp,#0
+ 553              	.LCFI18:
+ 554              	 .cfi_def_cfa_register 7
+ 617:../Startup/system_XMC4500.c ****   uint32_t pdiv;
+ 618:../Startup/system_XMC4500.c ****   uint32_t ndiv;
+ 619:../Startup/system_XMC4500.c ****   uint32_t kdiv;
+ 620:../Startup/system_XMC4500.c ****   uint32_t temp;
+ 621:../Startup/system_XMC4500.c **** 
+ 622:../Startup/system_XMC4500.c ****   if (SCU_CLK->SYSCLKCR & SCU_CLK_SYSCLKCR_SYSSEL_Msk)
+ 555              	 .loc 1 622 0
+ 556 0006 2F4B     	 ldr r3,.L30
+ 557 0008 DB68     	 ldr r3,[r3,#12]
+ 558 000a 03F48033 	 and r3,r3,#65536
+ 559 000e 002B     	 cmp r3,#0
+ 560 0010 3ED0     	 beq .L24
+ 623:../Startup/system_XMC4500.c ****   {
+ 624:../Startup/system_XMC4500.c ****     /* fPLL is clock source for fSYS */
+ 625:../Startup/system_XMC4500.c ****     if(SCU_PLL->PLLCON2 & SCU_PLL_PLLCON2_PINSEL_Msk)
+ 561              	 .loc 1 625 0
+ 562 0012 2D4B     	 ldr r3,.L30+4
+ 563 0014 DB68     	 ldr r3,[r3,#12]
+ 564 0016 03F00103 	 and r3,r3,#1
+ 565 001a 002B     	 cmp r3,#0
+ 566 001c 02D0     	 beq .L25
+ 626:../Startup/system_XMC4500.c ****     {
+ 627:../Startup/system_XMC4500.c ****       /* PLL input clock is the backup clock (fOFI) */
+ 628:../Startup/system_XMC4500.c ****       temp = OFI_FREQUENCY;
+ 567              	 .loc 1 628 0
+ 568 001e 2B4B     	 ldr r3,.L30+8
+ 569 0020 FB60     	 str r3,[r7,#12]
+ 570 0022 02E0     	 b .L26
+ 571              	.L25:
+ 629:../Startup/system_XMC4500.c ****     }
+ 630:../Startup/system_XMC4500.c ****     else
+ 631:../Startup/system_XMC4500.c ****     {
+ 632:../Startup/system_XMC4500.c ****       /* PLL input clock is the high performance osicllator (fOSCHP) */
+ 633:../Startup/system_XMC4500.c ****       temp = OSCHP_GetFrequency();
+ 572              	 .loc 1 633 0
+ 573 0024 FFF7FEFF 	 bl OSCHP_GetFrequency
+ 574 0028 F860     	 str r0,[r7,#12]
+ 575              	.L26:
+ 634:../Startup/system_XMC4500.c ****     }
+ 635:../Startup/system_XMC4500.c **** 
+ 636:../Startup/system_XMC4500.c ****     /* check if PLL is locked */
+ 637:../Startup/system_XMC4500.c ****     if (SCU_PLL->PLLSTAT & SCU_PLL_PLLSTAT_VCOLOCK_Msk)
+ 576              	 .loc 1 637 0
+ 577 002a 274B     	 ldr r3,.L30+4
+ 578 002c 1B68     	 ldr r3,[r3]
+ 579 002e 03F00403 	 and r3,r3,#4
+ 580 0032 002B     	 cmp r3,#0
+ 581 0034 20D0     	 beq .L27
+ 638:../Startup/system_XMC4500.c ****     {
+ 639:../Startup/system_XMC4500.c ****       /* PLL normal mode */
+ 640:../Startup/system_XMC4500.c ****       /* read back divider settings */
+ 641:../Startup/system_XMC4500.c ****       pdiv = ((SCU_PLL->PLLCON1 & SCU_PLL_PLLCON1_PDIV_Msk) >> SCU_PLL_PLLCON1_PDIV_Pos) + 1;
+ 582              	 .loc 1 641 0
+ 583 0036 244B     	 ldr r3,.L30+4
+ 584 0038 9B68     	 ldr r3,[r3,#8]
+ 585 003a 03F07063 	 and r3,r3,#251658240
+ 586 003e 1B0E     	 lsrs r3,r3,#24
+ 587 0040 0133     	 adds r3,r3,#1
+ 588 0042 BB60     	 str r3,[r7,#8]
+ 642:../Startup/system_XMC4500.c ****       ndiv = ((SCU_PLL->PLLCON1 & SCU_PLL_PLLCON1_NDIV_Msk) >> SCU_PLL_PLLCON1_NDIV_Pos) + 1;
+ 589              	 .loc 1 642 0
+ 590 0044 204B     	 ldr r3,.L30+4
+ 591 0046 9B68     	 ldr r3,[r3,#8]
+ 592 0048 03F4FE43 	 and r3,r3,#32512
+ 593 004c 1B0A     	 lsrs r3,r3,#8
+ 594 004e 0133     	 adds r3,r3,#1
+ 595 0050 7B60     	 str r3,[r7,#4]
+ 643:../Startup/system_XMC4500.c ****       kdiv = ((SCU_PLL->PLLCON1 & SCU_PLL_PLLCON1_K2DIV_Msk) >> SCU_PLL_PLLCON1_K2DIV_Pos) + 1;
+ 596              	 .loc 1 643 0
+ 597 0052 1D4B     	 ldr r3,.L30+4
+ 598 0054 9B68     	 ldr r3,[r3,#8]
+ 599 0056 03F4FE03 	 and r3,r3,#8323072
+ 600 005a 1B0C     	 lsrs r3,r3,#16
+ 601 005c 0133     	 adds r3,r3,#1
+ 602 005e 3B60     	 str r3,[r7]
+ 644:../Startup/system_XMC4500.c **** 
+ 645:../Startup/system_XMC4500.c ****       temp = (temp / (pdiv * kdiv)) * ndiv;
+ 603              	 .loc 1 645 0
+ 604 0060 BB68     	 ldr r3,[r7,#8]
+ 605 0062 3A68     	 ldr r2,[r7]
+ 606 0064 02FB03F3 	 mul r3,r2,r3
+ 607 0068 FA68     	 ldr r2,[r7,#12]
+ 608 006a B2FBF3F3 	 udiv r3,r2,r3
+ 609 006e 7A68     	 ldr r2,[r7,#4]
+ 610 0070 02FB03F3 	 mul r3,r2,r3
+ 611 0074 FB60     	 str r3,[r7,#12]
+ 612 0076 0DE0     	 b .L29
+ 613              	.L27:
+ 646:../Startup/system_XMC4500.c ****     }
+ 647:../Startup/system_XMC4500.c ****     else
+ 648:../Startup/system_XMC4500.c ****     {
+ 649:../Startup/system_XMC4500.c ****       /* PLL prescalar mode */
+ 650:../Startup/system_XMC4500.c ****       /* read back divider settings */
+ 651:../Startup/system_XMC4500.c ****       kdiv  = ((SCU_PLL->PLLCON1 & SCU_PLL_PLLCON1_K1DIV_Msk) >> SCU_PLL_PLLCON1_K1DIV_Pos) + 1;
+ 614              	 .loc 1 651 0
+ 615 0078 134B     	 ldr r3,.L30+4
+ 616 007a 9B68     	 ldr r3,[r3,#8]
+ 617 007c 03F07F03 	 and r3,r3,#127
+ 618 0080 0133     	 adds r3,r3,#1
+ 619 0082 3B60     	 str r3,[r7]
+ 652:../Startup/system_XMC4500.c ****       
+ 653:../Startup/system_XMC4500.c ****       temp = (temp / kdiv);
+ 620              	 .loc 1 653 0
+ 621 0084 FA68     	 ldr r2,[r7,#12]
+ 622 0086 3B68     	 ldr r3,[r7]
+ 623 0088 B2FBF3F3 	 udiv r3,r2,r3
+ 624 008c FB60     	 str r3,[r7,#12]
+ 625 008e 01E0     	 b .L29
+ 626              	.L24:
+ 654:../Startup/system_XMC4500.c ****     }
+ 655:../Startup/system_XMC4500.c ****   }
+ 656:../Startup/system_XMC4500.c ****   else
+ 657:../Startup/system_XMC4500.c ****   {
+ 658:../Startup/system_XMC4500.c ****     /* fOFI is clock source for fSYS */    
+ 659:../Startup/system_XMC4500.c ****     temp = OFI_FREQUENCY;
+ 627              	 .loc 1 659 0
+ 628 0090 0E4B     	 ldr r3,.L30+8
+ 629 0092 FB60     	 str r3,[r7,#12]
+ 630              	.L29:
+ 660:../Startup/system_XMC4500.c ****   }
+ 661:../Startup/system_XMC4500.c **** 
+ 662:../Startup/system_XMC4500.c ****   temp = temp / ((SCU_CLK->SYSCLKCR & SCU_CLK_SYSCLKCR_SYSDIV_Msk) + 1);
+ 631              	 .loc 1 662 0
+ 632 0094 0B4B     	 ldr r3,.L30
+ 633 0096 DB68     	 ldr r3,[r3,#12]
+ 634 0098 DBB2     	 uxtb r3,r3
+ 635 009a 0133     	 adds r3,r3,#1
+ 636 009c FA68     	 ldr r2,[r7,#12]
+ 637 009e B2FBF3F3 	 udiv r3,r2,r3
+ 638 00a2 FB60     	 str r3,[r7,#12]
+ 663:../Startup/system_XMC4500.c ****   temp = temp / ((SCU_CLK->CPUCLKCR & SCU_CLK_CPUCLKCR_CPUDIV_Msk) + 1);
+ 639              	 .loc 1 663 0
+ 640 00a4 074B     	 ldr r3,.L30
+ 641 00a6 1B69     	 ldr r3,[r3,#16]
+ 642 00a8 03F00103 	 and r3,r3,#1
+ 643 00ac 0133     	 adds r3,r3,#1
+ 644 00ae FA68     	 ldr r2,[r7,#12]
+ 645 00b0 B2FBF3F3 	 udiv r3,r2,r3
+ 646 00b4 FB60     	 str r3,[r7,#12]
+ 664:../Startup/system_XMC4500.c **** 
+ 665:../Startup/system_XMC4500.c ****   SystemCoreClock = temp;
+ 647              	 .loc 1 665 0
+ 648 00b6 064A     	 ldr r2,.L30+12
+ 649 00b8 FB68     	 ldr r3,[r7,#12]
+ 650 00ba 1360     	 str r3,[r2]
+ 666:../Startup/system_XMC4500.c **** }
+ 651              	 .loc 1 666 0
+ 652 00bc 1037     	 adds r7,r7,#16
+ 653              	.LCFI19:
+ 654              	 .cfi_def_cfa_offset 8
+ 655 00be BD46     	 mov sp,r7
+ 656              	.LCFI20:
+ 657              	 .cfi_def_cfa_register 13
+ 658              	 
+ 659 00c0 80BD     	 pop {r7,pc}
+ 660              	.L31:
+ 661 00c2 00BF     	 .align 2
+ 662              	.L30:
+ 663 00c4 00460050 	 .word 1342195200
+ 664 00c8 10470050 	 .word 1342195472
+ 665 00cc 00366E01 	 .word 24000000
+ 666 00d0 00000000 	 .word SystemCoreClock
+ 667              	 .cfi_endproc
+ 668              	.LFE127:
+ 670              	 .section .text.OSCHP_GetFrequency,"ax",%progbits
+ 671              	 .align 2
+ 672              	 .weak OSCHP_GetFrequency
+ 673              	 .thumb
+ 674              	 .thumb_func
+ 676              	OSCHP_GetFrequency:
+ 677              	.LFB128:
+ 667:../Startup/system_XMC4500.c **** 
+ 668:../Startup/system_XMC4500.c **** __WEAK uint32_t OSCHP_GetFrequency(void)
+ 669:../Startup/system_XMC4500.c **** {
+ 678              	 .loc 1 669 0
+ 679              	 .cfi_startproc
+ 680              	 
+ 681              	 
+ 682              	 
+ 683 0000 80B4     	 push {r7}
+ 684              	.LCFI21:
+ 685              	 .cfi_def_cfa_offset 4
+ 686              	 .cfi_offset 7,-4
+ 687 0002 00AF     	 add r7,sp,#0
+ 688              	.LCFI22:
+ 689              	 .cfi_def_cfa_register 7
+ 670:../Startup/system_XMC4500.c ****   return OSCHP_FREQUENCY;
+ 690              	 .loc 1 670 0
+ 691 0004 024B     	 ldr r3,.L34
+ 671:../Startup/system_XMC4500.c **** }
+ 692              	 .loc 1 671 0
+ 693 0006 1846     	 mov r0,r3
+ 694 0008 BD46     	 mov sp,r7
+ 695              	.LCFI23:
+ 696              	 .cfi_def_cfa_register 13
+ 697              	 
+ 698 000a 5DF8047B 	 ldr r7,[sp],#4
+ 699              	.LCFI24:
+ 700              	 .cfi_restore 7
+ 701              	 .cfi_def_cfa_offset 0
+ 702 000e 7047     	 bx lr
+ 703              	.L35:
+ 704              	 .align 2
+ 705              	.L34:
+ 706 0010 001BB700 	 .word 12000000
+ 707              	 .cfi_endproc
+ 708              	.LFE128:
+ 710              	 .text
+ 711              	.Letext0:
+ 712              	 .file 4 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 713              	 .file 5 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 714              	 .file 6 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include/core_cm4.h"
+ 715              	 .file 7 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Infineon/XMC4500_series/Include/XMC4500.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 system_XMC4500.c
+    {standard input}:23     .no_init:00000000 SystemCoreClock
+    {standard input}:20     .no_init:00000000 $d
+    {standard input}:29     .no_init:00000004 g_chipid
+    {standard input}:32     .text.delay:00000000 $t
+    {standard input}:36     .text.delay:00000000 delay
+    {standard input}:97     .text.SystemInit:00000000 $t
+    {standard input}:102    .text.SystemInit:00000000 SystemInit
+    {standard input}:143    .text.SystemCoreSetup:00000000 SystemCoreSetup
+    {standard input}:246    .text.SystemCoreClockSetup:00000000 SystemCoreClockSetup
+    {standard input}:133    .text.SystemInit:0000001c $d
+    {standard input}:138    .text.SystemCoreSetup:00000000 $t
+    {standard input}:234    .text.SystemCoreSetup:00000054 $d
+    {standard input}:241    .text.SystemCoreClockSetup:00000000 $t
+    {standard input}:676    .text.OSCHP_GetFrequency:00000000 OSCHP_GetFrequency
+    {standard input}:538    .text.SystemCoreClockUpdate:00000000 SystemCoreClockUpdate
+    {standard input}:518    .text.SystemCoreClockSetup:000001d8 $d
+    {standard input}:533    .text.SystemCoreClockUpdate:00000000 $t
+    {standard input}:663    .text.SystemCoreClockUpdate:000000c4 $d
+    {standard input}:671    .text.OSCHP_GetFrequency:00000000 $t
+    {standard input}:706    .text.OSCHP_GetFrequency:00000010 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+__Vectors

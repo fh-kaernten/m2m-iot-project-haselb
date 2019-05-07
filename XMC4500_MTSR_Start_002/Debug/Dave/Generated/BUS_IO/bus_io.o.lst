@@ -1,0 +1,1206 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .fpu softvfp
+   4              	 .eabi_attribute 20,1
+   5              	 .eabi_attribute 21,1
+   6              	 .eabi_attribute 23,3
+   7              	 .eabi_attribute 24,1
+   8              	 .eabi_attribute 25,1
+   9              	 .eabi_attribute 26,1
+  10              	 .eabi_attribute 30,6
+  11              	 .eabi_attribute 34,1
+  12              	 .eabi_attribute 18,4
+  13              	 .thumb
+  14              	 .file "bus_io.c"
+  15              	 .text
+  16              	.Ltext0:
+  17              	 .cfi_sections .debug_frame
+  18              	 .section .text.XMC_GPIO_SetOutputLevel,"ax",%progbits
+  19              	 .align 2
+  20              	 .thumb
+  21              	 .thumb_func
+  23              	XMC_GPIO_SetOutputLevel:
+  24              	.LFB128:
+  25              	 .file 1 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc_gpio.h"
+   1:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+   2:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @file xmc_gpio.h
+   3:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @date 2015-06-20
+   4:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+   5:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @cond
+   6:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   *************************************************************************************************
+   7:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMClib v2.0.0 - XMC Peripheral Driver Library
+   8:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+   9:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Copyright (c) 2015, Infineon Technologies AG
+  10:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * All rights reserved.                        
+  11:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                             
+  12:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * following conditions are met:   
+  14:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  15:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * disclaimer.                        
+  17:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  18:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  20:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  21:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * products derived from this software without specific prior written permission.                  
+  23:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  24:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  31:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *                                                                              
+  32:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  34:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  **************************************************************************************************
+  35:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  36:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Change History
+  37:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * --------------
+  38:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  39:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * 2015-02-20:
+  40:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Initial draft<br>
+  41:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Documentation improved <br>
+  42:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *      
+  43:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * 2015-06-20:
+  44:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *     - Removed version macros and declaration of GetDriverVersion API
+  45:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  46:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @endcond
+  47:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  48:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  49:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  50:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #ifndef XMC_GPIO_H
+  51:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_H
+  52:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  53:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /*******************************************************************************
+  54:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * HEADER FILES
+  55:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *******************************************************************************/
+  56:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  57:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc_common.h"
+  58:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  59:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+  60:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @addtogroup XMClib XMC Peripheral Library
+  61:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @{
+  62:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  63:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  64:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+  65:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @addtogroup GPIO
+  66:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @brief General Purpose Input Output (GPIO) driver for the XMC microcontroller family.
+  67:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  68:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * GPIO driver provide a generic and very flexible software interface for all standard digital I/O 
+  69:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Each port slice has individual interfaces for the operation as General Purpose I/O and it furthe
+  70:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * connectivity to the on-chip periphery and the control for the pad characteristics. 
+  71:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  72:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * The driver is divided into Input and Output mode.
+  73:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  74:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Input mode features:
+  75:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Configuration structure XMC_GPIO_CONFIG_t and initialization function XMC_GPIO_Init()
+  76:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of weak pull-up or pull-down device. Configuration structure XMC_GPIO_MO
+  77:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC1
+  78:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of input hysteresis. XMC_GPIO_SetInputHysteresis()
+  79:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+  80:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  81:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * 
+  82:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Output mode features:
+  83:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of push pull/open drain and Alternate output. Configuration structure XM
+  84:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC4
+  85:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of pad driver strength. Configuration structure XMC_GPIO_OUTPUT_STRENGTH
+  86:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+  87:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  88:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * -# Allows the selection of initial output level. Configuration structure XMC_GPIO_OUTPUT_LEVEL_t
+  89:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+  90:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *@{
+  91:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+  92:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  
+  93:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /*******************************************************************************
+  94:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * MACROS
+  95:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *******************************************************************************/
+  96:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+  97:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Msk PORT0_IOCR0_PC0_Msk 	/**< Port input output control register(Pn_IOCR),
+  98:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 													 PCx bit field-Mask :0xf8 */
+  99:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #define PORT_IOCR_PC_Size 				(8U) 	/**< Port input output control register(Pn_IOCR),
+ 100:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 													 PCx bit field-shift size */
+ 101:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 102:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_CHECK_OUTPUT_LEVEL(level) ((level == XMC_GPIO_OUTPUT_LEVEL_LOW) || \
+ 103:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****                                             (level == XMC_GPIO_OUTPUT_LEVEL_HIGH))
+ 104:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****                                             
+ 105:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #define XMC_GPIO_CHECK_HWCTRL(hwctrl) ((hwctrl == XMC_GPIO_HWCTRL_DISABLED) || \
+ 106:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****                                        (hwctrl == XMC_GPIO_HWCTRL_PERIPHERAL1) || \
+ 107:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****                                        (hwctrl == XMC_GPIO_HWCTRL_PERIPHERAL2))                    
+ 108:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****                                             
+ 109:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /*******************************************************************************
+ 110:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * ENUMS
+ 111:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *******************************************************************************/
+ 112:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 113:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 114:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines the direction and characteristics of a pin. Use type \a XMC_GPIO_MODE_t for this enum. F
+ 115:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * with alternate functions, the port pins are directly connected to input or output functions of t
+ 116:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 117:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 118:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_MODE
+ 119:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 120:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_INPUT_TRISTATE = 0x00UL, 	/**<  No internal pull device active */
+ 121:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_INPUT_PULL_DOWN = 0x08UL, 	/**<  Internal pull-down device active */
+ 122:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_INPUT_PULL_UP = 0x10UL, 	/**<  Internal pull-up device active */
+ 123:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_INPUT_SAMPLING = 0x18UL, 	/**<  No internal pull device active;Pn_OUTx continuously
+ 124:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   	  	  	  	  	  	  	  	  	  	  	  	  input value */
+ 125:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_INPUT_INVERTED_TRISTATE = 0x20UL, 	/**<  Inverted no internal pull device active */
+ 126:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_INPUT_INVERTED_PULL_DOWN = 0x28UL, 	/**<  Inverted internal pull-down device active
+ 127:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_INPUT_INVERTED_PULL_UP = 0x30UL, 	/**<  Inverted internal pull-up device active */
+ 128:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_INPUT_INVERTED_SAMPLING = 0x38UL, 	/**<  Inverted no internal pull device active;Pn
+ 129:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   	  	  	  	  	  	  	  	  	  	  	  	  	  	  samples the input value */
+ 130:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_PUSH_PULL = 0x80UL, 			/**< Push-pull general-purpose output */
+ 131:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_PUSH_PULL_ALT1 = 0x88UL, 	/**<  Push-pull alternate output function 1 */
+ 132:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_PUSH_PULL_ALT2 = 0x90UL, 	/**<  Push-pull alternate output function 2 */
+ 133:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_PUSH_PULL_ALT3 = 0x98UL, 	/**<  Push-pull alternate output function 3 */
+ 134:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_PUSH_PULL_ALT4 = 0xA0UL, 	/**<  Push-pull alternate output function 4 */
+ 135:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_PUSH_PULL_ALT5 = 0xA8UL, 	/**<  Push-pull alternate output function 5 */
+ 136:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_PUSH_PULL_ALT6 = 0xB0UL, 	/**<  Push-pull alternate output function 6 */
+ 137:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_PUSH_PULL_ALT7 = 0xB8UL, 	/**<  Push-pull alternate output function 7 */
+ 138:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN = 0xc0UL, 		/**< Open-drain general-purpose output */
+ 139:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT1 = 0xc8UL, 	/**<  Push-pull alternate output function 1 */
+ 140:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT2 = 0xD0UL, 	/**<  Push-pull alternate output function 2 */
+ 141:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT3 = 0xD8UL, 	/**<  Push-pull alternate output function 3 */
+ 142:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT4 = 0xE0UL, 	/**<  Push-pull alternate output function 4 */
+ 143:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT5 = 0xE8UL, 	/**<  Push-pull alternate output function 5 */
+ 144:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT6 = 0xF0UL, 	/**<  Push-pull alternate output function 6 */
+ 145:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_MODE_OUTPUT_OPEN_DRAIN_ALT7 = 0xF8UL 	/**<  Push-pull alternate output function 7 */
+ 146:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_MODE_t;
+ 147:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 148:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 149:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 150:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines output level of a pin. Use type \a XMC_GPIO_OUTPUT_LEVEL_t for this enum.
+ 151:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 152:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_OUTPUT_LEVEL
+ 153:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 154:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_OUTPUT_LEVEL_LOW  = 0x10000U, /**<  Reset bit */
+ 155:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_OUTPUT_LEVEL_HIGH = 0x1U, 	/**< Set bit  */
+ 156:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_OUTPUT_LEVEL_t;
+ 157:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 158:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 159:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Defines direct hardware control characteristics of the pin . Use type \a XMC_GPIO_HWCTRL_t for t
+ 160:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 161:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** typedef enum XMC_GPIO_HWCTRL
+ 162:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 163:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_DISABLED     = 0x0U, /**<  Software control only */
+ 164:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_PERIPHERAL1  = 0x1U, /**<  HWI0/HWO0 control path can override the software confi
+ 165:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_GPIO_HWCTRL_PERIPHERAL2  = 0x2U  /**<  HWI1/HWO1 control path can override the software confi
+ 166:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** } XMC_GPIO_HWCTRL_t;
+ 167:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 168:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /*******************************************************************************
+ 169:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * DEVICE FAMILY EXTENSIONS
+ 170:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *******************************************************************************/
+ 171:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 172:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  #if UC_FAMILY == XMC1
+ 173:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc1_gpio.h"
+ 174:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #elif UC_FAMILY == XMC4
+ 175:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #include "xmc4_gpio.h"
+ 176:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #else
+ 177:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #error "xmc_gpio.h: familiy device not supported"
+ 178:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #endif
+ 179:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 180:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /*******************************************************************************
+ 181:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * API PROTOTYPES
+ 182:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *******************************************************************************/
+ 183:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 184:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #ifdef __cplusplus
+ 185:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** extern "C" {
+ 186:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** #endif
+ 187:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 188:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 189:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 190:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	  Constant pointer pointing to GPIO port, to access port registers like Pn_OUT,Pn_O
+ 191:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	  Port pin number.
+ 192:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  config GPIO configuration data structure. Refer data structure @ref XMC_GPIO_CONFIG_t fo
+ 193:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 194:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 195:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 196:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 197:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC1
+ 198:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Initializes input / output mode settings like, pull up / pull down devices,hysteresis, push pull
+ 199:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Also configures alternate function outputs and clears hardware port control for a selected \a po
+ 200:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \a config provides selected I/O settings. It configures hardware registers Pn_IOCR,Pn_OUT, Pn_OM
+ 201:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+ 202:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \if XMC4
+ 203:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Initializes input / output mode settings like, pull up / pull down devices,push pull /open drain
+ 204:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Also configures alternate function outputs and clears hardware port control for selected \a port
+ 205:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * It configures hardware registers Pn_IOCR,Pn_OUT,Pn_OMR,Pn_PDISC and Pn_PDR.\n
+ 206:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \endif
+ 207:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 208:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 209:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *  None
+ 210:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 211:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 212:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * This API is called in definition of DAVE_init by code generation and therefore should not be exp
+ 213:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * for the normal operation. Use other APIs only after DAVE_init is called successfully (returns DA
+ 214:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 215:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 216:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 217:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 218:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  
+ 219:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** void XMC_GPIO_Init(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_CONFIG_t *const c
+ 220:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  
+ 221:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 222:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 223:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	Constant pointer pointing to GPIO port, to access hardware register Pn_IOCR.
+ 224:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	Port pin number.
+ 225:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  mode input / output functionality selection. Refer @ref XMC_GPIO_MODE_t for valid values
+ 226:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 227:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 228:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 229:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 230:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Sets digital input and output driver functionality and characteristics of a GPIO port pin. It co
+ 231:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * registers Pn_IOCR. \a mode is initially configured during initialization in XMC_GPIO_Init(). Cal
+ 232:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * the port direction functionality as needed later in the program.
+ 233:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 234:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 235:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *  None
+ 236:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 237:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 238:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 239:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** void XMC_GPIO_SetMode(XMC_GPIO_PORT_t *const port, const uint8_t pin, const XMC_GPIO_MODE_t mode);
+ 240:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 241:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 242:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 243:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 244:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	 Constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 245:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	 Port pin number.
+ 246:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  level output level selection. Refer @ref XMC_GPIO_OUTPUT_LEVEL_t for valid values.
+ 247:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 248:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 249:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 250:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 251:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Set port pin output level to high or low.It configures hardware registers Pn_OMR.\a level is ini
+ 252:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * configured during initialization in XMC_GPIO_Init(). Call this API to alter output level as need
+ 253:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 254:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 255:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *  XMC_GPIO_SetOutputHigh(), XMC_GPIO_SetOutputLow().
+ 256:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 257:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 258:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().
+ 259:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 260:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 261:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 262:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 263:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputLevel(XMC_GPIO_PORT_t *const port, const uint8_t pin, const 
+ 264:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** {
+  26              	 .loc 1 264 0
+  27              	 .cfi_startproc
+  28              	 
+  29              	 
+  30              	 
+  31 0000 80B4     	 push {r7}
+  32              	.LCFI0:
+  33              	 .cfi_def_cfa_offset 4
+  34              	 .cfi_offset 7,-4
+  35 0002 85B0     	 sub sp,sp,#20
+  36              	.LCFI1:
+  37              	 .cfi_def_cfa_offset 24
+  38 0004 00AF     	 add r7,sp,#0
+  39              	.LCFI2:
+  40              	 .cfi_def_cfa_register 7
+  41 0006 F860     	 str r0,[r7,#12]
+  42 0008 0B46     	 mov r3,r1
+  43 000a 7A60     	 str r2,[r7,#4]
+  44 000c FB72     	 strb r3,[r7,#11]
+ 265:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLevel: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 266:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLevel: Invalid output level", XMC_GPIO_CHECK_OUTPUT_LEVEL(level));
+ 267:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   
+ 268:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = (uint32_t)level << pin;
+  45              	 .loc 1 268 0
+  46 000e FB7A     	 ldrb r3,[r7,#11]
+  47 0010 7A68     	 ldr r2,[r7,#4]
+  48 0012 9A40     	 lsls r2,r2,r3
+  49 0014 FB68     	 ldr r3,[r7,#12]
+  50 0016 5A60     	 str r2,[r3,#4]
+ 269:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** }
+  51              	 .loc 1 269 0
+  52 0018 1437     	 adds r7,r7,#20
+  53              	.LCFI3:
+  54              	 .cfi_def_cfa_offset 4
+  55 001a BD46     	 mov sp,r7
+  56              	.LCFI4:
+  57              	 .cfi_def_cfa_register 13
+  58              	 
+  59 001c 5DF8047B 	 ldr r7,[sp],#4
+  60              	.LCFI5:
+  61              	 .cfi_restore 7
+  62              	 .cfi_def_cfa_offset 0
+  63 0020 7047     	 bx lr
+  64              	 .cfi_endproc
+  65              	.LFE128:
+  67 0022 00BF     	 .section .text.XMC_GPIO_ToggleOutput,"ax",%progbits
+  68              	 .align 2
+  69              	 .thumb
+  70              	 .thumb_func
+  72              	XMC_GPIO_ToggleOutput:
+  73              	.LFB131:
+ 270:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 271:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 272:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 273:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 274:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	Port pin number.
+ 275:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 276:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 277:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 278:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 279:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *  Sets port pin output to high. It configures hardware registers Pn_OMR.
+ 280:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 281:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *  \par<b>Related APIs:</b><BR>
+ 282:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *  XMC_GPIO_SetOutputLow()
+ 283:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 284:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 285:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().\n
+ 286:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Register Pn_OMR is virtual and does not contain any flip-flop. A read action delivers the value 
+ 287:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 288:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 289:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 290:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputHigh(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 291:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 292:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputHigh: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 293:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 294:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = (uint32_t)0x1U << pin;
+ 295:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 296:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 297:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 298:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 299:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  port	constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 300:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param  pin	port pin number.
+ 301:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 302:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return  None
+ 303:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 304:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *\par<b>Description:</b><br>
+ 305:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Sets port pin output to low. It configures hardware registers Pn_OMR.\n
+ 306:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 307:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>>
+ 308:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMC_GPIO_SetOutputHigh()
+ 309:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 310:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *\par<b>Note:</b><br>
+ 311:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode().
+ 312:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Register Pn_OMR is virtual and does not contain any flip-flop. A read action delivers the value 
+ 313:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 314:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 315:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 316:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_SetOutputLow(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 317:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 318:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_SetOutputLow: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 319:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 320:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = 0x10000U << pin;
+ 321:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 322:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 323:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 324:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 325:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param port constant pointer pointing to GPIO port, to access hardware register Pn_OMR.
+ 326:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param pin  port pin number.
+ 327:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 328:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return None
+ 329:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 330:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Description:</b><br>
+ 331:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Configures port pin output to Toggle. It configures hardware registers Pn_OMR.
+ 332:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 333:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 334:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * XMC_GPIO_SetOutputHigh(), XMC_GPIO_SetOutputLow().
+ 335:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 336:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 337:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to output mode using XMC_GPIO_SetMode(). Regis
+ 338:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * and does not contain any flip-flop. A read action delivers the value of 0.
+ 339:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 340:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 341:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 342:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE void XMC_GPIO_ToggleOutput(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 343:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** {
+  74              	 .loc 1 343 0
+  75              	 .cfi_startproc
+  76              	 
+  77              	 
+  78              	 
+  79 0000 80B4     	 push {r7}
+  80              	.LCFI6:
+  81              	 .cfi_def_cfa_offset 4
+  82              	 .cfi_offset 7,-4
+  83 0002 83B0     	 sub sp,sp,#12
+  84              	.LCFI7:
+  85              	 .cfi_def_cfa_offset 16
+  86 0004 00AF     	 add r7,sp,#0
+  87              	.LCFI8:
+  88              	 .cfi_def_cfa_register 7
+  89 0006 7860     	 str r0,[r7,#4]
+  90 0008 0B46     	 mov r3,r1
+  91 000a FB70     	 strb r3,[r7,#3]
+ 344:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_ToggleOutput: Invalid port", XMC_GPIO_CHECK_OUTPUT_PORT(port));
+ 345:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 346:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   port->OMR = 0x10001U << pin;
+  92              	 .loc 1 346 0
+  93 000c FB78     	 ldrb r3,[r7,#3]
+  94 000e 4FF00112 	 mov r2,#65537
+  95 0012 9A40     	 lsls r2,r2,r3
+  96 0014 7B68     	 ldr r3,[r7,#4]
+  97 0016 5A60     	 str r2,[r3,#4]
+ 347:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** }
+  98              	 .loc 1 347 0
+  99 0018 0C37     	 adds r7,r7,#12
+ 100              	.LCFI9:
+ 101              	 .cfi_def_cfa_offset 4
+ 102 001a BD46     	 mov sp,r7
+ 103              	.LCFI10:
+ 104              	 .cfi_def_cfa_register 13
+ 105              	 
+ 106 001c 5DF8047B 	 ldr r7,[sp],#4
+ 107              	.LCFI11:
+ 108              	 .cfi_restore 7
+ 109              	 .cfi_def_cfa_offset 0
+ 110 0020 7047     	 bx lr
+ 111              	 .cfi_endproc
+ 112              	.LFE131:
+ 114 0022 00BF     	 .section .text.XMC_GPIO_GetInput,"ax",%progbits
+ 115              	 .align 2
+ 116              	 .thumb
+ 117              	 .thumb_func
+ 119              	XMC_GPIO_GetInput:
+ 120              	.LFB132:
+ 348:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 349:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** /**
+ 350:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 351:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param port constant pointer pointing to GPIO port, to access hardware register Pn_IN.
+ 352:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @param pin  Port pin number.
+ 353:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 354:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * @return uint32_t pin logic level status.
+ 355:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 356:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *\par<b>Description:</b><br>
+ 357:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Reads the Pn_IN register and returns the current logical value at the GPIO pin.
+ 358:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 359:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Related APIs:</b><BR>
+ 360:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * None
+ 361:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 362:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * \par<b>Note:</b><br>
+ 363:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  * Prior to this api, user has to configure port pin to input mode using XMC_GPIO_SetMode().
+ 364:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  *
+ 365:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****  */
+ 366:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 367:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** __STATIC_INLINE uint32_t XMC_GPIO_GetInput(XMC_GPIO_PORT_t *const port, const uint8_t pin)
+ 368:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** {
+ 121              	 .loc 1 368 0
+ 122              	 .cfi_startproc
+ 123              	 
+ 124              	 
+ 125              	 
+ 126 0000 80B4     	 push {r7}
+ 127              	.LCFI12:
+ 128              	 .cfi_def_cfa_offset 4
+ 129              	 .cfi_offset 7,-4
+ 130 0002 83B0     	 sub sp,sp,#12
+ 131              	.LCFI13:
+ 132              	 .cfi_def_cfa_offset 16
+ 133 0004 00AF     	 add r7,sp,#0
+ 134              	.LCFI14:
+ 135              	 .cfi_def_cfa_register 7
+ 136 0006 7860     	 str r0,[r7,#4]
+ 137 0008 0B46     	 mov r3,r1
+ 138 000a FB70     	 strb r3,[r7,#3]
+ 369:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   XMC_ASSERT("XMC_GPIO_GetInput: Invalid port", XMC_GPIO_CHECK_PORT(port));
+ 370:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** 
+ 371:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h ****   return (((port->IN) >> pin) & 0x1U);
+ 139              	 .loc 1 371 0
+ 140 000c 7B68     	 ldr r3,[r7,#4]
+ 141 000e 5A6A     	 ldr r2,[r3,#36]
+ 142 0010 FB78     	 ldrb r3,[r7,#3]
+ 143 0012 22FA03F3 	 lsr r3,r2,r3
+ 144 0016 03F00103 	 and r3,r3,#1
+ 372:C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc\xmc_gpio.h **** }
+ 145              	 .loc 1 372 0
+ 146 001a 1846     	 mov r0,r3
+ 147 001c 0C37     	 adds r7,r7,#12
+ 148              	.LCFI15:
+ 149              	 .cfi_def_cfa_offset 4
+ 150 001e BD46     	 mov sp,r7
+ 151              	.LCFI16:
+ 152              	 .cfi_def_cfa_register 13
+ 153              	 
+ 154 0020 5DF8047B 	 ldr r7,[sp],#4
+ 155              	.LCFI17:
+ 156              	 .cfi_restore 7
+ 157              	 .cfi_def_cfa_offset 0
+ 158 0024 7047     	 bx lr
+ 159              	 .cfi_endproc
+ 160              	.LFE132:
+ 162 0026 00BF     	 .section .text.BUS_IO_GetAppVersion,"ax",%progbits
+ 163              	 .align 2
+ 164              	 .global BUS_IO_GetAppVersion
+ 165              	 .thumb
+ 166              	 .thumb_func
+ 168              	BUS_IO_GetAppVersion:
+ 169              	.LFB137:
+ 170              	 .file 2 "../Dave/Generated/BUS_IO/bus_io.c"
+   1:../Dave/Generated/BUS_IO/bus_io.c **** /**
+   2:../Dave/Generated/BUS_IO/bus_io.c ****  * @file BUS_io.c
+   3:../Dave/Generated/BUS_IO/bus_io.c ****  * @date 2016-04-06
+   4:../Dave/Generated/BUS_IO/bus_io.c ****  *
+   5:../Dave/Generated/BUS_IO/bus_io.c ****  * NOTE:
+   6:../Dave/Generated/BUS_IO/bus_io.c ****  * This file is generated by DAVE. Any manual modification done to this file will be lost when the 
+   7:../Dave/Generated/BUS_IO/bus_io.c ****  *
+   8:../Dave/Generated/BUS_IO/bus_io.c ****  * @cond
+   9:../Dave/Generated/BUS_IO/bus_io.c ****  **************************************************************************************************
+  10:../Dave/Generated/BUS_IO/bus_io.c ****  * BUS_IO v4.0.2 - BUS_IO APP is used to configure/control several GPIO pins as one entity.
+  11:../Dave/Generated/BUS_IO/bus_io.c ****  *
+  12:../Dave/Generated/BUS_IO/bus_io.c ****  * Copyright (c) 2016, Infineon Technologies AG
+  13:../Dave/Generated/BUS_IO/bus_io.c ****  * All rights reserved.
+  14:../Dave/Generated/BUS_IO/bus_io.c ****  *
+  15:../Dave/Generated/BUS_IO/bus_io.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  16:../Dave/Generated/BUS_IO/bus_io.c ****  * following conditions are met:
+  17:../Dave/Generated/BUS_IO/bus_io.c ****  *
+  18:../Dave/Generated/BUS_IO/bus_io.c ****  *   Redistributions of source code must retain the above copyright notice, this list of conditions
+  19:../Dave/Generated/BUS_IO/bus_io.c ****  *   disclaimer.
+  20:../Dave/Generated/BUS_IO/bus_io.c ****  *
+  21:../Dave/Generated/BUS_IO/bus_io.c ****  *   Redistributions in binary form must reproduce the above copyright notice, this list of conditi
+  22:../Dave/Generated/BUS_IO/bus_io.c ****  *   following disclaimer in the documentation and/or other materials provided with the distributio
+  23:../Dave/Generated/BUS_IO/bus_io.c ****  *
+  24:../Dave/Generated/BUS_IO/bus_io.c ****  *   Neither the name of the copyright holders nor the names of its contributors may be used to end
+  25:../Dave/Generated/BUS_IO/bus_io.c ****  *   products derived from this software without specific prior written permission.
+  26:../Dave/Generated/BUS_IO/bus_io.c ****  *
+  27:../Dave/Generated/BUS_IO/bus_io.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  28:../Dave/Generated/BUS_IO/bus_io.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  29:../Dave/Generated/BUS_IO/bus_io.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  30:../Dave/Generated/BUS_IO/bus_io.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  31:../Dave/Generated/BUS_IO/bus_io.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  32:../Dave/Generated/BUS_IO/bus_io.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  33:../Dave/Generated/BUS_IO/bus_io.c ****  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+  34:../Dave/Generated/BUS_IO/bus_io.c ****  *
+  35:../Dave/Generated/BUS_IO/bus_io.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  36:../Dave/Generated/BUS_IO/bus_io.c ****  * with Infineon Technologies AG (dave@infineon.com).
+  37:../Dave/Generated/BUS_IO/bus_io.c ****  **************************************************************************************************
+  38:../Dave/Generated/BUS_IO/bus_io.c ****  *
+  39:../Dave/Generated/BUS_IO/bus_io.c ****  * Change History
+  40:../Dave/Generated/BUS_IO/bus_io.c ****  * --------------
+  41:../Dave/Generated/BUS_IO/bus_io.c ****  *
+  42:../Dave/Generated/BUS_IO/bus_io.c ****  * 2016-04-01
+  43:../Dave/Generated/BUS_IO/bus_io.c ****  *     - Initial version.<br>
+  44:../Dave/Generated/BUS_IO/bus_io.c ****  * 2016-04-06
+  45:../Dave/Generated/BUS_IO/bus_io.c ****  *     - BUS_IO_Write() API performance improved.<br>
+  46:../Dave/Generated/BUS_IO/bus_io.c ****  *
+  47:../Dave/Generated/BUS_IO/bus_io.c ****  * @endcond
+  48:../Dave/Generated/BUS_IO/bus_io.c ****  *
+  49:../Dave/Generated/BUS_IO/bus_io.c ****  */
+  50:../Dave/Generated/BUS_IO/bus_io.c **** 
+  51:../Dave/Generated/BUS_IO/bus_io.c **** /**************************************************************************************************
+  52:../Dave/Generated/BUS_IO/bus_io.c ****  * HEADER FILES
+  53:../Dave/Generated/BUS_IO/bus_io.c ****  **************************************************************************************************
+  54:../Dave/Generated/BUS_IO/bus_io.c **** #include "bus_io.h"
+  55:../Dave/Generated/BUS_IO/bus_io.c **** 
+  56:../Dave/Generated/BUS_IO/bus_io.c **** /**************************************************************************************************
+  57:../Dave/Generated/BUS_IO/bus_io.c ****  * MACROS
+  58:../Dave/Generated/BUS_IO/bus_io.c ****  **************************************************************************************************
+  59:../Dave/Generated/BUS_IO/bus_io.c **** 
+  60:../Dave/Generated/BUS_IO/bus_io.c **** /**************************************************************************************************
+  61:../Dave/Generated/BUS_IO/bus_io.c ****  * LOCAL DATA
+  62:../Dave/Generated/BUS_IO/bus_io.c ****  **************************************************************************************************
+  63:../Dave/Generated/BUS_IO/bus_io.c **** 
+  64:../Dave/Generated/BUS_IO/bus_io.c **** /**************************************************************************************************
+  65:../Dave/Generated/BUS_IO/bus_io.c ****  * LOCAL ROUTINES
+  66:../Dave/Generated/BUS_IO/bus_io.c ****  **************************************************************************************************
+  67:../Dave/Generated/BUS_IO/bus_io.c **** 
+  68:../Dave/Generated/BUS_IO/bus_io.c ****  /*************************************************************************************************
+  69:../Dave/Generated/BUS_IO/bus_io.c ****  * API IMPLEMENTATION
+  70:../Dave/Generated/BUS_IO/bus_io.c ****  **************************************************************************************************
+  71:../Dave/Generated/BUS_IO/bus_io.c **** 
+  72:../Dave/Generated/BUS_IO/bus_io.c **** /**
+  73:../Dave/Generated/BUS_IO/bus_io.c **** * @brief Get BUS_IO APP version
+  74:../Dave/Generated/BUS_IO/bus_io.c **** * @return DAVE_APP_VERSION_t APP version information (major, minor and patch number)
+  75:../Dave/Generated/BUS_IO/bus_io.c **** */
+  76:../Dave/Generated/BUS_IO/bus_io.c **** 
+  77:../Dave/Generated/BUS_IO/bus_io.c **** DAVE_APP_VERSION_t BUS_IO_GetAppVersion(void)
+  78:../Dave/Generated/BUS_IO/bus_io.c **** {
+ 171              	 .loc 2 78 0
+ 172              	 .cfi_startproc
+ 173              	 
+ 174              	 
+ 175              	 
+ 176 0000 80B4     	 push {r7}
+ 177              	.LCFI18:
+ 178              	 .cfi_def_cfa_offset 4
+ 179              	 .cfi_offset 7,-4
+ 180 0002 83B0     	 sub sp,sp,#12
+ 181              	.LCFI19:
+ 182              	 .cfi_def_cfa_offset 16
+ 183 0004 00AF     	 add r7,sp,#0
+ 184              	.LCFI20:
+ 185              	 .cfi_def_cfa_register 7
+  79:../Dave/Generated/BUS_IO/bus_io.c ****   DAVE_APP_VERSION_t version;
+  80:../Dave/Generated/BUS_IO/bus_io.c **** 
+  81:../Dave/Generated/BUS_IO/bus_io.c ****   version.major = (uint8_t)BUS_IO_MAJOR_VERSION;
+ 186              	 .loc 2 81 0
+ 187 0006 0423     	 movs r3,#4
+ 188 0008 3B70     	 strb r3,[r7]
+  82:../Dave/Generated/BUS_IO/bus_io.c ****   version.minor = (uint8_t)BUS_IO_MINOR_VERSION;
+ 189              	 .loc 2 82 0
+ 190 000a 0023     	 movs r3,#0
+ 191 000c 7B70     	 strb r3,[r7,#1]
+  83:../Dave/Generated/BUS_IO/bus_io.c ****   version.patch = (uint8_t)BUS_IO_PATCH_VERSION;
+ 192              	 .loc 2 83 0
+ 193 000e 0223     	 movs r3,#2
+ 194 0010 BB70     	 strb r3,[r7,#2]
+  84:../Dave/Generated/BUS_IO/bus_io.c **** 
+  85:../Dave/Generated/BUS_IO/bus_io.c ****   return (version);
+ 195              	 .loc 2 85 0
+ 196 0012 3B1D     	 adds r3,r7,#4
+ 197 0014 3A46     	 mov r2,r7
+ 198 0016 1268     	 ldr r2,[r2]
+ 199 0018 1146     	 mov r1,r2
+ 200 001a 1980     	 strh r1,[r3]
+ 201 001c 0233     	 adds r3,r3,#2
+ 202 001e 120C     	 lsrs r2,r2,#16
+ 203 0020 1A70     	 strb r2,[r3]
+ 204 0022 0023     	 movs r3,#0
+ 205 0024 3A79     	 ldrb r2,[r7,#4]
+ 206 0026 62F30703 	 bfi r3,r2,#0,#8
+ 207 002a 7A79     	 ldrb r2,[r7,#5]
+ 208 002c 62F30F23 	 bfi r3,r2,#8,#8
+ 209 0030 BA79     	 ldrb r2,[r7,#6]
+ 210 0032 62F31743 	 bfi r3,r2,#16,#8
+  86:../Dave/Generated/BUS_IO/bus_io.c **** }
+ 211              	 .loc 2 86 0
+ 212 0036 1846     	 mov r0,r3
+ 213 0038 0C37     	 adds r7,r7,#12
+ 214              	.LCFI21:
+ 215              	 .cfi_def_cfa_offset 4
+ 216 003a BD46     	 mov sp,r7
+ 217              	.LCFI22:
+ 218              	 .cfi_def_cfa_register 13
+ 219              	 
+ 220 003c 5DF8047B 	 ldr r7,[sp],#4
+ 221              	.LCFI23:
+ 222              	 .cfi_restore 7
+ 223              	 .cfi_def_cfa_offset 0
+ 224 0040 7047     	 bx lr
+ 225              	 .cfi_endproc
+ 226              	.LFE137:
+ 228 0042 00BF     	 .section .text.BUS_IO_Init,"ax",%progbits
+ 229              	 .align 2
+ 230              	 .global BUS_IO_Init
+ 231              	 .thumb
+ 232              	 .thumb_func
+ 234              	BUS_IO_Init:
+ 235              	.LFB138:
+  87:../Dave/Generated/BUS_IO/bus_io.c **** 
+  88:../Dave/Generated/BUS_IO/bus_io.c **** /**
+  89:../Dave/Generated/BUS_IO/bus_io.c **** * @brief Function to initialize the port pin as per UI settings.
+  90:../Dave/Generated/BUS_IO/bus_io.c **** * @param handle_ptr Pointer pointing to APP data structure.
+  91:../Dave/Generated/BUS_IO/bus_io.c **** * @return BUS_IO_STATUS_t BUS_IO APP status.
+  92:../Dave/Generated/BUS_IO/bus_io.c **** */
+  93:../Dave/Generated/BUS_IO/bus_io.c **** 
+  94:../Dave/Generated/BUS_IO/bus_io.c **** BUS_IO_STATUS_t BUS_IO_Init(BUS_IO_t *const handle_ptr)
+  95:../Dave/Generated/BUS_IO/bus_io.c **** {
+ 236              	 .loc 2 95 0
+ 237              	 .cfi_startproc
+ 238              	 
+ 239              	 
+ 240 0000 80B5     	 push {r7,lr}
+ 241              	.LCFI24:
+ 242              	 .cfi_def_cfa_offset 8
+ 243              	 .cfi_offset 7,-8
+ 244              	 .cfi_offset 14,-4
+ 245 0002 84B0     	 sub sp,sp,#16
+ 246              	.LCFI25:
+ 247              	 .cfi_def_cfa_offset 24
+ 248 0004 00AF     	 add r7,sp,#0
+ 249              	.LCFI26:
+ 250              	 .cfi_def_cfa_register 7
+ 251 0006 7860     	 str r0,[r7,#4]
+  96:../Dave/Generated/BUS_IO/bus_io.c ****   uint8_t i;
+  97:../Dave/Generated/BUS_IO/bus_io.c **** 
+  98:../Dave/Generated/BUS_IO/bus_io.c ****   XMC_ASSERT("BUS_IO_Init: handle_ptr null pointer", handle_ptr != NULL);
+  99:../Dave/Generated/BUS_IO/bus_io.c **** 
+ 100:../Dave/Generated/BUS_IO/bus_io.c ****   if ((bool)false == handle_ptr->initialized)
+ 252              	 .loc 2 100 0
+ 253 0008 7B68     	 ldr r3,[r7,#4]
+ 254 000a 5B7C     	 ldrb r3,[r3,#17]
+ 255 000c 83F00103 	 eor r3,r3,#1
+ 256 0010 DBB2     	 uxtb r3,r3
+ 257 0012 002B     	 cmp r3,#0
+ 258 0014 20D0     	 beq .L8
+ 101:../Dave/Generated/BUS_IO/bus_io.c ****   {
+ 102:../Dave/Generated/BUS_IO/bus_io.c ****     /* Iterate the list of pins initializing the pin according to the gpio_config */
+ 103:../Dave/Generated/BUS_IO/bus_io.c ****     for (i = 0U; i < handle_ptr->number_of_pins; i++)
+ 259              	 .loc 2 103 0
+ 260 0016 0023     	 movs r3,#0
+ 261 0018 FB73     	 strb r3,[r7,#15]
+ 262 001a 15E0     	 b .L9
+ 263              	.L10:
+ 104:../Dave/Generated/BUS_IO/bus_io.c ****     {
+ 105:../Dave/Generated/BUS_IO/bus_io.c ****       /* Initializes input / output characteristics */
+ 106:../Dave/Generated/BUS_IO/bus_io.c ****       XMC_GPIO_Init(handle_ptr->pin_array[i].gpio_port, handle_ptr->pin_array[i].gpio_pin, &handle_
+ 264              	 .loc 2 106 0 discriminator 3
+ 265 001c 7B68     	 ldr r3,[r7,#4]
+ 266 001e 1A68     	 ldr r2,[r3]
+ 267 0020 FB7B     	 ldrb r3,[r7,#15]
+ 268 0022 DB00     	 lsls r3,r3,#3
+ 269 0024 1344     	 add r3,r3,r2
+ 270 0026 1968     	 ldr r1,[r3]
+ 271 0028 7B68     	 ldr r3,[r7,#4]
+ 272 002a 1A68     	 ldr r2,[r3]
+ 273 002c FB7B     	 ldrb r3,[r7,#15]
+ 274 002e DB00     	 lsls r3,r3,#3
+ 275 0030 1344     	 add r3,r3,r2
+ 276 0032 1A79     	 ldrb r2,[r3,#4]
+ 277 0034 7B68     	 ldr r3,[r7,#4]
+ 278 0036 0433     	 adds r3,r3,#4
+ 279 0038 0846     	 mov r0,r1
+ 280 003a 1146     	 mov r1,r2
+ 281 003c 1A46     	 mov r2,r3
+ 282 003e FFF7FEFF 	 bl XMC_GPIO_Init
+ 103:../Dave/Generated/BUS_IO/bus_io.c ****     {
+ 283              	 .loc 2 103 0 discriminator 3
+ 284 0042 FB7B     	 ldrb r3,[r7,#15]
+ 285 0044 0133     	 adds r3,r3,#1
+ 286 0046 FB73     	 strb r3,[r7,#15]
+ 287              	.L9:
+ 103:../Dave/Generated/BUS_IO/bus_io.c ****     {
+ 288              	 .loc 2 103 0 is_stmt 0 discriminator 1
+ 289 0048 7B68     	 ldr r3,[r7,#4]
+ 290 004a 1B7C     	 ldrb r3,[r3,#16]
+ 291 004c FA7B     	 ldrb r2,[r7,#15]
+ 292 004e 9A42     	 cmp r2,r3
+ 293 0050 E4D3     	 bcc .L10
+ 107:../Dave/Generated/BUS_IO/bus_io.c ****     }
+ 108:../Dave/Generated/BUS_IO/bus_io.c ****     handle_ptr->initialized = (bool)true;
+ 294              	 .loc 2 108 0 is_stmt 1
+ 295 0052 7B68     	 ldr r3,[r7,#4]
+ 296 0054 0122     	 movs r2,#1
+ 297 0056 5A74     	 strb r2,[r3,#17]
+ 298              	.L8:
+ 109:../Dave/Generated/BUS_IO/bus_io.c ****   }
+ 110:../Dave/Generated/BUS_IO/bus_io.c ****   return (BUS_IO_STATUS_OK);
+ 299              	 .loc 2 110 0
+ 300 0058 0023     	 movs r3,#0
+ 111:../Dave/Generated/BUS_IO/bus_io.c **** }
+ 301              	 .loc 2 111 0
+ 302 005a 1846     	 mov r0,r3
+ 303 005c 1037     	 adds r7,r7,#16
+ 304              	.LCFI27:
+ 305              	 .cfi_def_cfa_offset 8
+ 306 005e BD46     	 mov sp,r7
+ 307              	.LCFI28:
+ 308              	 .cfi_def_cfa_register 13
+ 309              	 
+ 310 0060 80BD     	 pop {r7,pc}
+ 311              	 .cfi_endproc
+ 312              	.LFE138:
+ 314 0062 00BF     	 .section .text.BUS_IO_SetMode,"ax",%progbits
+ 315              	 .align 2
+ 316              	 .global BUS_IO_SetMode
+ 317              	 .thumb
+ 318              	 .thumb_func
+ 320              	BUS_IO_SetMode:
+ 321              	.LFB139:
+ 112:../Dave/Generated/BUS_IO/bus_io.c **** 
+ 113:../Dave/Generated/BUS_IO/bus_io.c **** /* Function to set the mode of the bus */
+ 114:../Dave/Generated/BUS_IO/bus_io.c **** void BUS_IO_SetMode(BUS_IO_t *const handle_ptr, const BUS_IO_MODE_t mode)
+ 115:../Dave/Generated/BUS_IO/bus_io.c **** {
+ 322              	 .loc 2 115 0
+ 323              	 .cfi_startproc
+ 324              	 
+ 325              	 
+ 326 0000 80B5     	 push {r7,lr}
+ 327              	.LCFI29:
+ 328              	 .cfi_def_cfa_offset 8
+ 329              	 .cfi_offset 7,-8
+ 330              	 .cfi_offset 14,-4
+ 331 0002 84B0     	 sub sp,sp,#16
+ 332              	.LCFI30:
+ 333              	 .cfi_def_cfa_offset 24
+ 334 0004 00AF     	 add r7,sp,#0
+ 335              	.LCFI31:
+ 336              	 .cfi_def_cfa_register 7
+ 337 0006 7860     	 str r0,[r7,#4]
+ 338 0008 0B46     	 mov r3,r1
+ 339 000a FB70     	 strb r3,[r7,#3]
+ 116:../Dave/Generated/BUS_IO/bus_io.c ****   uint8_t i;
+ 117:../Dave/Generated/BUS_IO/bus_io.c **** 
+ 118:../Dave/Generated/BUS_IO/bus_io.c ****   XMC_ASSERT("BUS_IO_SetMode: handle_ptr null pointer", handle_ptr != NULL);
+ 119:../Dave/Generated/BUS_IO/bus_io.c **** 
+ 120:../Dave/Generated/BUS_IO/bus_io.c ****   /* Iterate the list of pins setting the pin according to the selected mode */
+ 121:../Dave/Generated/BUS_IO/bus_io.c ****   for (i = 0U; i < handle_ptr->number_of_pins; i++)
+ 340              	 .loc 2 121 0
+ 341 000c 0023     	 movs r3,#0
+ 342 000e FB73     	 strb r3,[r7,#15]
+ 343 0010 14E0     	 b .L13
+ 344              	.L14:
+ 122:../Dave/Generated/BUS_IO/bus_io.c ****   {
+ 123:../Dave/Generated/BUS_IO/bus_io.c ****     /* Setting of a mode of a bus */
+ 124:../Dave/Generated/BUS_IO/bus_io.c ****     XMC_GPIO_SetMode(handle_ptr->pin_array[i].gpio_port, handle_ptr->pin_array[i].gpio_pin, mode);
+ 345              	 .loc 2 124 0 discriminator 3
+ 346 0012 7B68     	 ldr r3,[r7,#4]
+ 347 0014 1A68     	 ldr r2,[r3]
+ 348 0016 FB7B     	 ldrb r3,[r7,#15]
+ 349 0018 DB00     	 lsls r3,r3,#3
+ 350 001a 1344     	 add r3,r3,r2
+ 351 001c 1968     	 ldr r1,[r3]
+ 352 001e 7B68     	 ldr r3,[r7,#4]
+ 353 0020 1A68     	 ldr r2,[r3]
+ 354 0022 FB7B     	 ldrb r3,[r7,#15]
+ 355 0024 DB00     	 lsls r3,r3,#3
+ 356 0026 1344     	 add r3,r3,r2
+ 357 0028 1A79     	 ldrb r2,[r3,#4]
+ 358 002a FB78     	 ldrb r3,[r7,#3]
+ 359 002c 0846     	 mov r0,r1
+ 360 002e 1146     	 mov r1,r2
+ 361 0030 1A46     	 mov r2,r3
+ 362 0032 FFF7FEFF 	 bl XMC_GPIO_SetMode
+ 121:../Dave/Generated/BUS_IO/bus_io.c ****   {
+ 363              	 .loc 2 121 0 discriminator 3
+ 364 0036 FB7B     	 ldrb r3,[r7,#15]
+ 365 0038 0133     	 adds r3,r3,#1
+ 366 003a FB73     	 strb r3,[r7,#15]
+ 367              	.L13:
+ 121:../Dave/Generated/BUS_IO/bus_io.c ****   {
+ 368              	 .loc 2 121 0 is_stmt 0 discriminator 1
+ 369 003c 7B68     	 ldr r3,[r7,#4]
+ 370 003e 1B7C     	 ldrb r3,[r3,#16]
+ 371 0040 FA7B     	 ldrb r2,[r7,#15]
+ 372 0042 9A42     	 cmp r2,r3
+ 373 0044 E5D3     	 bcc .L14
+ 125:../Dave/Generated/BUS_IO/bus_io.c ****   }
+ 126:../Dave/Generated/BUS_IO/bus_io.c **** }
+ 374              	 .loc 2 126 0 is_stmt 1
+ 375 0046 1037     	 adds r7,r7,#16
+ 376              	.LCFI32:
+ 377              	 .cfi_def_cfa_offset 8
+ 378 0048 BD46     	 mov sp,r7
+ 379              	.LCFI33:
+ 380              	 .cfi_def_cfa_register 13
+ 381              	 
+ 382 004a 80BD     	 pop {r7,pc}
+ 383              	 .cfi_endproc
+ 384              	.LFE139:
+ 386              	 .section .text.BUS_IO_Read,"ax",%progbits
+ 387              	 .align 2
+ 388              	 .global BUS_IO_Read
+ 389              	 .thumb
+ 390              	 .thumb_func
+ 392              	BUS_IO_Read:
+ 393              	.LFB140:
+ 127:../Dave/Generated/BUS_IO/bus_io.c **** 
+ 128:../Dave/Generated/BUS_IO/bus_io.c **** /* Function to read the bus pins state */
+ 129:../Dave/Generated/BUS_IO/bus_io.c **** uint16_t BUS_IO_Read(BUS_IO_t *const handle_ptr)
+ 130:../Dave/Generated/BUS_IO/bus_io.c **** {
+ 394              	 .loc 2 130 0
+ 395              	 .cfi_startproc
+ 396              	 
+ 397              	 
+ 398 0000 80B5     	 push {r7,lr}
+ 399              	.LCFI34:
+ 400              	 .cfi_def_cfa_offset 8
+ 401              	 .cfi_offset 7,-8
+ 402              	 .cfi_offset 14,-4
+ 403 0002 84B0     	 sub sp,sp,#16
+ 404              	.LCFI35:
+ 405              	 .cfi_def_cfa_offset 24
+ 406 0004 00AF     	 add r7,sp,#0
+ 407              	.LCFI36:
+ 408              	 .cfi_def_cfa_register 7
+ 409 0006 7860     	 str r0,[r7,#4]
+ 131:../Dave/Generated/BUS_IO/bus_io.c ****   uint8_t i;
+ 132:../Dave/Generated/BUS_IO/bus_io.c ****   uint16_t count = 0U;
+ 410              	 .loc 2 132 0
+ 411 0008 0023     	 movs r3,#0
+ 412 000a BB81     	 strh r3,[r7,#12]
+ 133:../Dave/Generated/BUS_IO/bus_io.c **** 
+ 134:../Dave/Generated/BUS_IO/bus_io.c ****   XMC_ASSERT("BUS_IO_Read: handle_ptr null pointer", handle_ptr != NULL);
+ 135:../Dave/Generated/BUS_IO/bus_io.c **** 
+ 136:../Dave/Generated/BUS_IO/bus_io.c ****   /* Iterate the list of pins reading the pin state and packing the result according the pin positi
+ 137:../Dave/Generated/BUS_IO/bus_io.c ****   for (i = 0U; i < handle_ptr->number_of_pins; i++)
+ 413              	 .loc 2 137 0
+ 414 000c 0023     	 movs r3,#0
+ 415 000e FB73     	 strb r3,[r7,#15]
+ 416 0010 1AE0     	 b .L16
+ 417              	.L17:
+ 138:../Dave/Generated/BUS_IO/bus_io.c ****   {
+ 139:../Dave/Generated/BUS_IO/bus_io.c ****     /* Reading a bus pin's state */
+ 140:../Dave/Generated/BUS_IO/bus_io.c ****     count |= (uint16_t)(XMC_GPIO_GetInput(handle_ptr->pin_array[i].gpio_port, handle_ptr->pin_array
+ 418              	 .loc 2 140 0 discriminator 3
+ 419 0012 7B68     	 ldr r3,[r7,#4]
+ 420 0014 1A68     	 ldr r2,[r3]
+ 421 0016 FB7B     	 ldrb r3,[r7,#15]
+ 422 0018 DB00     	 lsls r3,r3,#3
+ 423 001a 1344     	 add r3,r3,r2
+ 424 001c 1968     	 ldr r1,[r3]
+ 425 001e 7B68     	 ldr r3,[r7,#4]
+ 426 0020 1A68     	 ldr r2,[r3]
+ 427 0022 FB7B     	 ldrb r3,[r7,#15]
+ 428 0024 DB00     	 lsls r3,r3,#3
+ 429 0026 1344     	 add r3,r3,r2
+ 430 0028 1B79     	 ldrb r3,[r3,#4]
+ 431 002a 0846     	 mov r0,r1
+ 432 002c 1946     	 mov r1,r3
+ 433 002e FFF7FEFF 	 bl XMC_GPIO_GetInput
+ 434 0032 0246     	 mov r2,r0
+ 435 0034 FB7B     	 ldrb r3,[r7,#15]
+ 436 0036 02FA03F3 	 lsl r3,r2,r3
+ 437 003a 9AB2     	 uxth r2,r3
+ 438 003c BB89     	 ldrh r3,[r7,#12]
+ 439 003e 1343     	 orrs r3,r3,r2
+ 440 0040 BB81     	 strh r3,[r7,#12]
+ 137:../Dave/Generated/BUS_IO/bus_io.c ****   {
+ 441              	 .loc 2 137 0 discriminator 3
+ 442 0042 FB7B     	 ldrb r3,[r7,#15]
+ 443 0044 0133     	 adds r3,r3,#1
+ 444 0046 FB73     	 strb r3,[r7,#15]
+ 445              	.L16:
+ 137:../Dave/Generated/BUS_IO/bus_io.c ****   {
+ 446              	 .loc 2 137 0 is_stmt 0 discriminator 1
+ 447 0048 7B68     	 ldr r3,[r7,#4]
+ 448 004a 1B7C     	 ldrb r3,[r3,#16]
+ 449 004c FA7B     	 ldrb r2,[r7,#15]
+ 450 004e 9A42     	 cmp r2,r3
+ 451 0050 DFD3     	 bcc .L17
+ 141:../Dave/Generated/BUS_IO/bus_io.c ****   }
+ 142:../Dave/Generated/BUS_IO/bus_io.c ****   return(count);
+ 452              	 .loc 2 142 0 is_stmt 1
+ 453 0052 BB89     	 ldrh r3,[r7,#12]
+ 143:../Dave/Generated/BUS_IO/bus_io.c **** }
+ 454              	 .loc 2 143 0
+ 455 0054 1846     	 mov r0,r3
+ 456 0056 1037     	 adds r7,r7,#16
+ 457              	.LCFI37:
+ 458              	 .cfi_def_cfa_offset 8
+ 459 0058 BD46     	 mov sp,r7
+ 460              	.LCFI38:
+ 461              	 .cfi_def_cfa_register 13
+ 462              	 
+ 463 005a 80BD     	 pop {r7,pc}
+ 464              	 .cfi_endproc
+ 465              	.LFE140:
+ 467              	 .section .text.BUS_IO_Write,"ax",%progbits
+ 468              	 .align 2
+ 469              	 .global BUS_IO_Write
+ 470              	 .thumb
+ 471              	 .thumb_func
+ 473              	BUS_IO_Write:
+ 474              	.LFB141:
+ 144:../Dave/Generated/BUS_IO/bus_io.c **** 
+ 145:../Dave/Generated/BUS_IO/bus_io.c **** /* Function to set the pins bus state */
+ 146:../Dave/Generated/BUS_IO/bus_io.c **** void BUS_IO_Write(BUS_IO_t *const handle_ptr, const uint16_t data)
+ 147:../Dave/Generated/BUS_IO/bus_io.c **** {
+ 475              	 .loc 2 147 0
+ 476              	 .cfi_startproc
+ 477              	 
+ 478              	 
+ 479 0000 80B5     	 push {r7,lr}
+ 480              	.LCFI39:
+ 481              	 .cfi_def_cfa_offset 8
+ 482              	 .cfi_offset 7,-8
+ 483              	 .cfi_offset 14,-4
+ 484 0002 84B0     	 sub sp,sp,#16
+ 485              	.LCFI40:
+ 486              	 .cfi_def_cfa_offset 24
+ 487 0004 00AF     	 add r7,sp,#0
+ 488              	.LCFI41:
+ 489              	 .cfi_def_cfa_register 7
+ 490 0006 7860     	 str r0,[r7,#4]
+ 491 0008 0B46     	 mov r3,r1
+ 492 000a 7B80     	 strh r3,[r7,#2]
+ 148:../Dave/Generated/BUS_IO/bus_io.c ****   uint8_t i;
+ 149:../Dave/Generated/BUS_IO/bus_io.c ****   const BUS_IO_PORT_PIN_t *bus_io_port_pin;
+ 150:../Dave/Generated/BUS_IO/bus_io.c **** 
+ 151:../Dave/Generated/BUS_IO/bus_io.c ****   XMC_ASSERT("BUS_IO_Write: handle_ptr null pointer", handle_ptr != NULL);
+ 152:../Dave/Generated/BUS_IO/bus_io.c **** 
+ 153:../Dave/Generated/BUS_IO/bus_io.c ****   bus_io_port_pin = handle_ptr->pin_array;
+ 493              	 .loc 2 153 0
+ 494 000c 7B68     	 ldr r3,[r7,#4]
+ 495 000e 1B68     	 ldr r3,[r3]
+ 496 0010 BB60     	 str r3,[r7,#8]
+ 154:../Dave/Generated/BUS_IO/bus_io.c ****   /* Iterate the list of pins setting the pin state according the pin position in the list, , from 
+ 155:../Dave/Generated/BUS_IO/bus_io.c ****   for (i = 0U; i < handle_ptr->number_of_pins; i++)
+ 497              	 .loc 2 155 0
+ 498 0012 0023     	 movs r3,#0
+ 499 0014 FB73     	 strb r3,[r7,#15]
+ 500 0016 23E0     	 b .L20
+ 501              	.L23:
+ 156:../Dave/Generated/BUS_IO/bus_io.c ****   {
+ 157:../Dave/Generated/BUS_IO/bus_io.c ****     if (data & (uint16_t)((uint16_t)1 << i))
+ 502              	 .loc 2 157 0
+ 503 0018 FB7B     	 ldrb r3,[r7,#15]
+ 504 001a 0122     	 movs r2,#1
+ 505 001c 02FA03F3 	 lsl r3,r2,r3
+ 506 0020 9AB2     	 uxth r2,r3
+ 507 0022 7B88     	 ldrh r3,[r7,#2]
+ 508 0024 1340     	 ands r3,r3,r2
+ 509 0026 9BB2     	 uxth r3,r3
+ 510 0028 002B     	 cmp r3,#0
+ 511 002a 09D0     	 beq .L21
+ 158:../Dave/Generated/BUS_IO/bus_io.c ****     {
+ 159:../Dave/Generated/BUS_IO/bus_io.c ****       XMC_GPIO_SetOutputLevel(bus_io_port_pin->gpio_port, bus_io_port_pin->gpio_pin, XMC_GPIO_OUTPU
+ 512              	 .loc 2 159 0
+ 513 002c BB68     	 ldr r3,[r7,#8]
+ 514 002e 1A68     	 ldr r2,[r3]
+ 515 0030 BB68     	 ldr r3,[r7,#8]
+ 516 0032 1B79     	 ldrb r3,[r3,#4]
+ 517 0034 1046     	 mov r0,r2
+ 518 0036 1946     	 mov r1,r3
+ 519 0038 0122     	 movs r2,#1
+ 520 003a FFF7FEFF 	 bl XMC_GPIO_SetOutputLevel
+ 521 003e 09E0     	 b .L22
+ 522              	.L21:
+ 160:../Dave/Generated/BUS_IO/bus_io.c ****     }
+ 161:../Dave/Generated/BUS_IO/bus_io.c ****     else
+ 162:../Dave/Generated/BUS_IO/bus_io.c ****     {
+ 163:../Dave/Generated/BUS_IO/bus_io.c ****       XMC_GPIO_SetOutputLevel(bus_io_port_pin->gpio_port, bus_io_port_pin->gpio_pin, XMC_GPIO_OUTPU
+ 523              	 .loc 2 163 0
+ 524 0040 BB68     	 ldr r3,[r7,#8]
+ 525 0042 1A68     	 ldr r2,[r3]
+ 526 0044 BB68     	 ldr r3,[r7,#8]
+ 527 0046 1B79     	 ldrb r3,[r3,#4]
+ 528 0048 1046     	 mov r0,r2
+ 529 004a 1946     	 mov r1,r3
+ 530 004c 4FF48032 	 mov r2,#65536
+ 531 0050 FFF7FEFF 	 bl XMC_GPIO_SetOutputLevel
+ 532              	.L22:
+ 164:../Dave/Generated/BUS_IO/bus_io.c ****     }
+ 165:../Dave/Generated/BUS_IO/bus_io.c ****    bus_io_port_pin++;
+ 533              	 .loc 2 165 0 discriminator 2
+ 534 0054 BB68     	 ldr r3,[r7,#8]
+ 535 0056 0833     	 adds r3,r3,#8
+ 536 0058 BB60     	 str r3,[r7,#8]
+ 155:../Dave/Generated/BUS_IO/bus_io.c ****   {
+ 537              	 .loc 2 155 0 discriminator 2
+ 538 005a FB7B     	 ldrb r3,[r7,#15]
+ 539 005c 0133     	 adds r3,r3,#1
+ 540 005e FB73     	 strb r3,[r7,#15]
+ 541              	.L20:
+ 155:../Dave/Generated/BUS_IO/bus_io.c ****   {
+ 542              	 .loc 2 155 0 is_stmt 0 discriminator 1
+ 543 0060 7B68     	 ldr r3,[r7,#4]
+ 544 0062 1B7C     	 ldrb r3,[r3,#16]
+ 545 0064 FA7B     	 ldrb r2,[r7,#15]
+ 546 0066 9A42     	 cmp r2,r3
+ 547 0068 D6D3     	 bcc .L23
+ 166:../Dave/Generated/BUS_IO/bus_io.c ****   }
+ 167:../Dave/Generated/BUS_IO/bus_io.c **** }
+ 548              	 .loc 2 167 0 is_stmt 1
+ 549 006a 1037     	 adds r7,r7,#16
+ 550              	.LCFI42:
+ 551              	 .cfi_def_cfa_offset 8
+ 552 006c BD46     	 mov sp,r7
+ 553              	.LCFI43:
+ 554              	 .cfi_def_cfa_register 13
+ 555              	 
+ 556 006e 80BD     	 pop {r7,pc}
+ 557              	 .cfi_endproc
+ 558              	.LFE141:
+ 560              	 .section .text.BUS_IO_Toggle,"ax",%progbits
+ 561              	 .align 2
+ 562              	 .global BUS_IO_Toggle
+ 563              	 .thumb
+ 564              	 .thumb_func
+ 566              	BUS_IO_Toggle:
+ 567              	.LFB142:
+ 168:../Dave/Generated/BUS_IO/bus_io.c **** 
+ 169:../Dave/Generated/BUS_IO/bus_io.c **** /* Function to Toggles the pins bus state */
+ 170:../Dave/Generated/BUS_IO/bus_io.c **** void BUS_IO_Toggle(BUS_IO_t *const handle_ptr)
+ 171:../Dave/Generated/BUS_IO/bus_io.c **** {
+ 568              	 .loc 2 171 0
+ 569              	 .cfi_startproc
+ 570              	 
+ 571              	 
+ 572 0000 80B5     	 push {r7,lr}
+ 573              	.LCFI44:
+ 574              	 .cfi_def_cfa_offset 8
+ 575              	 .cfi_offset 7,-8
+ 576              	 .cfi_offset 14,-4
+ 577 0002 84B0     	 sub sp,sp,#16
+ 578              	.LCFI45:
+ 579              	 .cfi_def_cfa_offset 24
+ 580 0004 00AF     	 add r7,sp,#0
+ 581              	.LCFI46:
+ 582              	 .cfi_def_cfa_register 7
+ 583 0006 7860     	 str r0,[r7,#4]
+ 172:../Dave/Generated/BUS_IO/bus_io.c ****   uint8_t i;
+ 173:../Dave/Generated/BUS_IO/bus_io.c **** 
+ 174:../Dave/Generated/BUS_IO/bus_io.c ****   XMC_ASSERT("BUS_IO_Toggle: handle_ptr null pointer", handle_ptr != NULL);
+ 175:../Dave/Generated/BUS_IO/bus_io.c **** 
+ 176:../Dave/Generated/BUS_IO/bus_io.c ****   /* Iterate the list of pins toggling the pin state */
+ 177:../Dave/Generated/BUS_IO/bus_io.c ****   for (i = 0U; i < handle_ptr->number_of_pins; i++)
+ 584              	 .loc 2 177 0
+ 585 0008 0023     	 movs r3,#0
+ 586 000a FB73     	 strb r3,[r7,#15]
+ 587 000c 12E0     	 b .L25
+ 588              	.L26:
+ 178:../Dave/Generated/BUS_IO/bus_io.c ****   {
+ 179:../Dave/Generated/BUS_IO/bus_io.c ****     /* Toggles the pins bus state */
+ 180:../Dave/Generated/BUS_IO/bus_io.c ****     XMC_GPIO_ToggleOutput(handle_ptr->pin_array[i].gpio_port, handle_ptr->pin_array[i].gpio_pin);
+ 589              	 .loc 2 180 0 discriminator 3
+ 590 000e 7B68     	 ldr r3,[r7,#4]
+ 591 0010 1A68     	 ldr r2,[r3]
+ 592 0012 FB7B     	 ldrb r3,[r7,#15]
+ 593 0014 DB00     	 lsls r3,r3,#3
+ 594 0016 1344     	 add r3,r3,r2
+ 595 0018 1968     	 ldr r1,[r3]
+ 596 001a 7B68     	 ldr r3,[r7,#4]
+ 597 001c 1A68     	 ldr r2,[r3]
+ 598 001e FB7B     	 ldrb r3,[r7,#15]
+ 599 0020 DB00     	 lsls r3,r3,#3
+ 600 0022 1344     	 add r3,r3,r2
+ 601 0024 1B79     	 ldrb r3,[r3,#4]
+ 602 0026 0846     	 mov r0,r1
+ 603 0028 1946     	 mov r1,r3
+ 604 002a FFF7FEFF 	 bl XMC_GPIO_ToggleOutput
+ 177:../Dave/Generated/BUS_IO/bus_io.c ****   {
+ 605              	 .loc 2 177 0 discriminator 3
+ 606 002e FB7B     	 ldrb r3,[r7,#15]
+ 607 0030 0133     	 adds r3,r3,#1
+ 608 0032 FB73     	 strb r3,[r7,#15]
+ 609              	.L25:
+ 177:../Dave/Generated/BUS_IO/bus_io.c ****   {
+ 610              	 .loc 2 177 0 is_stmt 0 discriminator 1
+ 611 0034 7B68     	 ldr r3,[r7,#4]
+ 612 0036 1B7C     	 ldrb r3,[r3,#16]
+ 613 0038 FA7B     	 ldrb r2,[r7,#15]
+ 614 003a 9A42     	 cmp r2,r3
+ 615 003c E7D3     	 bcc .L26
+ 181:../Dave/Generated/BUS_IO/bus_io.c ****   }
+ 182:../Dave/Generated/BUS_IO/bus_io.c **** }
+ 616              	 .loc 2 182 0 is_stmt 1
+ 617 003e 1037     	 adds r7,r7,#16
+ 618              	.LCFI47:
+ 619              	 .cfi_def_cfa_offset 8
+ 620 0040 BD46     	 mov sp,r7
+ 621              	.LCFI48:
+ 622              	 .cfi_def_cfa_register 13
+ 623              	 
+ 624 0042 80BD     	 pop {r7,pc}
+ 625              	 .cfi_endproc
+ 626              	.LFE142:
+ 628              	 .text
+ 629              	.Letext0:
+ 630              	 .file 3 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 631              	 .file 4 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 632              	 .file 5 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc4_gpio.h"
+ 633              	 .file 6 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Dave/Generated/DAVE_common.h"
+ 634              	 .file 7 "../Dave/Generated/BUS_IO/bus_io.h"
+ 635              	 .file 8 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include/core_cm4.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 bus_io.c
+    {standard input}:19     .text.XMC_GPIO_SetOutputLevel:00000000 $t
+    {standard input}:23     .text.XMC_GPIO_SetOutputLevel:00000000 XMC_GPIO_SetOutputLevel
+    {standard input}:68     .text.XMC_GPIO_ToggleOutput:00000000 $t
+    {standard input}:72     .text.XMC_GPIO_ToggleOutput:00000000 XMC_GPIO_ToggleOutput
+    {standard input}:115    .text.XMC_GPIO_GetInput:00000000 $t
+    {standard input}:119    .text.XMC_GPIO_GetInput:00000000 XMC_GPIO_GetInput
+    {standard input}:163    .text.BUS_IO_GetAppVersion:00000000 $t
+    {standard input}:168    .text.BUS_IO_GetAppVersion:00000000 BUS_IO_GetAppVersion
+    {standard input}:229    .text.BUS_IO_Init:00000000 $t
+    {standard input}:234    .text.BUS_IO_Init:00000000 BUS_IO_Init
+    {standard input}:315    .text.BUS_IO_SetMode:00000000 $t
+    {standard input}:320    .text.BUS_IO_SetMode:00000000 BUS_IO_SetMode
+    {standard input}:387    .text.BUS_IO_Read:00000000 $t
+    {standard input}:392    .text.BUS_IO_Read:00000000 BUS_IO_Read
+    {standard input}:468    .text.BUS_IO_Write:00000000 $t
+    {standard input}:473    .text.BUS_IO_Write:00000000 BUS_IO_Write
+    {standard input}:561    .text.BUS_IO_Toggle:00000000 $t
+    {standard input}:566    .text.BUS_IO_Toggle:00000000 BUS_IO_Toggle
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+XMC_GPIO_Init
+XMC_GPIO_SetMode

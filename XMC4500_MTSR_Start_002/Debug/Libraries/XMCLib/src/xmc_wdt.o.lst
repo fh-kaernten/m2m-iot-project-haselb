@@ -1,0 +1,252 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .fpu softvfp
+   4              	 .eabi_attribute 20,1
+   5              	 .eabi_attribute 21,1
+   6              	 .eabi_attribute 23,3
+   7              	 .eabi_attribute 24,1
+   8              	 .eabi_attribute 25,1
+   9              	 .eabi_attribute 26,1
+  10              	 .eabi_attribute 30,6
+  11              	 .eabi_attribute 34,1
+  12              	 .eabi_attribute 18,4
+  13              	 .thumb
+  14              	 .file "xmc_wdt.c"
+  15              	 .text
+  16              	.Ltext0:
+  17              	 .cfi_sections .debug_frame
+  18              	 .section .text.XMC_WDT_Enable,"ax",%progbits
+  19              	 .align 2
+  20              	 .global XMC_WDT_Enable
+  21              	 .thumb
+  22              	 .thumb_func
+  24              	XMC_WDT_Enable:
+  25              	.LFB160:
+  26              	 .file 1 "../Libraries/XMCLib/src/xmc_wdt.c"
+   1:../Libraries/XMCLib/src/xmc_wdt.c **** /**
+   2:../Libraries/XMCLib/src/xmc_wdt.c ****  * @file xmc_wdt.c
+   3:../Libraries/XMCLib/src/xmc_wdt.c ****  * @date 2015-06-20 
+   4:../Libraries/XMCLib/src/xmc_wdt.c ****  *
+   5:../Libraries/XMCLib/src/xmc_wdt.c ****  * @cond
+   6:../Libraries/XMCLib/src/xmc_wdt.c ****  **************************************************************************************************
+   7:../Libraries/XMCLib/src/xmc_wdt.c ****  * XMClib v2.0.0 - XMC Peripheral Driver Library
+   8:../Libraries/XMCLib/src/xmc_wdt.c ****  *
+   9:../Libraries/XMCLib/src/xmc_wdt.c ****  * Copyright (c) 2015, Infineon Technologies AG
+  10:../Libraries/XMCLib/src/xmc_wdt.c ****  * All rights reserved.                        
+  11:../Libraries/XMCLib/src/xmc_wdt.c ****  *                                             
+  12:../Libraries/XMCLib/src/xmc_wdt.c ****  * Redistribution and use in source and binary forms, with or without modification,are permitted pr
+  13:../Libraries/XMCLib/src/xmc_wdt.c ****  * following conditions are met:   
+  14:../Libraries/XMCLib/src/xmc_wdt.c ****  *                                                                              
+  15:../Libraries/XMCLib/src/xmc_wdt.c ****  * Redistributions of source code must retain the above copyright notice, this list of conditions a
+  16:../Libraries/XMCLib/src/xmc_wdt.c ****  * disclaimer.                        
+  17:../Libraries/XMCLib/src/xmc_wdt.c ****  * 
+  18:../Libraries/XMCLib/src/xmc_wdt.c ****  * Redistributions in binary form must reproduce the above copyright notice, this list of condition
+  19:../Libraries/XMCLib/src/xmc_wdt.c ****  * disclaimer in the documentation and/or other materials provided with the distribution.          
+  20:../Libraries/XMCLib/src/xmc_wdt.c ****  * 
+  21:../Libraries/XMCLib/src/xmc_wdt.c ****  * Neither the name of the copyright holders nor the names of its contributors may be used to endor
+  22:../Libraries/XMCLib/src/xmc_wdt.c ****  * products derived from this software without specific prior written permission.                  
+  23:../Libraries/XMCLib/src/xmc_wdt.c ****  *                                                                              
+  24:../Libraries/XMCLib/src/xmc_wdt.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR I
+  25:../Libraries/XMCLib/src/xmc_wdt.c ****  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTI
+  26:../Libraries/XMCLib/src/xmc_wdt.c ****  * DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE  FOR ANY DIRECT, IN
+  27:../Libraries/XMCLib/src/xmc_wdt.c ****  * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBS
+  28:../Libraries/XMCLib/src/xmc_wdt.c ****  * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THE
+  29:../Libraries/XMCLib/src/xmc_wdt.c ****  * WHETHER IN CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY
+  30:../Libraries/XMCLib/src/xmc_wdt.c ****  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                            
+  31:../Libraries/XMCLib/src/xmc_wdt.c ****  *                                                                              
+  32:../Libraries/XMCLib/src/xmc_wdt.c ****  * To improve the quality of the software, users are encouraged to share modifications, enhancement
+  33:../Libraries/XMCLib/src/xmc_wdt.c ****  * Infineon Technologies AG dave@infineon.com).                                                    
+  34:../Libraries/XMCLib/src/xmc_wdt.c ****  **************************************************************************************************
+  35:../Libraries/XMCLib/src/xmc_wdt.c ****  *
+  36:../Libraries/XMCLib/src/xmc_wdt.c ****  * Change History
+  37:../Libraries/XMCLib/src/xmc_wdt.c ****  * --------------
+  38:../Libraries/XMCLib/src/xmc_wdt.c ****  *
+  39:../Libraries/XMCLib/src/xmc_wdt.c ****  * 2015-02-20:
+  40:../Libraries/XMCLib/src/xmc_wdt.c ****  *     - Initial <br>
+  41:../Libraries/XMCLib/src/xmc_wdt.c ****  *
+  42:../Libraries/XMCLib/src/xmc_wdt.c ****  * 2015-06-20:
+  43:../Libraries/XMCLib/src/xmc_wdt.c ****  *     - Removed definition of GetDriverVersion API <br>
+  44:../Libraries/XMCLib/src/xmc_wdt.c ****  *
+  45:../Libraries/XMCLib/src/xmc_wdt.c ****  * @endcond
+  46:../Libraries/XMCLib/src/xmc_wdt.c ****  */
+  47:../Libraries/XMCLib/src/xmc_wdt.c ****  
+  48:../Libraries/XMCLib/src/xmc_wdt.c **** /**************************************************************************************************
+  49:../Libraries/XMCLib/src/xmc_wdt.c ****  * HEADER FILES
+  50:../Libraries/XMCLib/src/xmc_wdt.c ****  **************************************************************************************************
+  51:../Libraries/XMCLib/src/xmc_wdt.c **** #include "xmc_wdt.h"
+  52:../Libraries/XMCLib/src/xmc_wdt.c **** 
+  53:../Libraries/XMCLib/src/xmc_wdt.c **** /**************************************************************************************************
+  54:../Libraries/XMCLib/src/xmc_wdt.c ****  * API IMPLEMENTATION
+  55:../Libraries/XMCLib/src/xmc_wdt.c ****   *************************************************************************************************
+  56:../Libraries/XMCLib/src/xmc_wdt.c **** /* Enables watchdog clock and releases watchdog reset. */
+  57:../Libraries/XMCLib/src/xmc_wdt.c **** void XMC_WDT_Enable(void)
+  58:../Libraries/XMCLib/src/xmc_wdt.c **** {
+  27              	 .loc 1 58 0
+  28              	 .cfi_startproc
+  29              	 
+  30              	 
+  31 0000 80B5     	 push {r7,lr}
+  32              	.LCFI0:
+  33              	 .cfi_def_cfa_offset 8
+  34              	 .cfi_offset 7,-8
+  35              	 .cfi_offset 14,-4
+  36 0002 00AF     	 add r7,sp,#0
+  37              	.LCFI1:
+  38              	 .cfi_def_cfa_register 7
+  59:../Libraries/XMCLib/src/xmc_wdt.c **** #if (UC_SERIES != XMC45)
+  60:../Libraries/XMCLib/src/xmc_wdt.c ****   XMC_SCU_CLOCK_UngatePeripheralClock(XMC_SCU_PERIPHERAL_CLOCK_WDT);
+  61:../Libraries/XMCLib/src/xmc_wdt.c **** #endif
+  62:../Libraries/XMCLib/src/xmc_wdt.c **** #if (UC_FAMILY == XMC4)
+  63:../Libraries/XMCLib/src/xmc_wdt.c ****   XMC_SCU_RESET_DeassertPeripheralReset(XMC_SCU_PERIPHERAL_RESET_WDT);
+  39              	 .loc 1 63 0
+  40 0004 0348     	 ldr r0,.L2
+  41 0006 FFF7FEFF 	 bl XMC_SCU_RESET_DeassertPeripheralReset
+  64:../Libraries/XMCLib/src/xmc_wdt.c ****   XMC_SCU_CLOCK_EnableClock(XMC_SCU_CLOCK_WDT);
+  42              	 .loc 1 64 0
+  43 000a 2020     	 movs r0,#32
+  44 000c FFF7FEFF 	 bl XMC_SCU_CLOCK_EnableClock
+  65:../Libraries/XMCLib/src/xmc_wdt.c **** #endif  
+  66:../Libraries/XMCLib/src/xmc_wdt.c **** }
+  45              	 .loc 1 66 0
+  46 0010 80BD     	 pop {r7,pc}
+  47              	.L3:
+  48 0012 00BF     	 .align 2
+  49              	.L2:
+  50 0014 02000020 	 .word 536870914
+  51              	 .cfi_endproc
+  52              	.LFE160:
+  54              	 .section .text.XMC_WDT_Disable,"ax",%progbits
+  55              	 .align 2
+  56              	 .global XMC_WDT_Disable
+  57              	 .thumb
+  58              	 .thumb_func
+  60              	XMC_WDT_Disable:
+  61              	.LFB161:
+  67:../Libraries/XMCLib/src/xmc_wdt.c **** 
+  68:../Libraries/XMCLib/src/xmc_wdt.c **** /* Disables watchdog clock and resets watchdog. */
+  69:../Libraries/XMCLib/src/xmc_wdt.c **** void XMC_WDT_Disable(void)
+  70:../Libraries/XMCLib/src/xmc_wdt.c **** {
+  62              	 .loc 1 70 0
+  63              	 .cfi_startproc
+  64              	 
+  65              	 
+  66 0000 80B5     	 push {r7,lr}
+  67              	.LCFI2:
+  68              	 .cfi_def_cfa_offset 8
+  69              	 .cfi_offset 7,-8
+  70              	 .cfi_offset 14,-4
+  71 0002 00AF     	 add r7,sp,#0
+  72              	.LCFI3:
+  73              	 .cfi_def_cfa_register 7
+  71:../Libraries/XMCLib/src/xmc_wdt.c **** #if (UC_FAMILY == XMC4)
+  72:../Libraries/XMCLib/src/xmc_wdt.c ****   XMC_SCU_CLOCK_DisableClock(XMC_SCU_CLOCK_WDT);
+  74              	 .loc 1 72 0
+  75 0004 2020     	 movs r0,#32
+  76 0006 FFF7FEFF 	 bl XMC_SCU_CLOCK_DisableClock
+  73:../Libraries/XMCLib/src/xmc_wdt.c ****   XMC_SCU_RESET_AssertPeripheralReset(XMC_SCU_PERIPHERAL_RESET_WDT);
+  77              	 .loc 1 73 0
+  78 000a 0248     	 ldr r0,.L5
+  79 000c FFF7FEFF 	 bl XMC_SCU_RESET_AssertPeripheralReset
+  74:../Libraries/XMCLib/src/xmc_wdt.c **** #endif  
+  75:../Libraries/XMCLib/src/xmc_wdt.c **** #if (UC_SERIES != XMC45)
+  76:../Libraries/XMCLib/src/xmc_wdt.c ****   XMC_SCU_CLOCK_GatePeripheralClock(XMC_SCU_PERIPHERAL_CLOCK_WDT); 
+  77:../Libraries/XMCLib/src/xmc_wdt.c **** #endif
+  78:../Libraries/XMCLib/src/xmc_wdt.c **** }
+  80              	 .loc 1 78 0
+  81 0010 80BD     	 pop {r7,pc}
+  82              	.L6:
+  83 0012 00BF     	 .align 2
+  84              	.L5:
+  85 0014 02000020 	 .word 536870914
+  86              	 .cfi_endproc
+  87              	.LFE161:
+  89              	 .section .text.XMC_WDT_Init,"ax",%progbits
+  90              	 .align 2
+  91              	 .global XMC_WDT_Init
+  92              	 .thumb
+  93              	 .thumb_func
+  95              	XMC_WDT_Init:
+  96              	.LFB162:
+  79:../Libraries/XMCLib/src/xmc_wdt.c **** /* Initializes and configures watchdog with configuration data pointed by \a config. */
+  80:../Libraries/XMCLib/src/xmc_wdt.c **** void XMC_WDT_Init(const XMC_WDT_CONFIG_t *const config)
+  81:../Libraries/XMCLib/src/xmc_wdt.c **** {
+  97              	 .loc 1 81 0
+  98              	 .cfi_startproc
+  99              	 
+ 100              	 
+ 101 0000 80B5     	 push {r7,lr}
+ 102              	.LCFI4:
+ 103              	 .cfi_def_cfa_offset 8
+ 104              	 .cfi_offset 7,-8
+ 105              	 .cfi_offset 14,-4
+ 106 0002 82B0     	 sub sp,sp,#8
+ 107              	.LCFI5:
+ 108              	 .cfi_def_cfa_offset 16
+ 109 0004 00AF     	 add r7,sp,#0
+ 110              	.LCFI6:
+ 111              	 .cfi_def_cfa_register 7
+ 112 0006 7860     	 str r0,[r7,#4]
+  82:../Libraries/XMCLib/src/xmc_wdt.c ****   XMC_WDT_Enable();
+ 113              	 .loc 1 82 0
+ 114 0008 FFF7FEFF 	 bl XMC_WDT_Enable
+  83:../Libraries/XMCLib/src/xmc_wdt.c ****   WDT->CTR = config->wdt_ctr;
+ 115              	 .loc 1 83 0
+ 116 000c 074A     	 ldr r2,.L8
+ 117 000e 7B68     	 ldr r3,[r7,#4]
+ 118 0010 9B68     	 ldr r3,[r3,#8]
+ 119 0012 5360     	 str r3,[r2,#4]
+  84:../Libraries/XMCLib/src/xmc_wdt.c ****   WDT->WLB = config->window_lower_bound;
+ 120              	 .loc 1 84 0
+ 121 0014 054A     	 ldr r2,.L8
+ 122 0016 7B68     	 ldr r3,[r7,#4]
+ 123 0018 5B68     	 ldr r3,[r3,#4]
+ 124 001a 1361     	 str r3,[r2,#16]
+  85:../Libraries/XMCLib/src/xmc_wdt.c ****   WDT->WUB = config->window_upper_bound;
+ 125              	 .loc 1 85 0
+ 126 001c 034A     	 ldr r2,.L8
+ 127 001e 7B68     	 ldr r3,[r7,#4]
+ 128 0020 1B68     	 ldr r3,[r3]
+ 129 0022 5361     	 str r3,[r2,#20]
+  86:../Libraries/XMCLib/src/xmc_wdt.c **** }
+ 130              	 .loc 1 86 0
+ 131 0024 0837     	 adds r7,r7,#8
+ 132              	.LCFI7:
+ 133              	 .cfi_def_cfa_offset 8
+ 134 0026 BD46     	 mov sp,r7
+ 135              	.LCFI8:
+ 136              	 .cfi_def_cfa_register 13
+ 137              	 
+ 138 0028 80BD     	 pop {r7,pc}
+ 139              	.L9:
+ 140 002a 00BF     	 .align 2
+ 141              	.L8:
+ 142 002c 00800050 	 .word 1342210048
+ 143              	 .cfi_endproc
+ 144              	.LFE162:
+ 146              	 .text
+ 147              	.Letext0:
+ 148              	 .file 2 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 149              	 .file 3 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 150              	 .file 4 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Infineon/XMC4500_series/Include/XMC4500.h"
+ 151              	 .file 5 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc4_scu.h"
+ 152              	 .file 6 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc_wdt.h"
+ 153              	 .file 7 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include/core_cm4.h"
+ 154              	 .file 8 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Infineon/XMC4500_series/Include/system_XMC4500.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 xmc_wdt.c
+    {standard input}:19     .text.XMC_WDT_Enable:00000000 $t
+    {standard input}:24     .text.XMC_WDT_Enable:00000000 XMC_WDT_Enable
+    {standard input}:50     .text.XMC_WDT_Enable:00000014 $d
+    {standard input}:55     .text.XMC_WDT_Disable:00000000 $t
+    {standard input}:60     .text.XMC_WDT_Disable:00000000 XMC_WDT_Disable
+    {standard input}:85     .text.XMC_WDT_Disable:00000014 $d
+    {standard input}:90     .text.XMC_WDT_Init:00000000 $t
+    {standard input}:95     .text.XMC_WDT_Init:00000000 XMC_WDT_Init
+    {standard input}:142    .text.XMC_WDT_Init:0000002c $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+XMC_SCU_RESET_DeassertPeripheralReset
+XMC_SCU_CLOCK_EnableClock
+XMC_SCU_CLOCK_DisableClock
+XMC_SCU_RESET_AssertPeripheralReset

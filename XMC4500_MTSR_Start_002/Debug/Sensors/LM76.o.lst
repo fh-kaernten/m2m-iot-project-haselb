@@ -1,0 +1,549 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .fpu softvfp
+   4              	 .eabi_attribute 20,1
+   5              	 .eabi_attribute 21,1
+   6              	 .eabi_attribute 23,3
+   7              	 .eabi_attribute 24,1
+   8              	 .eabi_attribute 25,1
+   9              	 .eabi_attribute 26,1
+  10              	 .eabi_attribute 30,6
+  11              	 .eabi_attribute 34,1
+  12              	 .eabi_attribute 18,4
+  13              	 .thumb
+  14              	 .file "LM76.c"
+  15              	 .text
+  16              	.Ltext0:
+  17              	 .cfi_sections .debug_frame
+  18              	 .comm lm76,28,4
+  19              	 .global S_LM76
+  20              	 .section .data.S_LM76,"aw",%progbits
+  21              	 .align 2
+  24              	S_LM76:
+  25 0000 00000000 	 .space 4
+  26 0004 0000A041 	 .word 1101004800
+  27 0008 00000000 	 .word 0
+  28 000c 00002042 	 .word 1109393408
+  29 0010 0000C8C1 	 .word -1043857408
+  30 0014 08       	 .byte 8
+  31 0015 000000   	 .space 3
+  32 0018 90       	 .byte -112
+  33 0019 01       	 .byte 1
+  34 001a 00       	 .byte 0
+  35 001b 00       	 .space 1
+  36              	 .section .text.read_LM76,"ax",%progbits
+  37              	 .align 2
+  38              	 .global read_LM76
+  39              	 .thumb
+  40              	 .thumb_func
+  42              	read_LM76:
+  43              	.LFB335:
+  44              	 .file 1 "../Sensors/LM76.c"
+   1:../Sensors/LM76.c **** /*
+   2:../Sensors/LM76.c ****  * LM75.c
+   3:../Sensors/LM76.c ****  *
+   4:../Sensors/LM76.c ****  *  Created on: 24.11.2014
+   5:../Sensors/LM76.c ****  *      Author: haselb
+   6:../Sensors/LM76.c ****  */
+   7:../Sensors/LM76.c **** // Writes all second LM75 temperature data with 57600bps N81P to UART001
+   8:../Sensors/LM76.c **** /* Declarations from DAVE3 Code Generation */
+   9:../Sensors/LM76.c **** #include <DAVE.h>
+  10:../Sensors/LM76.c **** #include "HAL/hal_i2c.h"
+  11:../Sensors/LM76.c **** #include "Source/Has_Misc.h"
+  12:../Sensors/LM76.c **** #include "LM76.h"
+  13:../Sensors/LM76.c **** 
+  14:../Sensors/LM76.c **** /*
+  15:../Sensors/LM76.c ****  * On XMC_MMI-Board both Jumpers JP1 and JP2 are in right position (0)
+  16:../Sensors/LM76.c ****  * Device-ID in 8-bit Notation 10010000b equates to 0x90U
+  17:../Sensors/LM76.c ****  * --------------------------------
+  18:../Sensors/LM76.c ****  *    Group	      |   |   |ADR|R/W|
+  19:../Sensors/LM76.c ****  *  7   6   5   4   3   2   1   0
+  20:../Sensors/LM76.c ****  *| 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
+  21:../Sensors/LM76.c ****  */
+  22:../Sensors/LM76.c **** 
+  23:../Sensors/LM76.c **** /* struct for temperature sensor; start with default values */
+  24:../Sensors/LM76.c **** struct lm76 S_LM76=
+  25:../Sensors/LM76.c **** {
+  26:../Sensors/LM76.c **** 		.DevID =		0x90U,		/* I2C-Dev.Addr. in 8 bit notation */
+  27:../Sensors/LM76.c **** 		.location =		0x01U,		/* where is the sensor located	*/
+  28:../Sensors/LM76.c **** 		.status =		0x00U,		/* different states, 0x00 is OK	*/
+  29:../Sensors/LM76.c **** 		.temp.ave_value = 20.0f,	/* default value				*/
+  30:../Sensors/LM76.c **** 		.temp.max_value = 40.0f,	/* max value for temp? 			*/
+  31:../Sensors/LM76.c **** 		.temp.min_value = -25.0f,	/* min value - brr 				*/
+  32:../Sensors/LM76.c **** 		.temp.ave_value_old = 0.0f,		/* take same value as ave_value	*/
+  33:../Sensors/LM76.c **** 		.temp.ave_factor= 8U,		/* weight for average filter	*/
+  34:../Sensors/LM76.c **** };
+  35:../Sensors/LM76.c **** 
+  36:../Sensors/LM76.c **** 
+  37:../Sensors/LM76.c **** /*!
+  38:../Sensors/LM76.c ****  * @brief 	   Function for reading LM76 Device on I2C Bus.
+  39:../Sensors/LM76.c ****  * @param[in]  DevID
+  40:../Sensors/LM76.c ****  * @param[out] return_value in raw format
+  41:../Sensors/LM76.c ****  * @retval     DEVICE_READ_ERROR if error occurs
+  42:../Sensors/LM76.c ****  * 			   DEVICE_SUCCESSFUL if success
+  43:../Sensors/LM76.c ****  * @pre        uses I2C_Master APP, initiated by DAVE.
+  44:../Sensors/LM76.c ****  * @post       Function updates global variable @ref mainloop_ticks.
+  45:../Sensors/LM76.c ****  * @attention  enable all Errors I2C_Master in DAVE App and
+  46:../Sensors/LM76.c ****  * @Note	   A Software Watchdog is initiated to prevent from stucking in while loop in case of fail
+  47:../Sensors/LM76.c ****  * invoked by the ISR generated from SYSTIMER.
+  48:../Sensors/LM76.c ****  */
+  49:../Sensors/LM76.c **** uint8_t read_LM76(uint8_t DevID, uint16_t *return_value){
+  45              	 .loc 1 49 0
+  46              	 .cfi_startproc
+  47              	 
+  48              	 
+  49 0000 90B5     	 push {r4,r7,lr}
+  50              	.LCFI0:
+  51              	 .cfi_def_cfa_offset 12
+  52              	 .cfi_offset 4,-12
+  53              	 .cfi_offset 7,-8
+  54              	 .cfi_offset 14,-4
+  55 0002 89B0     	 sub sp,sp,#36
+  56              	.LCFI1:
+  57              	 .cfi_def_cfa_offset 48
+  58 0004 04AF     	 add r7,sp,#16
+  59              	.LCFI2:
+  60              	 .cfi_def_cfa 7,32
+  61 0006 0346     	 mov r3,r0
+  62 0008 3960     	 str r1,[r7]
+  63 000a FB71     	 strb r3,[r7,#7]
+  50:../Sensors/LM76.c **** 
+  51:../Sensors/LM76.c **** 	uint8_t tx_data=0x00;
+  64              	 .loc 1 51 0
+  65 000c 0023     	 movs r3,#0
+  66 000e 7B73     	 strb r3,[r7,#13]
+  52:../Sensors/LM76.c **** 	uint8_t rx_data[2];
+  53:../Sensors/LM76.c **** 	uint16_t DataReceived = 0;
+  67              	 .loc 1 53 0
+  68 0010 0023     	 movs r3,#0
+  69 0012 FB81     	 strh r3,[r7,#14]
+  54:../Sensors/LM76.c **** 
+  55:../Sensors/LM76.c **** // 	attach ID_LM76 address
+  56:../Sensors/LM76.c **** // 	send start condition
+  57:../Sensors/LM76.c **** // 	select temperature register data=0x00
+  58:../Sensors/LM76.c **** //	Write data to DEVICE
+  59:../Sensors/LM76.c **** //	leave I2C bus open
+  60:../Sensors/LM76.c **** 	Soft_WDG_1(ON);
+  70              	 .loc 1 60 0
+  71 0014 0120     	 movs r0,#1
+  72 0016 FFF7FEFF 	 bl Soft_WDG_1
+  61:../Sensors/LM76.c ****     I2C_MASTER_Transmit(&I2C_MASTER_0,true,DevID,&tx_data,1,false);
+  73              	 .loc 1 61 0
+  74 001a FA79     	 ldrb r2,[r7,#7]
+  75 001c 07F10D04 	 add r4,r7,#13
+  76 0020 0123     	 movs r3,#1
+  77 0022 0093     	 str r3,[sp]
+  78 0024 0023     	 movs r3,#0
+  79 0026 0193     	 str r3,[sp,#4]
+  80 0028 5648     	 ldr r0,.L12
+  81 002a 0121     	 movs r1,#1
+  82 002c 2346     	 mov r3,r4
+  83 002e FFF7FEFF 	 bl I2C_MASTER_Transmit
+  62:../Sensors/LM76.c ****     while((f.tx_completion == 0) && (f.I2C_NACK == 0) && (f.eject_at_I2C_NACK == 0));
+  84              	 .loc 1 62 0
+  85 0032 00BF     	 nop
+  86              	.L3:
+  87              	 .loc 1 62 0 is_stmt 0 discriminator 3
+  88 0034 544B     	 ldr r3,.L12+4
+  89 0036 1B88     	 ldrh r3,[r3]
+  90 0038 9BB2     	 uxth r3,r3
+  91 003a 5B09     	 lsrs r3,r3,#5
+  92 003c 03F00103 	 and r3,r3,#1
+  93 0040 DBB2     	 uxtb r3,r3
+  94 0042 002B     	 cmp r3,#0
+  95 0044 11D1     	 bne .L2
+  96              	 .loc 1 62 0 discriminator 1
+  97 0046 504B     	 ldr r3,.L12+4
+  98 0048 1B88     	 ldrh r3,[r3]
+  99 004a 9BB2     	 uxth r3,r3
+ 100 004c 9B09     	 lsrs r3,r3,#6
+ 101 004e 03F00103 	 and r3,r3,#1
+ 102 0052 DBB2     	 uxtb r3,r3
+ 103 0054 002B     	 cmp r3,#0
+ 104 0056 08D1     	 bne .L2
+ 105              	 .loc 1 62 0 discriminator 2
+ 106 0058 4B4B     	 ldr r3,.L12+4
+ 107 005a 1B88     	 ldrh r3,[r3]
+ 108 005c 9BB2     	 uxth r3,r3
+ 109 005e DB09     	 lsrs r3,r3,#7
+ 110 0060 03F00103 	 and r3,r3,#1
+ 111 0064 DBB2     	 uxtb r3,r3
+ 112 0066 002B     	 cmp r3,#0
+ 113 0068 E4D0     	 beq .L3
+ 114              	.L2:
+  63:../Sensors/LM76.c ****     f.tx_completion = 0;
+ 115              	 .loc 1 63 0 is_stmt 1
+ 116 006a 474B     	 ldr r3,.L12+4
+ 117 006c 1A88     	 ldrh r2,[r3]
+ 118 006e 22F02002 	 bic r2,r2,#32
+ 119 0072 1A80     	 strh r2,[r3]
+  64:../Sensors/LM76.c ****     Soft_WDG_1(OFF);
+ 120              	 .loc 1 64 0
+ 121 0074 0020     	 movs r0,#0
+ 122 0076 FFF7FEFF 	 bl Soft_WDG_1
+  65:../Sensors/LM76.c **** 
+  66:../Sensors/LM76.c ****     if(f.I2C_NACK || f.eject_at_I2C_NACK)
+ 123              	 .loc 1 66 0
+ 124 007a 434B     	 ldr r3,.L12+4
+ 125 007c 1B88     	 ldrh r3,[r3]
+ 126 007e 9BB2     	 uxth r3,r3
+ 127 0080 9B09     	 lsrs r3,r3,#6
+ 128 0082 03F00103 	 and r3,r3,#1
+ 129 0086 DBB2     	 uxtb r3,r3
+ 130 0088 002B     	 cmp r3,#0
+ 131 008a 08D1     	 bne .L4
+ 132              	 .loc 1 66 0 is_stmt 0 discriminator 1
+ 133 008c 3E4B     	 ldr r3,.L12+4
+ 134 008e 1B88     	 ldrh r3,[r3]
+ 135 0090 9BB2     	 uxth r3,r3
+ 136 0092 DB09     	 lsrs r3,r3,#7
+ 137 0094 03F00103 	 and r3,r3,#1
+ 138 0098 DBB2     	 uxtb r3,r3
+ 139 009a 002B     	 cmp r3,#0
+ 140 009c 0BD0     	 beq .L5
+ 141              	.L4:
+  67:../Sensors/LM76.c ****         {
+  68:../Sensors/LM76.c ****         	 f.I2C_NACK=0;
+ 142              	 .loc 1 68 0 is_stmt 1
+ 143 009e 3A4B     	 ldr r3,.L12+4
+ 144 00a0 1A88     	 ldrh r2,[r3]
+ 145 00a2 22F04002 	 bic r2,r2,#64
+ 146 00a6 1A80     	 strh r2,[r3]
+  69:../Sensors/LM76.c ****         	 f.eject_at_I2C_NACK=0;
+ 147              	 .loc 1 69 0
+ 148 00a8 374B     	 ldr r3,.L12+4
+ 149 00aa 1A88     	 ldrh r2,[r3]
+ 150 00ac 22F08002 	 bic r2,r2,#128
+ 151 00b0 1A80     	 strh r2,[r3]
+  70:../Sensors/LM76.c ****         	 return DEVICE_READ_ERROR;
+ 152              	 .loc 1 70 0
+ 153 00b2 FF23     	 movs r3,#255
+ 154 00b4 61E0     	 b .L11
+ 155              	.L5:
+  71:../Sensors/LM76.c ****         }
+  72:../Sensors/LM76.c **** //	send repeated start condition
+  73:../Sensors/LM76.c **** //  Read content of Register 0x00 from DEVICE and place it in rx_data[0] and rx_data[1]
+  74:../Sensors/LM76.c **** //	close I2C BUS
+  75:../Sensors/LM76.c ****     Soft_WDG_1(ON);
+ 156              	 .loc 1 75 0
+ 157 00b6 0120     	 movs r0,#1
+ 158 00b8 FFF7FEFF 	 bl Soft_WDG_1
+  76:../Sensors/LM76.c ****     I2C_MASTER_Receive(&I2C_MASTER_0,true,DevID,rx_data,2,true,true);
+ 159              	 .loc 1 76 0
+ 160 00bc FA79     	 ldrb r2,[r7,#7]
+ 161 00be 07F10804 	 add r4,r7,#8
+ 162 00c2 0223     	 movs r3,#2
+ 163 00c4 0093     	 str r3,[sp]
+ 164 00c6 0123     	 movs r3,#1
+ 165 00c8 0193     	 str r3,[sp,#4]
+ 166 00ca 0123     	 movs r3,#1
+ 167 00cc 0293     	 str r3,[sp,#8]
+ 168 00ce 2D48     	 ldr r0,.L12
+ 169 00d0 0121     	 movs r1,#1
+ 170 00d2 2346     	 mov r3,r4
+ 171 00d4 FFF7FEFF 	 bl I2C_MASTER_Receive
+  77:../Sensors/LM76.c ****     while((f.rx_completion == 0) && (f.I2C_NACK == 0) && (f.eject_at_I2C_NACK == 0));
+ 172              	 .loc 1 77 0
+ 173 00d8 00BF     	 nop
+ 174              	.L8:
+ 175              	 .loc 1 77 0 is_stmt 0 discriminator 3
+ 176 00da 2B4B     	 ldr r3,.L12+4
+ 177 00dc 1B88     	 ldrh r3,[r3]
+ 178 00de 9BB2     	 uxth r3,r3
+ 179 00e0 1B09     	 lsrs r3,r3,#4
+ 180 00e2 03F00103 	 and r3,r3,#1
+ 181 00e6 DBB2     	 uxtb r3,r3
+ 182 00e8 002B     	 cmp r3,#0
+ 183 00ea 11D1     	 bne .L7
+ 184              	 .loc 1 77 0 discriminator 1
+ 185 00ec 264B     	 ldr r3,.L12+4
+ 186 00ee 1B88     	 ldrh r3,[r3]
+ 187 00f0 9BB2     	 uxth r3,r3
+ 188 00f2 9B09     	 lsrs r3,r3,#6
+ 189 00f4 03F00103 	 and r3,r3,#1
+ 190 00f8 DBB2     	 uxtb r3,r3
+ 191 00fa 002B     	 cmp r3,#0
+ 192 00fc 08D1     	 bne .L7
+ 193              	 .loc 1 77 0 discriminator 2
+ 194 00fe 224B     	 ldr r3,.L12+4
+ 195 0100 1B88     	 ldrh r3,[r3]
+ 196 0102 9BB2     	 uxth r3,r3
+ 197 0104 DB09     	 lsrs r3,r3,#7
+ 198 0106 03F00103 	 and r3,r3,#1
+ 199 010a DBB2     	 uxtb r3,r3
+ 200 010c 002B     	 cmp r3,#0
+ 201 010e E4D0     	 beq .L8
+ 202              	.L7:
+  78:../Sensors/LM76.c ****     f.rx_completion = 0;
+ 203              	 .loc 1 78 0 is_stmt 1
+ 204 0110 1D4B     	 ldr r3,.L12+4
+ 205 0112 1A88     	 ldrh r2,[r3]
+ 206 0114 22F01002 	 bic r2,r2,#16
+ 207 0118 1A80     	 strh r2,[r3]
+  79:../Sensors/LM76.c ****     Soft_WDG_1(OFF);
+ 208              	 .loc 1 79 0
+ 209 011a 0020     	 movs r0,#0
+ 210 011c FFF7FEFF 	 bl Soft_WDG_1
+  80:../Sensors/LM76.c **** 
+  81:../Sensors/LM76.c ****     if(f.I2C_NACK || f.eject_at_I2C_NACK)
+ 211              	 .loc 1 81 0
+ 212 0120 194B     	 ldr r3,.L12+4
+ 213 0122 1B88     	 ldrh r3,[r3]
+ 214 0124 9BB2     	 uxth r3,r3
+ 215 0126 9B09     	 lsrs r3,r3,#6
+ 216 0128 03F00103 	 and r3,r3,#1
+ 217 012c DBB2     	 uxtb r3,r3
+ 218 012e 002B     	 cmp r3,#0
+ 219 0130 08D1     	 bne .L9
+ 220              	 .loc 1 81 0 is_stmt 0 discriminator 1
+ 221 0132 154B     	 ldr r3,.L12+4
+ 222 0134 1B88     	 ldrh r3,[r3]
+ 223 0136 9BB2     	 uxth r3,r3
+ 224 0138 DB09     	 lsrs r3,r3,#7
+ 225 013a 03F00103 	 and r3,r3,#1
+ 226 013e DBB2     	 uxtb r3,r3
+ 227 0140 002B     	 cmp r3,#0
+ 228 0142 0BD0     	 beq .L10
+ 229              	.L9:
+  82:../Sensors/LM76.c ****         {
+  83:../Sensors/LM76.c ****           	f.I2C_NACK=0;
+ 230              	 .loc 1 83 0 is_stmt 1
+ 231 0144 104B     	 ldr r3,.L12+4
+ 232 0146 1A88     	 ldrh r2,[r3]
+ 233 0148 22F04002 	 bic r2,r2,#64
+ 234 014c 1A80     	 strh r2,[r3]
+  84:../Sensors/LM76.c ****             f.eject_at_I2C_NACK=0;
+ 235              	 .loc 1 84 0
+ 236 014e 0E4B     	 ldr r3,.L12+4
+ 237 0150 1A88     	 ldrh r2,[r3]
+ 238 0152 22F08002 	 bic r2,r2,#128
+ 239 0156 1A80     	 strh r2,[r3]
+  85:../Sensors/LM76.c ****             return DEVICE_READ_ERROR;
+ 240              	 .loc 1 85 0
+ 241 0158 FF23     	 movs r3,#255
+ 242 015a 0EE0     	 b .L11
+ 243              	.L10:
+  86:../Sensors/LM76.c ****         }
+  87:../Sensors/LM76.c **** 
+  88:../Sensors/LM76.c ****     // prepare 13Bit temperature value two's complement notation
+  89:../Sensors/LM76.c ****     //|-----------upper_byte MSByte[0]----------|-------lower_byteLSByte[1]-------|
+  90:../Sensors/LM76.c ****     // D15  D14   D13  D12  D11  D10   D9   D8   D7   D6   D5   D4  D3  D2  D1  D0
+  91:../Sensors/LM76.c ****     //Sign  MSB Bit10 Bit9 Bit8 Bit7 Bit6 Bit5 Bit4 Bit3 Bit2 Bit1 Bit0  X   X   X    //LM76
+  92:../Sensors/LM76.c **** 
+  93:../Sensors/LM76.c ****     //shift 8 bit bytes to proper 16bit position
+  94:../Sensors/LM76.c **** 	DataReceived = rx_data[1] >> 3;
+ 244              	 .loc 1 94 0
+ 245 015c 7B7A     	 ldrb r3,[r7,#9]
+ 246 015e DB08     	 lsrs r3,r3,#3
+ 247 0160 DBB2     	 uxtb r3,r3
+ 248 0162 FB81     	 strh r3,[r7,#14]
+  95:../Sensors/LM76.c **** 	DataReceived |= rx_data[0] << 5;
+ 249              	 .loc 1 95 0
+ 250 0164 3B7A     	 ldrb r3,[r7,#8]
+ 251 0166 5B01     	 lsls r3,r3,#5
+ 252 0168 9AB2     	 uxth r2,r3
+ 253 016a FB89     	 ldrh r3,[r7,#14]
+ 254 016c 1343     	 orrs r3,r3,r2
+ 255 016e 9BB2     	 uxth r3,r3
+ 256 0170 FB81     	 strh r3,[r7,#14]
+  96:../Sensors/LM76.c **** 
+  97:../Sensors/LM76.c ****     (*return_value)=DataReceived;
+ 257              	 .loc 1 97 0
+ 258 0172 3B68     	 ldr r3,[r7]
+ 259 0174 FA89     	 ldrh r2,[r7,#14]
+ 260 0176 1A80     	 strh r2,[r3]
+  98:../Sensors/LM76.c **** 
+  99:../Sensors/LM76.c ****     XMC_DEBUG("main: Application OK");
+ 100:../Sensors/LM76.c ****     return DEVICE_SUCCESSFUL;
+ 261              	 .loc 1 100 0
+ 262 0178 0023     	 movs r3,#0
+ 263              	.L11:
+ 101:../Sensors/LM76.c **** }
+ 264              	 .loc 1 101 0 discriminator 1
+ 265 017a 1846     	 mov r0,r3
+ 266 017c 1437     	 adds r7,r7,#20
+ 267              	.LCFI3:
+ 268              	 .cfi_def_cfa_offset 12
+ 269 017e BD46     	 mov sp,r7
+ 270              	.LCFI4:
+ 271              	 .cfi_def_cfa_register 13
+ 272              	 
+ 273 0180 90BD     	 pop {r4,r7,pc}
+ 274              	.L13:
+ 275 0182 00BF     	 .align 2
+ 276              	.L12:
+ 277 0184 00000000 	 .word I2C_MASTER_0
+ 278 0188 00000000 	 .word f
+ 279              	 .cfi_endproc
+ 280              	.LFE335:
+ 282              	 .global __aeabi_i2d
+ 283              	 .global __aeabi_dmul
+ 284              	 .global __aeabi_d2f
+ 285              	 .global __aeabi_fsub
+ 286              	 .global __aeabi_i2f
+ 287              	 .global __aeabi_fdiv
+ 288              	 .global __aeabi_fadd
+ 289              	 .section .text.update_LM76,"ax",%progbits
+ 290              	 .align 2
+ 291              	 .global update_LM76
+ 292              	 .thumb
+ 293              	 .thumb_func
+ 295              	update_LM76:
+ 296              	.LFB336:
+ 102:../Sensors/LM76.c **** 
+ 103:../Sensors/LM76.c **** /*!
+ 104:../Sensors/LM76.c ****  * @brief 	   Main function for updating and calculating LM76 Temperature Sensors value.
+ 105:../Sensors/LM76.c ****  * @param[in]  None
+ 106:../Sensors/LM76.c ****  * @param[out] None
+ 107:../Sensors/LM76.c ****  * @retval     void
+ 108:../Sensors/LM76.c ****  * @pre        uses @read_LM76() for updating raw_value.
+ 109:../Sensors/LM76.c ****  * @post       None
+ 110:../Sensors/LM76.c ****  * @attention  call routine NEVER more than once a second, device delivers then all time same tempe
+ 111:../Sensors/LM76.c ****  * @note       acc. to datasheet convert from UINT to INT cast to float multiply with 0.0625
+ 112:../Sensors/LM76.c ****  */
+ 113:../Sensors/LM76.c **** void update_LM76(void)
+ 114:../Sensors/LM76.c **** {
+ 297              	 .loc 1 114 0
+ 298              	 .cfi_startproc
+ 299              	 
+ 300              	 
+ 301 0000 B0B5     	 push {r4,r5,r7,lr}
+ 302              	.LCFI5:
+ 303              	 .cfi_def_cfa_offset 16
+ 304              	 .cfi_offset 4,-16
+ 305              	 .cfi_offset 5,-12
+ 306              	 .cfi_offset 7,-8
+ 307              	 .cfi_offset 14,-4
+ 308 0002 00AF     	 add r7,sp,#0
+ 309              	.LCFI6:
+ 310              	 .cfi_def_cfa_register 7
+ 115:../Sensors/LM76.c **** 
+ 116:../Sensors/LM76.c **** 	S_LM76.status = read_LM76(S_LM76.DevID, &S_LM76.temp.raw_value);
+ 311              	 .loc 1 116 0
+ 312 0004 294B     	 ldr r3,.L16
+ 313 0006 1B7E     	 ldrb r3,[r3,#24]
+ 314 0008 1846     	 mov r0,r3
+ 315 000a 2849     	 ldr r1,.L16
+ 316 000c FFF7FEFF 	 bl read_LM76
+ 317 0010 0346     	 mov r3,r0
+ 318 0012 1A46     	 mov r2,r3
+ 319 0014 254B     	 ldr r3,.L16
+ 320 0016 9A76     	 strb r2,[r3,#26]
+ 117:../Sensors/LM76.c **** 	if(S_LM76.temp.raw_value & 0x1000U) S_LM76.temp.raw_value |= 0xF000U; //fill up MSB to fit 2`s com
+ 321              	 .loc 1 117 0
+ 322 0018 244B     	 ldr r3,.L16
+ 323 001a 1B88     	 ldrh r3,[r3]
+ 324 001c 03F48053 	 and r3,r3,#4096
+ 325 0020 002B     	 cmp r3,#0
+ 326 0022 08D0     	 beq .L15
+ 327              	 .loc 1 117 0 is_stmt 0 discriminator 1
+ 328 0024 214B     	 ldr r3,.L16
+ 329 0026 1B88     	 ldrh r3,[r3]
+ 330 0028 6FEA0353 	 mvn r3,r3,lsl#20
+ 331 002c 6FEA1353 	 mvn r3,r3,lsr#20
+ 332 0030 9AB2     	 uxth r2,r3
+ 333 0032 1E4B     	 ldr r3,.L16
+ 334 0034 1A80     	 strh r2,[r3]
+ 335              	.L15:
+ 118:../Sensors/LM76.c **** 	S_LM76.temp.ave_value=(float)(S_LM76.temp.raw_value*0.0625); // consult datasheet for calculation
+ 336              	 .loc 1 118 0 is_stmt 1
+ 337 0036 1D4B     	 ldr r3,.L16
+ 338 0038 1B88     	 ldrh r3,[r3]
+ 339 003a 1846     	 mov r0,r3
+ 340 003c FFF7FEFF 	 bl __aeabi_i2d
+ 341 0040 0246     	 mov r2,r0
+ 342 0042 0B46     	 mov r3,r1
+ 343 0044 1046     	 mov r0,r2
+ 344 0046 1946     	 mov r1,r3
+ 345 0048 4FF00002 	 mov r2,#0
+ 346 004c 184B     	 ldr r3,.L16+4
+ 347 004e FFF7FEFF 	 bl __aeabi_dmul
+ 348 0052 0246     	 mov r2,r0
+ 349 0054 0B46     	 mov r3,r1
+ 350 0056 1046     	 mov r0,r2
+ 351 0058 1946     	 mov r1,r3
+ 352 005a FFF7FEFF 	 bl __aeabi_d2f
+ 353 005e 0246     	 mov r2,r0
+ 354 0060 124B     	 ldr r3,.L16
+ 355 0062 5A60     	 str r2,[r3,#4]
+ 119:../Sensors/LM76.c **** 	val_average(S_LM76.temp.ave_value,S_LM76.temp.ave_value_old,S_LM76.temp.ave_factor);
+ 356              	 .loc 1 119 0
+ 357 0064 114B     	 ldr r3,.L16
+ 358 0066 9C68     	 ldr r4,[r3,#8]
+ 359 0068 104B     	 ldr r3,.L16
+ 360 006a 5A68     	 ldr r2,[r3,#4]
+ 361 006c 0F4B     	 ldr r3,.L16
+ 362 006e 9B68     	 ldr r3,[r3,#8]
+ 363 0070 1046     	 mov r0,r2
+ 364 0072 1946     	 mov r1,r3
+ 365 0074 FFF7FEFF 	 bl __aeabi_fsub
+ 366 0078 0346     	 mov r3,r0
+ 367 007a 1D46     	 mov r5,r3
+ 368 007c 0B4B     	 ldr r3,.L16
+ 369 007e 1B7D     	 ldrb r3,[r3,#20]
+ 370 0080 1846     	 mov r0,r3
+ 371 0082 FFF7FEFF 	 bl __aeabi_i2f
+ 372 0086 0346     	 mov r3,r0
+ 373 0088 2846     	 mov r0,r5
+ 374 008a 1946     	 mov r1,r3
+ 375 008c FFF7FEFF 	 bl __aeabi_fdiv
+ 376 0090 0346     	 mov r3,r0
+ 377 0092 2046     	 mov r0,r4
+ 378 0094 1946     	 mov r1,r3
+ 379 0096 FFF7FEFF 	 bl __aeabi_fadd
+ 380 009a 0346     	 mov r3,r0
+ 381 009c 1A46     	 mov r2,r3
+ 382 009e 034B     	 ldr r3,.L16
+ 383 00a0 5A60     	 str r2,[r3,#4]
+ 384 00a2 024B     	 ldr r3,.L16
+ 385 00a4 5B68     	 ldr r3,[r3,#4]
+ 386 00a6 014A     	 ldr r2,.L16
+ 387 00a8 9360     	 str r3,[r2,#8]
+ 120:../Sensors/LM76.c **** }
+ 388              	 .loc 1 120 0
+ 389 00aa B0BD     	 pop {r4,r5,r7,pc}
+ 390              	.L17:
+ 391              	 .align 2
+ 392              	.L16:
+ 393 00ac 00000000 	 .word S_LM76
+ 394 00b0 0000B03F 	 .word 1068498944
+ 395              	 .cfi_endproc
+ 396              	.LFE336:
+ 398              	 .text
+ 399              	.Letext0:
+ 400              	 .file 2 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 401              	 .file 3 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 402              	 .file 4 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc_usic.h"
+ 403              	 .file 5 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc_i2c.h"
+ 404              	 .file 6 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Dave/Generated/I2C_MASTER/i2c_master.h"
+ 405              	 .file 7 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Source/Has_Misc.h"
+ 406              	 .file 8 "../Sensors/LM76.h"
+ 407              	 .file 9 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include/core_cm4.h"
+ 408              	 .file 10 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Infineon/XMC4500_series/Include/system_XMC4500.h"
+ 409              	 .file 11 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Dave/Generated/I2C_MASTER/i2c_master_extern.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 LM76.c
+                            *COM*:0000001c lm76
+    {standard input}:24     .data.S_LM76:00000000 S_LM76
+    {standard input}:21     .data.S_LM76:00000000 $d
+    {standard input}:37     .text.read_LM76:00000000 $t
+    {standard input}:42     .text.read_LM76:00000000 read_LM76
+    {standard input}:277    .text.read_LM76:00000184 $d
+    {standard input}:290    .text.update_LM76:00000000 $t
+    {standard input}:295    .text.update_LM76:00000000 update_LM76
+    {standard input}:393    .text.update_LM76:000000ac $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+Soft_WDG_1
+I2C_MASTER_Transmit
+I2C_MASTER_Receive
+I2C_MASTER_0
+f
+__aeabi_i2d
+__aeabi_dmul
+__aeabi_d2f
+__aeabi_fsub
+__aeabi_i2f
+__aeabi_fdiv
+__aeabi_fadd

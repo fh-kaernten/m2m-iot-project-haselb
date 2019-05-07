@@ -1,0 +1,151 @@
+!SESSION 2019-04-25 11:09:14.473 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.8.0_131
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_DE
+Framework arguments:  -application com.ifx.davex.product.daveApplication -showlocation
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -application com.ifx.davex.product.daveApplication -showlocation
+
+!ENTRY org.eclipse.egit.core 1 0 2019-04-25 11:09:24.723
+!MESSAGE Using Apache MINA sshd as ssh client.
+
+!ENTRY org.eclipse.egit.ui 2 0 2019-04-25 11:09:28.675
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'B:\'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY SOLVER 1 0 2019-04-25 11:09:31.441
+!MESSAGE USER_ACTION : Default solver exe path is: C:\DAVEv4-64Bit\DAVE-IDE-4.4.2-64Bit\eclipse\Solver\lib\i386_nt\eclipse.exe
+
+!ENTRY SOLVER 1 0 2019-04-25 11:09:31.566
+!MESSAGE USER_ACTION : GlobalSize= 750MB; LocalSize: 128MB
+
+!ENTRY SOLVER 1 0 2019-04-25 11:09:31.566
+!MESSAGE USER_ACTION : Creating OutOfProcessEclipse instance...
+
+!ENTRY SOLVER 1 0 2019-04-25 11:09:31.832
+!MESSAGE USER_ACTION : Solver Status: CONNECTED
+
+!ENTRY APPLICATION_MODEL 1 0 2019-04-25 11:09:32.378
+!MESSAGE Only One DAVE Application is running 
+
+!ENTRY com.ifx.dave.LibraryManager 4 0 2019-04-25 11:09:32.582
+!MESSAGE Reading file: http://dave.infineon.com/Libraries/Examples/XMC_IFX/v4.1//daveSite.xml
+
+!ENTRY com.ifx.dave.LibraryManager 4 0 2019-04-25 11:09:36.566
+!MESSAGE Reading file: http://dave.infineon.com/Libraries/DAVE_Libs/XMC_IFX/v4.4//daveSite.xml
+
+!ENTRY com.ifx.dave.LibraryManager 4 0 2019-04-25 11:09:41.426
+!MESSAGE Reading file: http://dave.infineon.com/Libraries/DAVE_Libs/Contributed/v4.4//daveSite.xml
+
+!ENTRY SOLVER 1 0 2019-04-25 11:09:41.504
+!MESSAGE Solver exited (0)
+
+!ENTRY SOLVER 1 0 2019-04-25 11:09:41.754
+!MESSAGE USER_ACTION : Solver Status: DISCONNECTED
+!SESSION 2019-05-07 15:14:01.198 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=1.8.0_131
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_DE
+Framework arguments:  -application com.ifx.davex.product.daveApplication -showlocation
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -application com.ifx.davex.product.daveApplication -showlocation
+
+!ENTRY org.eclipse.egit.core 1 0 2019-05-07 15:14:11.963
+!MESSAGE Using Apache MINA sshd as ssh client.
+
+!ENTRY org.eclipse.egit.ui 2 0 2019-05-07 15:14:15.707
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'B:\'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY SOLVER 1 0 2019-05-07 15:14:18.363
+!MESSAGE USER_ACTION : Default solver exe path is: C:\DAVEv4-64Bit\DAVE-IDE-4.4.2-64Bit\eclipse\Solver\lib\i386_nt\eclipse.exe
+
+!ENTRY SOLVER 1 0 2019-05-07 15:14:18.457
+!MESSAGE USER_ACTION : GlobalSize= 750MB; LocalSize: 128MB
+
+!ENTRY SOLVER 1 0 2019-05-07 15:14:18.457
+!MESSAGE USER_ACTION : Creating OutOfProcessEclipse instance...
+
+!ENTRY SOLVER 1 0 2019-05-07 15:14:18.676
+!MESSAGE USER_ACTION : Solver Status: CONNECTED
+
+!ENTRY APPLICATION_MODEL 1 0 2019-05-07 15:14:19.285
+!MESSAGE Only One DAVE Application is running 
+
+!ENTRY com.ifx.dave.LibraryManager 4 0 2019-05-07 15:14:19.457
+!MESSAGE Reading file: http://dave.infineon.com/Libraries/Examples/XMC_IFX/v4.1//daveSite.xml
+
+!ENTRY com.ifx.dave.LibraryManager 4 0 2019-05-07 15:14:20.566
+!MESSAGE Reading file: http://dave.infineon.com/Libraries/DAVE_Libs/XMC_IFX/v4.4//daveSite.xml
+
+!ENTRY com.ifx.dave.LibraryManager 4 0 2019-05-07 15:14:22.051
+!MESSAGE Reading file: http://dave.infineon.com/Libraries/DAVE_Libs/Contributed/v4.4//daveSite.xml
+
+!ENTRY org.eclipse.equinox.ds 1 0 2019-05-07 15:17:14.459
+!MESSAGE Could not bind a reference of component org.eclipse.fx.core.internal.JUtilLoggerFactory. The reference is: Reference[name = registerHandler, interface = java.util.logging.Handler, policy = dynamic, policy-option = greedy, cardinality = 0..n, target = null, bind = registerHandler, unbind = unregisterHandler, updated = null]
+
+!ENTRY Import 1 0 2019-05-07 15:17:19.313
+!MESSAGE USER_ACTION : Time taken for importing project: XMC4500_MTSR_Start_002 into workspace is : 5605 msec 
+
+!ENTRY APPSTORE 1 0 2019-05-07 15:17:19.985
+!MESSAGE USER_ACTION : Time taken for loading LibraryStore data for SoftwareId [XMC4.5.00.F100.ALL] is: 422 msec 
+
+!ENTRY APPLICATION_MODEL 1 0 2019-05-07 15:17:19.985
+!MESSAGE USER_ACTION : Time taken for disposing objects for memory cleanup: 0 msec 
+
+!ENTRY APPLICATION_MODEL 1 0 2019-05-07 15:17:20.500
+!MESSAGE USER_ACTION : Active project:XMC4500_MTSR_Start_002[ Software ID:XMC4.5.00.F100.ALL]
+
+!ENTRY COMMON 1 0 2019-05-07 15:17:21.594
+!MESSAGE Time Taken By De-Serialization  : 594 ms :: C:\Workspaces\DAVE-4.4.2-64Bit\fh-kaernten\DAVE_M2M_1\XMC4500_MTSR_Start_002\Dave\Model\projectData.bin
+
+!ENTRY com.dave.mbs.common 1 0 2019-05-07 15:17:21.610
+!MESSAGE *************Serializing EMF and Groovy data to RAM*******************
+
+!ENTRY APPLICATION_MODEL 1 0 2019-05-07 15:17:21.766
+!MESSAGE USER_ACTION : Time taken for initializing Application Model is: 1266 msec 
+
+!ENTRY APPLICATION_MODEL 1 0 2019-05-07 15:17:21.782
+!MESSAGE USER_ACTION : Time taken for reloadLastSolverResult(updateQuery): 16 msec 
+
+!ENTRY APPLICATION_MODEL 1 0 2019-05-07 15:17:21.782
+!MESSAGE USER_ACTION : Time taken for reloadLastSolverResult(getSolutionQuery): 0 msec 
+
+!ENTRY APPLICATION_MODEL 1 0 2019-05-07 15:17:21.797
+!MESSAGE USER_ACTION : Time taken for updating views is: 15 msec 
+
+!ENTRY APPLICATION_MODEL 1 0 2019-05-07 15:17:23.688
+!MESSAGE USER_ACTION : Time taken for rendering views is: 1891 msec 
+
+!ENTRY APPLICATION_MODEL 1 0 2019-05-07 15:17:24.313
+!MESSAGE USER_ACTION : Total time taken for setting project as active is: 4328 msec 
+
+!ENTRY APP_CONFIGURATOR 1 0 2019-05-07 15:24:19.144
+!MESSAGE USER_ACTION : Time taken for opening editor is: 312 msec 
+
+!ENTRY UI_EDITOR 1 0 2019-05-07 15:24:25.707
+!MESSAGE USER_ACTION : Setting value = "16" of "ginteger_swtimers" in APP: SYSTIMER/4.1.16/0
+
+!ENTRY com.dave.mbs.common 1 0 2019-05-07 15:24:25.738
+!MESSAGE **************Serialization is called for successful UI action without Solver*********
+
+!ENTRY com.dave.mbs.common 1 0 2019-05-07 15:24:25.738
+!MESSAGE *************Serializing EMF and Groovy data to RAM*******************
+
+!ENTRY com.dave.mbs.common 1 0 2019-05-07 15:24:25.785
+!MESSAGE Time taken for serialization in msec: 47
+
+!ENTRY com.dave.mbs.common 1 0 2019-05-07 15:24:25.785
+!MESSAGE *****************************
+
+!ENTRY CODEGEN 1 0 2019-05-07 15:24:26.269
+!MESSAGE Code generation started...
+
+!ENTRY CODEGEN 1 0 2019-05-07 15:24:28.488
+!MESSAGE Code generation completed...

@@ -1,0 +1,1368 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .fpu softvfp
+   4              	 .eabi_attribute 20,1
+   5              	 .eabi_attribute 21,1
+   6              	 .eabi_attribute 23,3
+   7              	 .eabi_attribute 24,1
+   8              	 .eabi_attribute 25,1
+   9              	 .eabi_attribute 26,1
+  10              	 .eabi_attribute 30,6
+  11              	 .eabi_attribute 34,1
+  12              	 .eabi_attribute 18,4
+  13              	 .thumb
+  14              	 .file "xmc_dsd.c"
+  15              	 .text
+  16              	.Ltext0:
+  17              	 .cfi_sections .debug_frame
+  18              	 .section .text.XMC_DSD_Enable,"ax",%progbits
+  19              	 .align 2
+  20              	 .global XMC_DSD_Enable
+  21              	 .thumb
+  22              	 .thumb_func
+  24              	XMC_DSD_Enable:
+  25              	.LFB165:
+  26              	 .file 1 "../Libraries/XMCLib/src/xmc_dsd.c"
+   1:../Libraries/XMCLib/src/xmc_dsd.c **** /**
+   2:../Libraries/XMCLib/src/xmc_dsd.c ****  * @file xmc_dsd.c
+   3:../Libraries/XMCLib/src/xmc_dsd.c ****  * @date 2015-06-19 
+   4:../Libraries/XMCLib/src/xmc_dsd.c ****  *
+   5:../Libraries/XMCLib/src/xmc_dsd.c ****  * @cond
+   6:../Libraries/XMCLib/src/xmc_dsd.c ****  **********************************************************************************
+   7:../Libraries/XMCLib/src/xmc_dsd.c ****  * XMClib v2.0.0 - XMC Peripheral Driver Library
+   8:../Libraries/XMCLib/src/xmc_dsd.c ****  *
+   9:../Libraries/XMCLib/src/xmc_dsd.c ****  * Copyright (c) 2015, Infineon Technologies AG
+  10:../Libraries/XMCLib/src/xmc_dsd.c ****  * All rights reserved.                        
+  11:../Libraries/XMCLib/src/xmc_dsd.c ****  *                                             
+  12:../Libraries/XMCLib/src/xmc_dsd.c ****  * Redistribution and use in source and binary forms, with or without           
+  13:../Libraries/XMCLib/src/xmc_dsd.c ****  * modification,are permitted provided that the following conditions are met:   
+  14:../Libraries/XMCLib/src/xmc_dsd.c ****  *                                                                              
+  15:../Libraries/XMCLib/src/xmc_dsd.c ****  *   Redistributions of source code must retain the above copyright notice,      
+  16:../Libraries/XMCLib/src/xmc_dsd.c ****  *   this list of conditions and the following disclaimer.                        
+  17:../Libraries/XMCLib/src/xmc_dsd.c ****  * 
+  18:../Libraries/XMCLib/src/xmc_dsd.c ****  *   Redistributions in binary form must reproduce the above copyright notice,   
+  19:../Libraries/XMCLib/src/xmc_dsd.c ****  *   this list of conditions and the following disclaimer in the documentation    
+  20:../Libraries/XMCLib/src/xmc_dsd.c ****  *   and/or other materials provided with the distribution.                       
+  21:../Libraries/XMCLib/src/xmc_dsd.c ****  * 
+  22:../Libraries/XMCLib/src/xmc_dsd.c ****  *   Neither the name of the copyright holders nor the names of its contributors 
+  23:../Libraries/XMCLib/src/xmc_dsd.c ****  *   may be used to endorse or promote products derived from this software without
+  24:../Libraries/XMCLib/src/xmc_dsd.c ****  *   specific prior written permission.                                           
+  25:../Libraries/XMCLib/src/xmc_dsd.c ****  *                                                                              
+  26:../Libraries/XMCLib/src/xmc_dsd.c ****  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"  
+  27:../Libraries/XMCLib/src/xmc_dsd.c ****  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE    
+  28:../Libraries/XMCLib/src/xmc_dsd.c ****  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE   
+  29:../Libraries/XMCLib/src/xmc_dsd.c ****  * ARE  DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE   
+  30:../Libraries/XMCLib/src/xmc_dsd.c ****  * LIABLE  FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR         
+  31:../Libraries/XMCLib/src/xmc_dsd.c ****  * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF         
+  32:../Libraries/XMCLib/src/xmc_dsd.c ****  * SUBSTITUTE GOODS OR  SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS    
+  33:../Libraries/XMCLib/src/xmc_dsd.c ****  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN      
+  34:../Libraries/XMCLib/src/xmc_dsd.c ****  * CONTRACT, STRICT LIABILITY,OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)       
+  35:../Libraries/XMCLib/src/xmc_dsd.c ****  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE   
+  36:../Libraries/XMCLib/src/xmc_dsd.c ****  * POSSIBILITY OF SUCH DAMAGE.                                                  
+  37:../Libraries/XMCLib/src/xmc_dsd.c ****  *                                                                              
+  38:../Libraries/XMCLib/src/xmc_dsd.c ****  * To improve the quality of the software, users are encouraged to share        
+  39:../Libraries/XMCLib/src/xmc_dsd.c ****  * modifications, enhancements or bug fixes with Infineon Technologies AG       
+  40:../Libraries/XMCLib/src/xmc_dsd.c ****  * dave@infineon.com).                                                          
+  41:../Libraries/XMCLib/src/xmc_dsd.c ****  **********************************************************************************
+  42:../Libraries/XMCLib/src/xmc_dsd.c ****  *
+  43:../Libraries/XMCLib/src/xmc_dsd.c ****  * Change History
+  44:../Libraries/XMCLib/src/xmc_dsd.c ****  * --------------
+  45:../Libraries/XMCLib/src/xmc_dsd.c ****  *
+  46:../Libraries/XMCLib/src/xmc_dsd.c ****  * 2015-03-30:
+  47:../Libraries/XMCLib/src/xmc_dsd.c ****  *     - Initial version
+  48:../Libraries/XMCLib/src/xmc_dsd.c ****  *      
+  49:../Libraries/XMCLib/src/xmc_dsd.c ****  * 2015-06-19:
+  50:../Libraries/XMCLib/src/xmc_dsd.c ****  *     - Removed GetDriverVersion API <BR>
+  51:../Libraries/XMCLib/src/xmc_dsd.c ****  * @endcond 
+  52:../Libraries/XMCLib/src/xmc_dsd.c ****  *
+  53:../Libraries/XMCLib/src/xmc_dsd.c ****  */
+  54:../Libraries/XMCLib/src/xmc_dsd.c ****  
+  55:../Libraries/XMCLib/src/xmc_dsd.c ****  /*************************************************************************************************
+  56:../Libraries/XMCLib/src/xmc_dsd.c ****  * HEADER FILES
+  57:../Libraries/XMCLib/src/xmc_dsd.c ****  **************************************************************************************************
+  58:../Libraries/XMCLib/src/xmc_dsd.c **** #include "xmc_dsd.h"
+  59:../Libraries/XMCLib/src/xmc_dsd.c **** 
+  60:../Libraries/XMCLib/src/xmc_dsd.c **** #if defined(DSD)
+  61:../Libraries/XMCLib/src/xmc_dsd.c **** 
+  62:../Libraries/XMCLib/src/xmc_dsd.c **** /**************************************************************************************************
+  63:../Libraries/XMCLib/src/xmc_dsd.c ****  * MACROS
+  64:../Libraries/XMCLib/src/xmc_dsd.c ****  **************************************************************************************************
+  65:../Libraries/XMCLib/src/xmc_dsd.c **** 
+  66:../Libraries/XMCLib/src/xmc_dsd.c **** 
+  67:../Libraries/XMCLib/src/xmc_dsd.c **** /**************************************************************************************************
+  68:../Libraries/XMCLib/src/xmc_dsd.c ****  * API IMPLEMENTATION
+  69:../Libraries/XMCLib/src/xmc_dsd.c ****  **************************************************************************************************
+  70:../Libraries/XMCLib/src/xmc_dsd.c **** 
+  71:../Libraries/XMCLib/src/xmc_dsd.c **** /*Enable the DSD Module*/
+  72:../Libraries/XMCLib/src/xmc_dsd.c **** void XMC_DSD_Enable(XMC_DSD_t *const dsd)
+  73:../Libraries/XMCLib/src/xmc_dsd.c **** {
+  27              	 .loc 1 73 0
+  28              	 .cfi_startproc
+  29              	 
+  30              	 
+  31 0000 80B5     	 push {r7,lr}
+  32              	.LCFI0:
+  33              	 .cfi_def_cfa_offset 8
+  34              	 .cfi_offset 7,-8
+  35              	 .cfi_offset 14,-4
+  36 0002 82B0     	 sub sp,sp,#8
+  37              	.LCFI1:
+  38              	 .cfi_def_cfa_offset 16
+  39 0004 00AF     	 add r7,sp,#0
+  40              	.LCFI2:
+  41              	 .cfi_def_cfa_register 7
+  42 0006 7860     	 str r0,[r7,#4]
+  74:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_Enable:Invalid module pointer", XMC_DSD_CHECK_MODULE_PTR(dsd));
+  75:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_UNUSED_ARG(dsd);
+  76:../Libraries/XMCLib/src/xmc_dsd.c ****   #if ((UC_FAMILY == XMC4))
+  77:../Libraries/XMCLib/src/xmc_dsd.c ****     XMC_SCU_RESET_DeassertPeripheralReset(XMC_SCU_PERIPHERAL_RESET_DSD);
+  43              	 .loc 1 77 0
+  44 0008 0220     	 movs r0,#2
+  45 000a FFF7FEFF 	 bl XMC_SCU_RESET_DeassertPeripheralReset
+  78:../Libraries/XMCLib/src/xmc_dsd.c ****     #if (UC_SERIES == XMC44)
+  79:../Libraries/XMCLib/src/xmc_dsd.c ****       XMC_SCU_CLOCK_UngatePeripheralClock(XMC_SCU_PERIPHERAL_CLOCK_DSD);
+  80:../Libraries/XMCLib/src/xmc_dsd.c ****     #endif
+  81:../Libraries/XMCLib/src/xmc_dsd.c ****   #endif
+  82:../Libraries/XMCLib/src/xmc_dsd.c **** }
+  46              	 .loc 1 82 0
+  47 000e 0837     	 adds r7,r7,#8
+  48              	.LCFI3:
+  49              	 .cfi_def_cfa_offset 8
+  50 0010 BD46     	 mov sp,r7
+  51              	.LCFI4:
+  52              	 .cfi_def_cfa_register 13
+  53              	 
+  54 0012 80BD     	 pop {r7,pc}
+  55              	 .cfi_endproc
+  56              	.LFE165:
+  58              	 .section .text.XMC_DSD_Disable,"ax",%progbits
+  59              	 .align 2
+  60              	 .global XMC_DSD_Disable
+  61              	 .thumb
+  62              	 .thumb_func
+  64              	XMC_DSD_Disable:
+  65              	.LFB166:
+  83:../Libraries/XMCLib/src/xmc_dsd.c **** 
+  84:../Libraries/XMCLib/src/xmc_dsd.c **** /*Disable the DSD Module*/
+  85:../Libraries/XMCLib/src/xmc_dsd.c **** void XMC_DSD_Disable(XMC_DSD_t *const dsd)
+  86:../Libraries/XMCLib/src/xmc_dsd.c **** {
+  66              	 .loc 1 86 0
+  67              	 .cfi_startproc
+  68              	 
+  69              	 
+  70 0000 80B5     	 push {r7,lr}
+  71              	.LCFI5:
+  72              	 .cfi_def_cfa_offset 8
+  73              	 .cfi_offset 7,-8
+  74              	 .cfi_offset 14,-4
+  75 0002 82B0     	 sub sp,sp,#8
+  76              	.LCFI6:
+  77              	 .cfi_def_cfa_offset 16
+  78 0004 00AF     	 add r7,sp,#0
+  79              	.LCFI7:
+  80              	 .cfi_def_cfa_register 7
+  81 0006 7860     	 str r0,[r7,#4]
+  87:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_Disable:Invalid module pointer", XMC_DSD_CHECK_MODULE_PTR(dsd));
+  88:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_UNUSED_ARG(dsd);
+  89:../Libraries/XMCLib/src/xmc_dsd.c ****   #if ((UC_FAMILY == XMC4))
+  90:../Libraries/XMCLib/src/xmc_dsd.c ****     XMC_SCU_RESET_AssertPeripheralReset(XMC_SCU_PERIPHERAL_RESET_DSD);
+  82              	 .loc 1 90 0
+  83 0008 0220     	 movs r0,#2
+  84 000a FFF7FEFF 	 bl XMC_SCU_RESET_AssertPeripheralReset
+  91:../Libraries/XMCLib/src/xmc_dsd.c ****     #if (UC_SERIES == XMC44)
+  92:../Libraries/XMCLib/src/xmc_dsd.c ****       XMC_SCU_CLOCK_GatePeripheralClock(XMC_SCU_PERIPHERAL_CLOCK_DSD);
+  93:../Libraries/XMCLib/src/xmc_dsd.c ****     #endif
+  94:../Libraries/XMCLib/src/xmc_dsd.c ****   #endif
+  95:../Libraries/XMCLib/src/xmc_dsd.c **** 
+  96:../Libraries/XMCLib/src/xmc_dsd.c **** }
+  85              	 .loc 1 96 0
+  86 000e 0837     	 adds r7,r7,#8
+  87              	.LCFI8:
+  88              	 .cfi_def_cfa_offset 8
+  89 0010 BD46     	 mov sp,r7
+  90              	.LCFI9:
+  91              	 .cfi_def_cfa_register 13
+  92              	 
+  93 0012 80BD     	 pop {r7,pc}
+  94              	 .cfi_endproc
+  95              	.LFE166:
+  97              	 .section .text.XMC_DSD_EnableClock,"ax",%progbits
+  98              	 .align 2
+  99              	 .global XMC_DSD_EnableClock
+ 100              	 .thumb
+ 101              	 .thumb_func
+ 103              	XMC_DSD_EnableClock:
+ 104              	.LFB167:
+  97:../Libraries/XMCLib/src/xmc_dsd.c **** 
+  98:../Libraries/XMCLib/src/xmc_dsd.c **** /* Enable the module clock*/
+  99:../Libraries/XMCLib/src/xmc_dsd.c **** void XMC_DSD_EnableClock(XMC_DSD_t *const dsd)
+ 100:../Libraries/XMCLib/src/xmc_dsd.c **** {
+ 105              	 .loc 1 100 0
+ 106              	 .cfi_startproc
+ 107              	 
+ 108              	 
+ 109              	 
+ 110 0000 80B4     	 push {r7}
+ 111              	.LCFI10:
+ 112              	 .cfi_def_cfa_offset 4
+ 113              	 .cfi_offset 7,-4
+ 114 0002 83B0     	 sub sp,sp,#12
+ 115              	.LCFI11:
+ 116              	 .cfi_def_cfa_offset 16
+ 117 0004 00AF     	 add r7,sp,#0
+ 118              	.LCFI12:
+ 119              	 .cfi_def_cfa_register 7
+ 120 0006 7860     	 str r0,[r7,#4]
+ 101:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_EnableClock:Invalid module pointer", XMC_DSD_CHECK_MODULE_PTR(dsd));
+ 102:../Libraries/XMCLib/src/xmc_dsd.c ****   /* Enable the module clock */
+ 103:../Libraries/XMCLib/src/xmc_dsd.c ****   dsd->CLC &= ~(uint32_t)DSD_CLC_DISR_Msk;
+ 121              	 .loc 1 103 0
+ 122 0008 7B68     	 ldr r3,[r7,#4]
+ 123 000a 1B68     	 ldr r3,[r3]
+ 124 000c 23F00102 	 bic r2,r3,#1
+ 125 0010 7B68     	 ldr r3,[r7,#4]
+ 126 0012 1A60     	 str r2,[r3]
+ 104:../Libraries/XMCLib/src/xmc_dsd.c ****   /* enable internal module clock */
+ 105:../Libraries/XMCLib/src/xmc_dsd.c ****   dsd ->GLOBCFG |= (uint32_t)0x01;
+ 127              	 .loc 1 105 0
+ 128 0014 7B68     	 ldr r3,[r7,#4]
+ 129 0016 D3F88030 	 ldr r3,[r3,#128]
+ 130 001a 43F00102 	 orr r2,r3,#1
+ 131 001e 7B68     	 ldr r3,[r7,#4]
+ 132 0020 C3F88020 	 str r2,[r3,#128]
+ 106:../Libraries/XMCLib/src/xmc_dsd.c **** }
+ 133              	 .loc 1 106 0
+ 134 0024 0C37     	 adds r7,r7,#12
+ 135              	.LCFI13:
+ 136              	 .cfi_def_cfa_offset 4
+ 137 0026 BD46     	 mov sp,r7
+ 138              	.LCFI14:
+ 139              	 .cfi_def_cfa_register 13
+ 140              	 
+ 141 0028 5DF8047B 	 ldr r7,[sp],#4
+ 142              	.LCFI15:
+ 143              	 .cfi_restore 7
+ 144              	 .cfi_def_cfa_offset 0
+ 145 002c 7047     	 bx lr
+ 146              	 .cfi_endproc
+ 147              	.LFE167:
+ 149 002e 00BF     	 .section .text.XMC_DSD_DisableClock,"ax",%progbits
+ 150              	 .align 2
+ 151              	 .global XMC_DSD_DisableClock
+ 152              	 .thumb
+ 153              	 .thumb_func
+ 155              	XMC_DSD_DisableClock:
+ 156              	.LFB168:
+ 107:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 108:../Libraries/XMCLib/src/xmc_dsd.c **** void XMC_DSD_DisableClock(XMC_DSD_t *const dsd)
+ 109:../Libraries/XMCLib/src/xmc_dsd.c **** {
+ 157              	 .loc 1 109 0
+ 158              	 .cfi_startproc
+ 159              	 
+ 160              	 
+ 161              	 
+ 162 0000 80B4     	 push {r7}
+ 163              	.LCFI16:
+ 164              	 .cfi_def_cfa_offset 4
+ 165              	 .cfi_offset 7,-4
+ 166 0002 83B0     	 sub sp,sp,#12
+ 167              	.LCFI17:
+ 168              	 .cfi_def_cfa_offset 16
+ 169 0004 00AF     	 add r7,sp,#0
+ 170              	.LCFI18:
+ 171              	 .cfi_def_cfa_register 7
+ 172 0006 7860     	 str r0,[r7,#4]
+ 110:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_DisableClock:Invalid module pointer", XMC_DSD_CHECK_MODULE_PTR(dsd));
+ 111:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 112:../Libraries/XMCLib/src/xmc_dsd.c ****   /* disable internal module clock */
+ 113:../Libraries/XMCLib/src/xmc_dsd.c ****   dsd->GLOBCFG &= ~(uint32_t)DSD_GLOBCFG_MCSEL_Msk;
+ 173              	 .loc 1 113 0
+ 174 0008 7B68     	 ldr r3,[r7,#4]
+ 175 000a D3F88030 	 ldr r3,[r3,#128]
+ 176 000e 23F00702 	 bic r2,r3,#7
+ 177 0012 7B68     	 ldr r3,[r7,#4]
+ 178 0014 C3F88020 	 str r2,[r3,#128]
+ 114:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 115:../Libraries/XMCLib/src/xmc_dsd.c ****   /* stop the module clock */
+ 116:../Libraries/XMCLib/src/xmc_dsd.c ****   dsd->CLC |= (uint32_t)DSD_CLC_DISR_Msk;
+ 179              	 .loc 1 116 0
+ 180 0018 7B68     	 ldr r3,[r7,#4]
+ 181 001a 1B68     	 ldr r3,[r3]
+ 182 001c 43F00102 	 orr r2,r3,#1
+ 183 0020 7B68     	 ldr r3,[r7,#4]
+ 184 0022 1A60     	 str r2,[r3]
+ 117:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 118:../Libraries/XMCLib/src/xmc_dsd.c **** }
+ 185              	 .loc 1 118 0
+ 186 0024 0C37     	 adds r7,r7,#12
+ 187              	.LCFI19:
+ 188              	 .cfi_def_cfa_offset 4
+ 189 0026 BD46     	 mov sp,r7
+ 190              	.LCFI20:
+ 191              	 .cfi_def_cfa_register 13
+ 192              	 
+ 193 0028 5DF8047B 	 ldr r7,[sp],#4
+ 194              	.LCFI21:
+ 195              	 .cfi_restore 7
+ 196              	 .cfi_def_cfa_offset 0
+ 197 002c 7047     	 bx lr
+ 198              	 .cfi_endproc
+ 199              	.LFE168:
+ 201 002e 00BF     	 .section .text.XMC_DSD_Init,"ax",%progbits
+ 202              	 .align 2
+ 203              	 .global XMC_DSD_Init
+ 204              	 .thumb
+ 205              	 .thumb_func
+ 207              	XMC_DSD_Init:
+ 208              	.LFB169:
+ 119:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 120:../Libraries/XMCLib/src/xmc_dsd.c **** /* Enable the DSD module and clock */
+ 121:../Libraries/XMCLib/src/xmc_dsd.c **** void XMC_DSD_Init(XMC_DSD_t *const dsd)
+ 122:../Libraries/XMCLib/src/xmc_dsd.c **** {
+ 209              	 .loc 1 122 0
+ 210              	 .cfi_startproc
+ 211              	 
+ 212              	 
+ 213 0000 80B5     	 push {r7,lr}
+ 214              	.LCFI22:
+ 215              	 .cfi_def_cfa_offset 8
+ 216              	 .cfi_offset 7,-8
+ 217              	 .cfi_offset 14,-4
+ 218 0002 82B0     	 sub sp,sp,#8
+ 219              	.LCFI23:
+ 220              	 .cfi_def_cfa_offset 16
+ 221 0004 00AF     	 add r7,sp,#0
+ 222              	.LCFI24:
+ 223              	 .cfi_def_cfa_register 7
+ 224 0006 7860     	 str r0,[r7,#4]
+ 123:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_Init:Invalid module pointer", XMC_DSD_CHECK_MODULE_PTR(dsd));
+ 124:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_DSD_Enable(dsd);
+ 225              	 .loc 1 124 0
+ 226 0008 7868     	 ldr r0,[r7,#4]
+ 227 000a FFF7FEFF 	 bl XMC_DSD_Enable
+ 125:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_DSD_EnableClock(dsd);
+ 228              	 .loc 1 125 0
+ 229 000e 7868     	 ldr r0,[r7,#4]
+ 230 0010 FFF7FEFF 	 bl XMC_DSD_EnableClock
+ 126:../Libraries/XMCLib/src/xmc_dsd.c **** }
+ 231              	 .loc 1 126 0
+ 232 0014 0837     	 adds r7,r7,#8
+ 233              	.LCFI25:
+ 234              	 .cfi_def_cfa_offset 8
+ 235 0016 BD46     	 mov sp,r7
+ 236              	.LCFI26:
+ 237              	 .cfi_def_cfa_register 13
+ 238              	 
+ 239 0018 80BD     	 pop {r7,pc}
+ 240              	 .cfi_endproc
+ 241              	.LFE169:
+ 243 001a 00BF     	 .section .text.XMC_DSD_IsEnabled,"ax",%progbits
+ 244              	 .align 2
+ 245              	 .global XMC_DSD_IsEnabled
+ 246              	 .thumb
+ 247              	 .thumb_func
+ 249              	XMC_DSD_IsEnabled:
+ 250              	.LFB170:
+ 127:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 128:../Libraries/XMCLib/src/xmc_dsd.c **** bool XMC_DSD_IsEnabled(XMC_DSD_t *const dsd)
+ 129:../Libraries/XMCLib/src/xmc_dsd.c **** {
+ 251              	 .loc 1 129 0
+ 252              	 .cfi_startproc
+ 253              	 
+ 254              	 
+ 255 0000 80B5     	 push {r7,lr}
+ 256              	.LCFI27:
+ 257              	 .cfi_def_cfa_offset 8
+ 258              	 .cfi_offset 7,-8
+ 259              	 .cfi_offset 14,-4
+ 260 0002 84B0     	 sub sp,sp,#16
+ 261              	.LCFI28:
+ 262              	 .cfi_def_cfa_offset 24
+ 263 0004 00AF     	 add r7,sp,#0
+ 264              	.LCFI29:
+ 265              	 .cfi_def_cfa_register 7
+ 266 0006 7860     	 str r0,[r7,#4]
+ 130:../Libraries/XMCLib/src/xmc_dsd.c ****   bool status;
+ 131:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_Disable:Invalid module pointer", XMC_DSD_CHECK_MODULE_PTR(dsd));
+ 132:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_UNUSED_ARG(dsd);
+ 133:../Libraries/XMCLib/src/xmc_dsd.c ****   
+ 134:../Libraries/XMCLib/src/xmc_dsd.c ****   #if (UC_SERIES == XMC44)
+ 135:../Libraries/XMCLib/src/xmc_dsd.c ****   if(XMC_SCU_RESET_IsPeripheralResetAsserted(XMC_SCU_PERIPHERAL_RESET_DSD) == false) 
+ 136:../Libraries/XMCLib/src/xmc_dsd.c ****   {
+ 137:../Libraries/XMCLib/src/xmc_dsd.c ****     if(XMC_SCU_CLOCK_IsPeripheralClockGated(XMC_SCU_PERIPHERAL_CLOCK_DSD) == false)
+ 138:../Libraries/XMCLib/src/xmc_dsd.c ****     {
+ 139:../Libraries/XMCLib/src/xmc_dsd.c ****       status = true;
+ 140:../Libraries/XMCLib/src/xmc_dsd.c ****     }
+ 141:../Libraries/XMCLib/src/xmc_dsd.c **** 	else
+ 142:../Libraries/XMCLib/src/xmc_dsd.c **** 	{
+ 143:../Libraries/XMCLib/src/xmc_dsd.c ****       status = false;
+ 144:../Libraries/XMCLib/src/xmc_dsd.c **** 	}
+ 145:../Libraries/XMCLib/src/xmc_dsd.c ****   }
+ 146:../Libraries/XMCLib/src/xmc_dsd.c ****   else
+ 147:../Libraries/XMCLib/src/xmc_dsd.c ****   {
+ 148:../Libraries/XMCLib/src/xmc_dsd.c ****     status = false;
+ 149:../Libraries/XMCLib/src/xmc_dsd.c ****   }
+ 150:../Libraries/XMCLib/src/xmc_dsd.c ****   #else
+ 151:../Libraries/XMCLib/src/xmc_dsd.c ****   if(XMC_SCU_RESET_IsPeripheralResetAsserted(XMC_SCU_PERIPHERAL_RESET_DSD) == false)
+ 267              	 .loc 1 151 0
+ 268 0008 0220     	 movs r0,#2
+ 269 000a FFF7FEFF 	 bl XMC_SCU_RESET_IsPeripheralResetAsserted
+ 270 000e 0346     	 mov r3,r0
+ 271 0010 83F00103 	 eor r3,r3,#1
+ 272 0014 DBB2     	 uxtb r3,r3
+ 273 0016 002B     	 cmp r3,#0
+ 274 0018 02D0     	 beq .L7
+ 152:../Libraries/XMCLib/src/xmc_dsd.c ****   {
+ 153:../Libraries/XMCLib/src/xmc_dsd.c ****     status = true;
+ 275              	 .loc 1 153 0
+ 276 001a 0123     	 movs r3,#1
+ 277 001c FB73     	 strb r3,[r7,#15]
+ 278 001e 01E0     	 b .L8
+ 279              	.L7:
+ 154:../Libraries/XMCLib/src/xmc_dsd.c ****   }
+ 155:../Libraries/XMCLib/src/xmc_dsd.c ****   else
+ 156:../Libraries/XMCLib/src/xmc_dsd.c ****   {
+ 157:../Libraries/XMCLib/src/xmc_dsd.c ****     status = false;
+ 280              	 .loc 1 157 0
+ 281 0020 0023     	 movs r3,#0
+ 282 0022 FB73     	 strb r3,[r7,#15]
+ 283              	.L8:
+ 158:../Libraries/XMCLib/src/xmc_dsd.c ****   }
+ 159:../Libraries/XMCLib/src/xmc_dsd.c ****   #endif
+ 160:../Libraries/XMCLib/src/xmc_dsd.c ****   
+ 161:../Libraries/XMCLib/src/xmc_dsd.c ****   return (status);
+ 284              	 .loc 1 161 0
+ 285 0024 FB7B     	 ldrb r3,[r7,#15]
+ 162:../Libraries/XMCLib/src/xmc_dsd.c **** }
+ 286              	 .loc 1 162 0
+ 287 0026 1846     	 mov r0,r3
+ 288 0028 1037     	 adds r7,r7,#16
+ 289              	.LCFI30:
+ 290              	 .cfi_def_cfa_offset 8
+ 291 002a BD46     	 mov sp,r7
+ 292              	.LCFI31:
+ 293              	 .cfi_def_cfa_register 13
+ 294              	 
+ 295 002c 80BD     	 pop {r7,pc}
+ 296              	 .cfi_endproc
+ 297              	.LFE170:
+ 299 002e 00BF     	 .section .text.XMC_DSD_Generator_Init,"ax",%progbits
+ 300              	 .align 2
+ 301              	 .global XMC_DSD_Generator_Init
+ 302              	 .thumb
+ 303              	 .thumb_func
+ 305              	XMC_DSD_Generator_Init:
+ 306              	.LFB171:
+ 163:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 164:../Libraries/XMCLib/src/xmc_dsd.c **** /*Initializes the Waveform Generator*/
+ 165:../Libraries/XMCLib/src/xmc_dsd.c **** void XMC_DSD_Generator_Init(XMC_DSD_t *const dsd, const XMC_DSD_GENERATOR_CONFIG_t *const config)
+ 166:../Libraries/XMCLib/src/xmc_dsd.c **** {
+ 307              	 .loc 1 166 0
+ 308              	 .cfi_startproc
+ 309              	 
+ 310              	 
+ 311              	 
+ 312 0000 80B4     	 push {r7}
+ 313              	.LCFI32:
+ 314              	 .cfi_def_cfa_offset 4
+ 315              	 .cfi_offset 7,-4
+ 316 0002 83B0     	 sub sp,sp,#12
+ 317              	.LCFI33:
+ 318              	 .cfi_def_cfa_offset 16
+ 319 0004 00AF     	 add r7,sp,#0
+ 320              	.LCFI34:
+ 321              	 .cfi_def_cfa_register 7
+ 322 0006 7860     	 str r0,[r7,#4]
+ 323 0008 3960     	 str r1,[r7]
+ 167:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_GENERATOR_Init:Invalid module pointer", XMC_DSD_CHECK_MODULE_PTR(dsd));
+ 168:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_GENERATOR_Init:NULL Pointer", (config != (XMC_DSD_GENERATOR_CONFIG_t *)NULL) 
+ 169:../Libraries/XMCLib/src/xmc_dsd.c ****   /* Reset Generator */
+ 170:../Libraries/XMCLib/src/xmc_dsd.c ****   dsd ->CGCFG &= ~((uint32_t)DSD_CGCFG_CGMOD_Msk | (uint32_t)DSD_CGCFG_BREV_Msk | (uint32_t)DSD_CGC
+ 324              	 .loc 1 170 0
+ 325 000a 7B68     	 ldr r3,[r7,#4]
+ 326 000c D3F8A030 	 ldr r3,[r3,#160]
+ 327 0010 23F0FF02 	 bic r2,r3,#255
+ 328 0014 7B68     	 ldr r3,[r7,#4]
+ 329 0016 C3F8A020 	 str r2,[r3,#160]
+ 171:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 172:../Libraries/XMCLib/src/xmc_dsd.c ****   /* Generator configuration */
+ 173:../Libraries/XMCLib/src/xmc_dsd.c ****   dsd ->CGCFG = config->generator_conf;
+ 330              	 .loc 1 173 0
+ 331 001a 3B68     	 ldr r3,[r7]
+ 332 001c 1A68     	 ldr r2,[r3]
+ 333 001e 7B68     	 ldr r3,[r7,#4]
+ 334 0020 C3F8A020 	 str r2,[r3,#160]
+ 174:../Libraries/XMCLib/src/xmc_dsd.c **** }
+ 335              	 .loc 1 174 0
+ 336 0024 0C37     	 adds r7,r7,#12
+ 337              	.LCFI35:
+ 338              	 .cfi_def_cfa_offset 4
+ 339 0026 BD46     	 mov sp,r7
+ 340              	.LCFI36:
+ 341              	 .cfi_def_cfa_register 13
+ 342              	 
+ 343 0028 5DF8047B 	 ldr r7,[sp],#4
+ 344              	.LCFI37:
+ 345              	 .cfi_restore 7
+ 346              	 .cfi_def_cfa_offset 0
+ 347 002c 7047     	 bx lr
+ 348              	 .cfi_endproc
+ 349              	.LFE171:
+ 351 002e 00BF     	 .section .text.XMC_DSD_CH_Init,"ax",%progbits
+ 352              	 .align 2
+ 353              	 .global XMC_DSD_CH_Init
+ 354              	 .thumb
+ 355              	 .thumb_func
+ 357              	XMC_DSD_CH_Init:
+ 358              	.LFB172:
+ 175:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 176:../Libraries/XMCLib/src/xmc_dsd.c **** /* Initialize main filter,auxiliary filter,integrator, rectifier and timestamp of DSD*/
+ 177:../Libraries/XMCLib/src/xmc_dsd.c **** XMC_DSD_STATUS_t XMC_DSD_CH_Init( XMC_DSD_CH_t *const channel, const XMC_DSD_CH_CONFIG_t *const con
+ 178:../Libraries/XMCLib/src/xmc_dsd.c **** {
+ 359              	 .loc 1 178 0
+ 360              	 .cfi_startproc
+ 361              	 
+ 362              	 
+ 363 0000 80B5     	 push {r7,lr}
+ 364              	.LCFI38:
+ 365              	 .cfi_def_cfa_offset 8
+ 366              	 .cfi_offset 7,-8
+ 367              	 .cfi_offset 14,-4
+ 368 0002 84B0     	 sub sp,sp,#16
+ 369              	.LCFI39:
+ 370              	 .cfi_def_cfa_offset 24
+ 371 0004 00AF     	 add r7,sp,#0
+ 372              	.LCFI40:
+ 373              	 .cfi_def_cfa_register 7
+ 374 0006 7860     	 str r0,[r7,#4]
+ 375 0008 3960     	 str r1,[r7]
+ 179:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_DSD_STATUS_t status;
+ 180:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 181:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_CH_Init:Invalid module pointer", XMC_DSD_CHECK_CHANNEL_PTR(channel));
+ 182:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_CH_Init:NULL Pointer", (config != (XMC_DSD_CH_CONFIG_t *)NULL) );
+ 183:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 184:../Libraries/XMCLib/src/xmc_dsd.c ****   if (config->filter != (XMC_DSD_CH_FILTER_CONFIG_t*)NULL)
+ 376              	 .loc 1 184 0
+ 377 000a 3B68     	 ldr r3,[r7]
+ 378 000c 1B68     	 ldr r3,[r3]
+ 379 000e 002B     	 cmp r3,#0
+ 380 0010 30D0     	 beq .L12
+ 185:../Libraries/XMCLib/src/xmc_dsd.c ****   {
+ 186:../Libraries/XMCLib/src/xmc_dsd.c ****     XMC_DSD_CH_MainFilter_Init(channel, config->filter);
+ 381              	 .loc 1 186 0
+ 382 0012 3B68     	 ldr r3,[r7]
+ 383 0014 1B68     	 ldr r3,[r3]
+ 384 0016 7868     	 ldr r0,[r7,#4]
+ 385 0018 1946     	 mov r1,r3
+ 386 001a FFF7FEFF 	 bl XMC_DSD_CH_MainFilter_Init
+ 187:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 188:../Libraries/XMCLib/src/xmc_dsd.c ****     if (config->aux != (XMC_DSD_CH_AUX_FILTER_CONFIG_t*)NULL)
+ 387              	 .loc 1 188 0
+ 388 001e 3B68     	 ldr r3,[r7]
+ 389 0020 DB68     	 ldr r3,[r3,#12]
+ 390 0022 002B     	 cmp r3,#0
+ 391 0024 05D0     	 beq .L13
+ 189:../Libraries/XMCLib/src/xmc_dsd.c ****     {
+ 190:../Libraries/XMCLib/src/xmc_dsd.c ****       XMC_DSD_CH_AuxFilter_Init(channel, config->aux);
+ 392              	 .loc 1 190 0
+ 393 0026 3B68     	 ldr r3,[r7]
+ 394 0028 DB68     	 ldr r3,[r3,#12]
+ 395 002a 7868     	 ldr r0,[r7,#4]
+ 396 002c 1946     	 mov r1,r3
+ 397 002e FFF7FEFF 	 bl XMC_DSD_CH_AuxFilter_Init
+ 398              	.L13:
+ 191:../Libraries/XMCLib/src/xmc_dsd.c ****     }
+ 192:../Libraries/XMCLib/src/xmc_dsd.c ****     if (config->integrator != (XMC_DSD_CH_INTEGRATOR_CONFIG_t*)NULL)
+ 399              	 .loc 1 192 0
+ 400 0032 3B68     	 ldr r3,[r7]
+ 401 0034 5B68     	 ldr r3,[r3,#4]
+ 402 0036 002B     	 cmp r3,#0
+ 403 0038 05D0     	 beq .L14
+ 193:../Libraries/XMCLib/src/xmc_dsd.c ****     {
+ 194:../Libraries/XMCLib/src/xmc_dsd.c ****       XMC_DSD_CH_Integrator_Init(channel, config->integrator);
+ 404              	 .loc 1 194 0
+ 405 003a 3B68     	 ldr r3,[r7]
+ 406 003c 5B68     	 ldr r3,[r3,#4]
+ 407 003e 7868     	 ldr r0,[r7,#4]
+ 408 0040 1946     	 mov r1,r3
+ 409 0042 FFF7FEFF 	 bl XMC_DSD_CH_Integrator_Init
+ 410              	.L14:
+ 195:../Libraries/XMCLib/src/xmc_dsd.c ****     }
+ 196:../Libraries/XMCLib/src/xmc_dsd.c ****     if (config->rectify != (XMC_DSD_CH_RECTIFY_CONFIG_t*)NULL)
+ 411              	 .loc 1 196 0
+ 412 0046 3B68     	 ldr r3,[r7]
+ 413 0048 1B69     	 ldr r3,[r3,#16]
+ 414 004a 002B     	 cmp r3,#0
+ 415 004c 05D0     	 beq .L15
+ 197:../Libraries/XMCLib/src/xmc_dsd.c ****     {
+ 198:../Libraries/XMCLib/src/xmc_dsd.c ****       XMC_DSD_CH_Rectify_Init(channel, config->rectify);
+ 416              	 .loc 1 198 0
+ 417 004e 3B68     	 ldr r3,[r7]
+ 418 0050 1B69     	 ldr r3,[r3,#16]
+ 419 0052 7868     	 ldr r0,[r7,#4]
+ 420 0054 1946     	 mov r1,r3
+ 421 0056 FFF7FEFF 	 bl XMC_DSD_CH_Rectify_Init
+ 422              	.L15:
+ 199:../Libraries/XMCLib/src/xmc_dsd.c ****     }
+ 200:../Libraries/XMCLib/src/xmc_dsd.c ****     if (config->timestamp != (XMC_DSD_CH_TIMESTAMP_CONFIG_t*)NULL)
+ 423              	 .loc 1 200 0
+ 424 005a 3B68     	 ldr r3,[r7]
+ 425 005c 9B68     	 ldr r3,[r3,#8]
+ 426 005e 002B     	 cmp r3,#0
+ 427 0060 05D0     	 beq .L16
+ 201:../Libraries/XMCLib/src/xmc_dsd.c ****     {
+ 202:../Libraries/XMCLib/src/xmc_dsd.c ****       XMC_DSD_CH_Timestamp_Init(channel, config->timestamp);
+ 428              	 .loc 1 202 0
+ 429 0062 3B68     	 ldr r3,[r7]
+ 430 0064 9B68     	 ldr r3,[r3,#8]
+ 431 0066 7868     	 ldr r0,[r7,#4]
+ 432 0068 1946     	 mov r1,r3
+ 433 006a FFF7FEFF 	 bl XMC_DSD_CH_Timestamp_Init
+ 434              	.L16:
+ 203:../Libraries/XMCLib/src/xmc_dsd.c ****     }
+ 204:../Libraries/XMCLib/src/xmc_dsd.c ****     status =  XMC_DSD_STATUS_OK;
+ 435              	 .loc 1 204 0
+ 436 006e 0023     	 movs r3,#0
+ 437 0070 FB73     	 strb r3,[r7,#15]
+ 438 0072 01E0     	 b .L17
+ 439              	.L12:
+ 205:../Libraries/XMCLib/src/xmc_dsd.c ****   }
+ 206:../Libraries/XMCLib/src/xmc_dsd.c ****   else
+ 207:../Libraries/XMCLib/src/xmc_dsd.c ****   {
+ 208:../Libraries/XMCLib/src/xmc_dsd.c ****     status =  XMC_DSD_STATUS_ERROR;
+ 440              	 .loc 1 208 0
+ 441 0074 0123     	 movs r3,#1
+ 442 0076 FB73     	 strb r3,[r7,#15]
+ 443              	.L17:
+ 209:../Libraries/XMCLib/src/xmc_dsd.c ****   }
+ 210:../Libraries/XMCLib/src/xmc_dsd.c ****   return (status);
+ 444              	 .loc 1 210 0
+ 445 0078 FB7B     	 ldrb r3,[r7,#15]
+ 211:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 212:../Libraries/XMCLib/src/xmc_dsd.c **** }
+ 446              	 .loc 1 212 0
+ 447 007a 1846     	 mov r0,r3
+ 448 007c 1037     	 adds r7,r7,#16
+ 449              	.LCFI41:
+ 450              	 .cfi_def_cfa_offset 8
+ 451 007e BD46     	 mov sp,r7
+ 452              	.LCFI42:
+ 453              	 .cfi_def_cfa_register 13
+ 454              	 
+ 455 0080 80BD     	 pop {r7,pc}
+ 456              	 .cfi_endproc
+ 457              	.LFE172:
+ 459 0082 00BF     	 .section .text.XMC_DSD_CH_MainFilter_Init,"ax",%progbits
+ 460              	 .align 2
+ 461              	 .global XMC_DSD_CH_MainFilter_Init
+ 462              	 .thumb
+ 463              	 .thumb_func
+ 465              	XMC_DSD_CH_MainFilter_Init:
+ 466              	.LFB173:
+ 213:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 214:../Libraries/XMCLib/src/xmc_dsd.c **** /* Initialize main filter of DSD */
+ 215:../Libraries/XMCLib/src/xmc_dsd.c **** void XMC_DSD_CH_MainFilter_Init(XMC_DSD_CH_t *const channel, const XMC_DSD_CH_FILTER_CONFIG_t *cons
+ 216:../Libraries/XMCLib/src/xmc_dsd.c **** {
+ 467              	 .loc 1 216 0
+ 468              	 .cfi_startproc
+ 469              	 
+ 470              	 
+ 471              	 
+ 472 0000 80B4     	 push {r7}
+ 473              	.LCFI43:
+ 474              	 .cfi_def_cfa_offset 4
+ 475              	 .cfi_offset 7,-4
+ 476 0002 85B0     	 sub sp,sp,#20
+ 477              	.LCFI44:
+ 478              	 .cfi_def_cfa_offset 24
+ 479 0004 00AF     	 add r7,sp,#0
+ 480              	.LCFI45:
+ 481              	 .cfi_def_cfa_register 7
+ 482 0006 7860     	 str r0,[r7,#4]
+ 483 0008 3960     	 str r1,[r7]
+ 217:../Libraries/XMCLib/src/xmc_dsd.c ****   uint32_t decimation_factor_temp;
+ 218:../Libraries/XMCLib/src/xmc_dsd.c ****   uint32_t filter_start_value_temp;
+ 219:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 220:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_MAIN_FILTER_Init:Invalid module pointer", XMC_DSD_CHECK_CHANNEL_PTR(channel))
+ 221:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_MAIN_FILTER_Init:NULL Pointer", (config != (XMC_DSD_CH_FILTER_CONFIG_t *)NULL
+ 222:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_MAIN_FILTER_Init:Invalid Filter Start Value", (config->filter_start_value >= 
+ 223:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_MAIN_FILTER_Init:Invalid Filter Start Value", (config->filter_start_value <= 
+ 224:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_MAIN_FILTER_Init:Invalid Decimation Factor",
+ 225:../Libraries/XMCLib/src/xmc_dsd.c ****       ((config->decimation_factor >= XMC_DSD_MIN_DECIMATION_FACTOR) && (config->decimation_factor <
+ 226:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_MAIN_FILTER_Init:Invalid divider",(((uint32_t)config->clock_divider <= XMC_DS
+ 227:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 228:../Libraries/XMCLib/src/xmc_dsd.c ****   /*Set Channel frequency*/
+ 229:../Libraries/XMCLib/src/xmc_dsd.c ****   channel->MODCFG = ((uint32_t)config->clock_divider << DSD_CH_MODCFG_DIVM_Pos) | (uint32_t)DSD_CH_
+ 484              	 .loc 1 229 0
+ 485 000a 3B68     	 ldr r3,[r7]
+ 486 000c 1B78     	 ldrb r3,[r3]
+ 487 000e C3F30303 	 ubfx r3,r3,#0,#4
+ 488 0012 DBB2     	 uxtb r3,r3
+ 489 0014 1B04     	 lsls r3,r3,#16
+ 490 0016 43F40002 	 orr r2,r3,#8388608
+ 491 001a 7B68     	 ldr r3,[r7,#4]
+ 492 001c 1A60     	 str r2,[r3]
+ 230:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 231:../Libraries/XMCLib/src/xmc_dsd.c ****   /* Input Data/Clk */
+ 232:../Libraries/XMCLib/src/xmc_dsd.c ****   channel->DICFG = config->demodulator_conf | (uint32_t)DSD_CH_DICFG_DSWC_Msk | (uint32_t)DSD_CH_DI
+ 493              	 .loc 1 232 0
+ 494 001e 3B68     	 ldr r3,[r7]
+ 495 0020 5B68     	 ldr r3,[r3,#4]
+ 496 0022 43F00043 	 orr r3,r3,#-2147483648
+ 497 0026 43F08003 	 orr r3,r3,#128
+ 498 002a 7A68     	 ldr r2,[r7,#4]
+ 499 002c 9360     	 str r3,[r2,#8]
+ 233:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 234:../Libraries/XMCLib/src/xmc_dsd.c ****   /*The decimation factor of the Main CIC filter is CFMDF + 1.*/
+ 235:../Libraries/XMCLib/src/xmc_dsd.c ****   decimation_factor_temp = config->decimation_factor-1U;
+ 500              	 .loc 1 235 0
+ 501 002e 3B68     	 ldr r3,[r7]
+ 502 0030 DB68     	 ldr r3,[r3,#12]
+ 503 0032 013B     	 subs r3,r3,#1
+ 504 0034 FB60     	 str r3,[r7,#12]
+ 236:../Libraries/XMCLib/src/xmc_dsd.c ****   filter_start_value_temp = config->filter_start_value-1U;
+ 505              	 .loc 1 236 0
+ 506 0036 3B68     	 ldr r3,[r7]
+ 507 0038 1B69     	 ldr r3,[r3,#16]
+ 508 003a 013B     	 subs r3,r3,#1
+ 509 003c BB60     	 str r3,[r7,#8]
+ 237:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 238:../Libraries/XMCLib/src/xmc_dsd.c ****   /* Filter setup*/
+ 239:../Libraries/XMCLib/src/xmc_dsd.c ****   channel->FCFGC = (decimation_factor_temp |
+ 240:../Libraries/XMCLib/src/xmc_dsd.c **** 		  (filter_start_value_temp << (uint32_t)DSD_CH_FCFGC_CFMSV_Pos)|
+ 510              	 .loc 1 240 0
+ 511 003e BB68     	 ldr r3,[r7,#8]
+ 512 0040 1A04     	 lsls r2,r3,#16
+ 239:../Libraries/XMCLib/src/xmc_dsd.c **** 		  (filter_start_value_temp << (uint32_t)DSD_CH_FCFGC_CFMSV_Pos)|
+ 513              	 .loc 1 239 0
+ 514 0042 FB68     	 ldr r3,[r7,#12]
+ 515 0044 1A43     	 orrs r2,r2,r3
+ 241:../Libraries/XMCLib/src/xmc_dsd.c **** 		  config->main_filter_conf|
+ 516              	 .loc 1 241 0
+ 517 0046 3B68     	 ldr r3,[r7]
+ 518 0048 9B68     	 ldr r3,[r3,#8]
+ 240:../Libraries/XMCLib/src/xmc_dsd.c **** 		  config->main_filter_conf|
+ 519              	 .loc 1 240 0
+ 520 004a 1343     	 orrs r3,r3,r2
+ 521              	 .loc 1 241 0
+ 522 004c 43F48062 	 orr r2,r3,#1024
+ 239:../Libraries/XMCLib/src/xmc_dsd.c **** 		  (filter_start_value_temp << (uint32_t)DSD_CH_FCFGC_CFMSV_Pos)|
+ 523              	 .loc 1 239 0
+ 524 0050 7B68     	 ldr r3,[r7,#4]
+ 525 0052 5A61     	 str r2,[r3,#20]
+ 242:../Libraries/XMCLib/src/xmc_dsd.c **** 		  (uint32_t)DSD_CH_FCFGC_CFEN_Msk);
+ 243:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 244:../Libraries/XMCLib/src/xmc_dsd.c ****   /* Offset */
+ 245:../Libraries/XMCLib/src/xmc_dsd.c ****   channel->OFFM = (uint16_t)config->offset;
+ 526              	 .loc 1 245 0
+ 527 0054 3B68     	 ldr r3,[r7]
+ 528 0056 5B88     	 ldrh r3,[r3,#2]
+ 529 0058 9BB2     	 uxth r3,r3
+ 530 005a 1A46     	 mov r2,r3
+ 531 005c 7B68     	 ldr r3,[r7,#4]
+ 532 005e 9A63     	 str r2,[r3,#56]
+ 246:../Libraries/XMCLib/src/xmc_dsd.c **** }
+ 533              	 .loc 1 246 0
+ 534 0060 1437     	 adds r7,r7,#20
+ 535              	.LCFI46:
+ 536              	 .cfi_def_cfa_offset 4
+ 537 0062 BD46     	 mov sp,r7
+ 538              	.LCFI47:
+ 539              	 .cfi_def_cfa_register 13
+ 540              	 
+ 541 0064 5DF8047B 	 ldr r7,[sp],#4
+ 542              	.LCFI48:
+ 543              	 .cfi_restore 7
+ 544              	 .cfi_def_cfa_offset 0
+ 545 0068 7047     	 bx lr
+ 546              	 .cfi_endproc
+ 547              	.LFE173:
+ 549 006a 00BF     	 .section .text.XMC_DSD_CH_Timestamp_Init,"ax",%progbits
+ 550              	 .align 2
+ 551              	 .global XMC_DSD_CH_Timestamp_Init
+ 552              	 .thumb
+ 553              	 .thumb_func
+ 555              	XMC_DSD_CH_Timestamp_Init:
+ 556              	.LFB174:
+ 247:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 248:../Libraries/XMCLib/src/xmc_dsd.c **** /* Initialize timestamp mode of DSD */
+ 249:../Libraries/XMCLib/src/xmc_dsd.c **** void XMC_DSD_CH_Timestamp_Init(XMC_DSD_CH_t *const channel, const XMC_DSD_CH_TIMESTAMP_CONFIG_t *co
+ 250:../Libraries/XMCLib/src/xmc_dsd.c **** {
+ 557              	 .loc 1 250 0
+ 558              	 .cfi_startproc
+ 559              	 
+ 560              	 
+ 561              	 
+ 562 0000 80B4     	 push {r7}
+ 563              	.LCFI49:
+ 564              	 .cfi_def_cfa_offset 4
+ 565              	 .cfi_offset 7,-4
+ 566 0002 85B0     	 sub sp,sp,#20
+ 567              	.LCFI50:
+ 568              	 .cfi_def_cfa_offset 24
+ 569 0004 00AF     	 add r7,sp,#0
+ 570              	.LCFI51:
+ 571              	 .cfi_def_cfa_register 7
+ 572 0006 7860     	 str r0,[r7,#4]
+ 573 0008 3960     	 str r1,[r7]
+ 251:../Libraries/XMCLib/src/xmc_dsd.c ****   uint32_t temp;
+ 252:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_MAIN_FILTER_Init:Invalid module pointer", XMC_DSD_CHECK_CHANNEL_PTR(channel))
+ 253:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_MAIN_FILTER_Init:NULL Pointer", (config != (XMC_DSD_CH_TIMESTAMP_CONFIG_t *)N
+ 254:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 255:../Libraries/XMCLib/src/xmc_dsd.c ****   temp = (channel->DICFG | (uint32_t)DSD_CH_DICFG_TRWC_Msk);
+ 574              	 .loc 1 255 0
+ 575 000a 7B68     	 ldr r3,[r7,#4]
+ 576 000c 9B68     	 ldr r3,[r3,#8]
+ 577 000e 43F40043 	 orr r3,r3,#32768
+ 578 0012 FB60     	 str r3,[r7,#12]
+ 256:../Libraries/XMCLib/src/xmc_dsd.c ****   temp &= ~((uint32_t)DSD_CH_DICFG_TSTRMODE_Msk|(uint32_t)DSD_CH_DICFG_TRSEL_Msk);
+ 579              	 .loc 1 256 0
+ 580 0014 FB68     	 ldr r3,[r7,#12]
+ 581 0016 23F4F843 	 bic r3,r3,#31744
+ 582 001a FB60     	 str r3,[r7,#12]
+ 257:../Libraries/XMCLib/src/xmc_dsd.c ****   temp |= config->timestamp_conf;
+ 583              	 .loc 1 257 0
+ 584 001c 3B68     	 ldr r3,[r7]
+ 585 001e 1B68     	 ldr r3,[r3]
+ 586 0020 FA68     	 ldr r2,[r7,#12]
+ 587 0022 1343     	 orrs r3,r3,r2
+ 588 0024 FB60     	 str r3,[r7,#12]
+ 258:../Libraries/XMCLib/src/xmc_dsd.c ****   channel->DICFG = temp;
+ 589              	 .loc 1 258 0
+ 590 0026 7B68     	 ldr r3,[r7,#4]
+ 591 0028 FA68     	 ldr r2,[r7,#12]
+ 592 002a 9A60     	 str r2,[r3,#8]
+ 259:../Libraries/XMCLib/src/xmc_dsd.c **** }
+ 593              	 .loc 1 259 0
+ 594 002c 1437     	 adds r7,r7,#20
+ 595              	.LCFI52:
+ 596              	 .cfi_def_cfa_offset 4
+ 597 002e BD46     	 mov sp,r7
+ 598              	.LCFI53:
+ 599              	 .cfi_def_cfa_register 13
+ 600              	 
+ 601 0030 5DF8047B 	 ldr r7,[sp],#4
+ 602              	.LCFI54:
+ 603              	 .cfi_restore 7
+ 604              	 .cfi_def_cfa_offset 0
+ 605 0034 7047     	 bx lr
+ 606              	 .cfi_endproc
+ 607              	.LFE174:
+ 609 0036 00BF     	 .section .text.XMC_DSD_CH_AuxFilter_Init,"ax",%progbits
+ 610              	 .align 2
+ 611              	 .global XMC_DSD_CH_AuxFilter_Init
+ 612              	 .thumb
+ 613              	 .thumb_func
+ 615              	XMC_DSD_CH_AuxFilter_Init:
+ 616              	.LFB175:
+ 260:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 261:../Libraries/XMCLib/src/xmc_dsd.c **** /* Initialize auxiliary filter of DSD */
+ 262:../Libraries/XMCLib/src/xmc_dsd.c **** void XMC_DSD_CH_AuxFilter_Init(XMC_DSD_CH_t *const channel, const XMC_DSD_CH_AUX_FILTER_CONFIG_t *c
+ 263:../Libraries/XMCLib/src/xmc_dsd.c **** {
+ 617              	 .loc 1 263 0
+ 618              	 .cfi_startproc
+ 619              	 
+ 620              	 
+ 621              	 
+ 622 0000 80B4     	 push {r7}
+ 623              	.LCFI55:
+ 624              	 .cfi_def_cfa_offset 4
+ 625              	 .cfi_offset 7,-4
+ 626 0002 85B0     	 sub sp,sp,#20
+ 627              	.LCFI56:
+ 628              	 .cfi_def_cfa_offset 24
+ 629 0004 00AF     	 add r7,sp,#0
+ 630              	.LCFI57:
+ 631              	 .cfi_def_cfa_register 7
+ 632 0006 7860     	 str r0,[r7,#4]
+ 633 0008 3960     	 str r1,[r7]
+ 264:../Libraries/XMCLib/src/xmc_dsd.c ****   uint32_t decimation_factor_temp;
+ 265:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 266:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_AUX_FILTER_Init:Invalid module pointer", XMC_DSD_CHECK_CHANNEL_PTR(channel));
+ 267:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_AUX_FILTER_Init:NULL Pointer", (config != (XMC_DSD_CH_AUX_FILTER_CONFIG_t *)N
+ 268:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_AUX_FILTER_Init:Invalid Decimation Factor",
+ 269:../Libraries/XMCLib/src/xmc_dsd.c ****       ((config->decimation_factor >= XMC_DSD_MIN_DECIMATION_FACTOR) && (config->decimation_factor <
+ 270:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 271:../Libraries/XMCLib/src/xmc_dsd.c ****   channel->BOUNDSEL = config->boundary_conf;
+ 634              	 .loc 1 271 0
+ 635 000a 3B68     	 ldr r3,[r7]
+ 636 000c 5A68     	 ldr r2,[r3,#4]
+ 637 000e 7B68     	 ldr r3,[r7,#4]
+ 638 0010 9A62     	 str r2,[r3,#40]
+ 272:../Libraries/XMCLib/src/xmc_dsd.c ****   /*The decimation factor of the Aux CIC filter is CFMDF + 1.*/
+ 273:../Libraries/XMCLib/src/xmc_dsd.c ****   decimation_factor_temp = config->decimation_factor-1U;
+ 639              	 .loc 1 273 0
+ 640 0012 3B68     	 ldr r3,[r7]
+ 641 0014 9B68     	 ldr r3,[r3,#8]
+ 642 0016 013B     	 subs r3,r3,#1
+ 643 0018 FB60     	 str r3,[r7,#12]
+ 274:../Libraries/XMCLib/src/xmc_dsd.c ****   channel->FCFGA = (decimation_factor_temp | config->aux_filter_conf);
+ 644              	 .loc 1 274 0
+ 645 001a 3B68     	 ldr r3,[r7]
+ 646 001c 1A68     	 ldr r2,[r3]
+ 647 001e FB68     	 ldr r3,[r7,#12]
+ 648 0020 1A43     	 orrs r2,r2,r3
+ 649 0022 7B68     	 ldr r3,[r7,#4]
+ 650 0024 9A61     	 str r2,[r3,#24]
+ 275:../Libraries/XMCLib/src/xmc_dsd.c **** }
+ 651              	 .loc 1 275 0
+ 652 0026 1437     	 adds r7,r7,#20
+ 653              	.LCFI58:
+ 654              	 .cfi_def_cfa_offset 4
+ 655 0028 BD46     	 mov sp,r7
+ 656              	.LCFI59:
+ 657              	 .cfi_def_cfa_register 13
+ 658              	 
+ 659 002a 5DF8047B 	 ldr r7,[sp],#4
+ 660              	.LCFI60:
+ 661              	 .cfi_restore 7
+ 662              	 .cfi_def_cfa_offset 0
+ 663 002e 7047     	 bx lr
+ 664              	 .cfi_endproc
+ 665              	.LFE175:
+ 667              	 .section .text.XMC_DSD_CH_Integrator_Init,"ax",%progbits
+ 668              	 .align 2
+ 669              	 .global XMC_DSD_CH_Integrator_Init
+ 670              	 .thumb
+ 671              	 .thumb_func
+ 673              	XMC_DSD_CH_Integrator_Init:
+ 674              	.LFB176:
+ 276:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 277:../Libraries/XMCLib/src/xmc_dsd.c **** /* Integrator initialization of DSD */
+ 278:../Libraries/XMCLib/src/xmc_dsd.c **** void XMC_DSD_CH_Integrator_Init(XMC_DSD_CH_t *const channel, const XMC_DSD_CH_INTEGRATOR_CONFIG_t *
+ 279:../Libraries/XMCLib/src/xmc_dsd.c **** {
+ 675              	 .loc 1 279 0
+ 676              	 .cfi_startproc
+ 677              	 
+ 678              	 
+ 679              	 
+ 680 0000 80B4     	 push {r7}
+ 681              	.LCFI61:
+ 682              	 .cfi_def_cfa_offset 4
+ 683              	 .cfi_offset 7,-4
+ 684 0002 85B0     	 sub sp,sp,#20
+ 685              	.LCFI62:
+ 686              	 .cfi_def_cfa_offset 24
+ 687 0004 00AF     	 add r7,sp,#0
+ 688              	.LCFI63:
+ 689              	 .cfi_def_cfa_register 7
+ 690 0006 7860     	 str r0,[r7,#4]
+ 691 0008 3960     	 str r1,[r7]
+ 280:../Libraries/XMCLib/src/xmc_dsd.c ****   uint32_t temp;
+ 281:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_INTEGRATOR_Init:Invalid module pointer", XMC_DSD_CHECK_CHANNEL_PTR(channel));
+ 282:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_INTEGRATOR_Init:NULL Pointer", (config != (XMC_DSD_CH_INTEGRATOR_CONFIG_t *)N
+ 283:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_INTEGRATOR_Init:Invalid integration_loop", (config->integration_loop > 0U ));
+ 284:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_INTEGRATOR_Init:Invalid counted_values", (config->counted_values > 0U ));
+ 285:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 286:../Libraries/XMCLib/src/xmc_dsd.c ****   channel->IWCTR = ((config->integration_loop - 1U) << DSD_CH_IWCTR_REPVAL_Pos)
+ 692              	 .loc 1 286 0
+ 693 000a 3B68     	 ldr r3,[r7]
+ 694 000c 5B68     	 ldr r3,[r3,#4]
+ 695 000e 013B     	 subs r3,r3,#1
+ 696 0010 1A03     	 lsls r2,r3,#12
+ 287:../Libraries/XMCLib/src/xmc_dsd.c ****                    | (config->discarded_values << DSD_CH_IWCTR_NVALDIS_Pos)
+ 697              	 .loc 1 287 0
+ 698 0012 3B68     	 ldr r3,[r7]
+ 699 0014 9B68     	 ldr r3,[r3,#8]
+ 700 0016 1B04     	 lsls r3,r3,#16
+ 701 0018 1A43     	 orrs r2,r2,r3
+ 288:../Libraries/XMCLib/src/xmc_dsd.c ****                    | (config->stop_condition << DSD_CH_IWCTR_IWS_Pos)
+ 702              	 .loc 1 288 0
+ 703 001a 3B68     	 ldr r3,[r7]
+ 704 001c DB68     	 ldr r3,[r3,#12]
+ 705 001e DB05     	 lsls r3,r3,#23
+ 706 0020 1A43     	 orrs r2,r2,r3
+ 289:../Libraries/XMCLib/src/xmc_dsd.c ****                    | ((config->counted_values - 1U) << DSD_CH_IWCTR_NVALINT_Pos);
+ 707              	 .loc 1 289 0
+ 708 0022 3B68     	 ldr r3,[r7]
+ 709 0024 1B69     	 ldr r3,[r3,#16]
+ 710 0026 013B     	 subs r3,r3,#1
+ 711 0028 1B06     	 lsls r3,r3,#24
+ 712 002a 1A43     	 orrs r2,r2,r3
+ 286:../Libraries/XMCLib/src/xmc_dsd.c ****                    | (config->discarded_values << DSD_CH_IWCTR_NVALDIS_Pos)
+ 713              	 .loc 1 286 0
+ 714 002c 7B68     	 ldr r3,[r7,#4]
+ 715 002e 1A62     	 str r2,[r3,#32]
+ 290:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 291:../Libraries/XMCLib/src/xmc_dsd.c ****   /*To ensure proper operation, ensure that bit field ITRMODE is zero before selecting any other tr
+ 292:../Libraries/XMCLib/src/xmc_dsd.c ****   temp = (channel->DICFG & ~((uint32_t)DSD_CH_DICFG_ITRMODE_Msk|(uint32_t)DSD_CH_DICFG_TRSEL_Msk)) 
+ 716              	 .loc 1 292 0
+ 717 0030 7B68     	 ldr r3,[r7,#4]
+ 718 0032 9B68     	 ldr r3,[r3,#8]
+ 719 0034 23F47343 	 bic r3,r3,#62208
+ 720 0038 43F40043 	 orr r3,r3,#32768
+ 721 003c FB60     	 str r3,[r7,#12]
+ 293:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 294:../Libraries/XMCLib/src/xmc_dsd.c ****   channel->DICFG = temp;
+ 722              	 .loc 1 294 0
+ 723 003e 7B68     	 ldr r3,[r7,#4]
+ 724 0040 FA68     	 ldr r2,[r7,#12]
+ 725 0042 9A60     	 str r2,[r3,#8]
+ 295:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 296:../Libraries/XMCLib/src/xmc_dsd.c ****   temp |=  config->integrator_trigger;
+ 726              	 .loc 1 296 0
+ 727 0044 3B68     	 ldr r3,[r7]
+ 728 0046 1B68     	 ldr r3,[r3]
+ 729 0048 FA68     	 ldr r2,[r7,#12]
+ 730 004a 1343     	 orrs r3,r3,r2
+ 731 004c FB60     	 str r3,[r7,#12]
+ 297:../Libraries/XMCLib/src/xmc_dsd.c ****   channel->DICFG = temp;
+ 732              	 .loc 1 297 0
+ 733 004e 7B68     	 ldr r3,[r7,#4]
+ 734 0050 FA68     	 ldr r2,[r7,#12]
+ 735 0052 9A60     	 str r2,[r3,#8]
+ 298:../Libraries/XMCLib/src/xmc_dsd.c **** }
+ 736              	 .loc 1 298 0
+ 737 0054 1437     	 adds r7,r7,#20
+ 738              	.LCFI64:
+ 739              	 .cfi_def_cfa_offset 4
+ 740 0056 BD46     	 mov sp,r7
+ 741              	.LCFI65:
+ 742              	 .cfi_def_cfa_register 13
+ 743              	 
+ 744 0058 5DF8047B 	 ldr r7,[sp],#4
+ 745              	.LCFI66:
+ 746              	 .cfi_restore 7
+ 747              	 .cfi_def_cfa_offset 0
+ 748 005c 7047     	 bx lr
+ 749              	 .cfi_endproc
+ 750              	.LFE176:
+ 752 005e 00BF     	 .section .text.XMC_DSD_CH_Rectify_Init,"ax",%progbits
+ 753              	 .align 2
+ 754              	 .global XMC_DSD_CH_Rectify_Init
+ 755              	 .thumb
+ 756              	 .thumb_func
+ 758              	XMC_DSD_CH_Rectify_Init:
+ 759              	.LFB177:
+ 299:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 300:../Libraries/XMCLib/src/xmc_dsd.c **** /* Rectifier initialization of DSD */
+ 301:../Libraries/XMCLib/src/xmc_dsd.c **** void XMC_DSD_CH_Rectify_Init(XMC_DSD_CH_t *const channel, const XMC_DSD_CH_RECTIFY_CONFIG_t *const 
+ 302:../Libraries/XMCLib/src/xmc_dsd.c **** {
+ 760              	 .loc 1 302 0
+ 761              	 .cfi_startproc
+ 762              	 
+ 763              	 
+ 764              	 
+ 765 0000 80B4     	 push {r7}
+ 766              	.LCFI67:
+ 767              	 .cfi_def_cfa_offset 4
+ 768              	 .cfi_offset 7,-4
+ 769 0002 83B0     	 sub sp,sp,#12
+ 770              	.LCFI68:
+ 771              	 .cfi_def_cfa_offset 16
+ 772 0004 00AF     	 add r7,sp,#0
+ 773              	.LCFI69:
+ 774              	 .cfi_def_cfa_register 7
+ 775 0006 7860     	 str r0,[r7,#4]
+ 776 0008 3960     	 str r1,[r7]
+ 303:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_RECTIFY_Init:Invalid module pointer", XMC_DSD_CHECK_CHANNEL_PTR(channel));
+ 304:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_RECTIFY_Init:NULL Pointer", (config != (XMC_DSD_CH_RECTIFY_CONFIG_t *)NULL));
+ 305:../Libraries/XMCLib/src/xmc_dsd.c ****   XMC_ASSERT("XMC_DSD_RECTIFY_Init:NULL Pointer", (((uint16_t)config->delay + (uint16_t)config->hal
+ 306:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 307:../Libraries/XMCLib/src/xmc_dsd.c ****   channel->RECTCFG = config->rectify_config | (uint32_t)DSD_CH_RECTCFG_RFEN_Msk;
+ 777              	 .loc 1 307 0
+ 778 000a 3B68     	 ldr r3,[r7]
+ 779 000c 1B68     	 ldr r3,[r3]
+ 780 000e 43F00102 	 orr r2,r3,#1
+ 781 0012 7B68     	 ldr r3,[r7,#4]
+ 782 0014 C3F8A820 	 str r2,[r3,#168]
+ 308:../Libraries/XMCLib/src/xmc_dsd.c ****   channel->CGSYNC = (((uint32_t) config->delay << (uint32_t)DSD_CH_CGSYNC_SDPOS_Pos)
+ 783              	 .loc 1 308 0
+ 784 0018 3B68     	 ldr r3,[r7]
+ 785 001a 1B79     	 ldrb r3,[r3,#4]
+ 786 001c 1A04     	 lsls r2,r3,#16
+ 309:../Libraries/XMCLib/src/xmc_dsd.c ****                       | (((uint32_t)config->delay + (uint32_t)config->half_cycle) << (uint32_t)DSD_
+ 787              	 .loc 1 309 0
+ 788 001e 3B68     	 ldr r3,[r7]
+ 789 0020 1B79     	 ldrb r3,[r3,#4]
+ 790 0022 1946     	 mov r1,r3
+ 791 0024 3B68     	 ldr r3,[r7]
+ 792 0026 5B79     	 ldrb r3,[r3,#5]
+ 793 0028 0B44     	 add r3,r3,r1
+ 794 002a 1B06     	 lsls r3,r3,#24
+ 795 002c 1A43     	 orrs r2,r2,r3
+ 308:../Libraries/XMCLib/src/xmc_dsd.c ****   channel->CGSYNC = (((uint32_t) config->delay << (uint32_t)DSD_CH_CGSYNC_SDPOS_Pos)
+ 796              	 .loc 1 308 0
+ 797 002e 7B68     	 ldr r3,[r7,#4]
+ 798 0030 C3F8A020 	 str r2,[r3,#160]
+ 310:../Libraries/XMCLib/src/xmc_dsd.c **** }
+ 799              	 .loc 1 310 0
+ 800 0034 0C37     	 adds r7,r7,#12
+ 801              	.LCFI70:
+ 802              	 .cfi_def_cfa_offset 4
+ 803 0036 BD46     	 mov sp,r7
+ 804              	.LCFI71:
+ 805              	 .cfi_def_cfa_register 13
+ 806              	 
+ 807 0038 5DF8047B 	 ldr r7,[sp],#4
+ 808              	.LCFI72:
+ 809              	 .cfi_restore 7
+ 810              	 .cfi_def_cfa_offset 0
+ 811 003c 7047     	 bx lr
+ 812              	 .cfi_endproc
+ 813              	.LFE177:
+ 815 003e 00BF     	 .section .text.XMC_DSD_CH_GetResult_TS,"ax",%progbits
+ 816              	 .align 2
+ 817              	 .global XMC_DSD_CH_GetResult_TS
+ 818              	 .thumb
+ 819              	 .thumb_func
+ 821              	XMC_DSD_CH_GetResult_TS:
+ 822              	.LFB178:
+ 311:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 312:../Libraries/XMCLib/src/xmc_dsd.c **** /* API to get the result of the last conversion */
+ 313:../Libraries/XMCLib/src/xmc_dsd.c **** void XMC_DSD_CH_GetResult_TS(XMC_DSD_CH_t* const channel,
+ 314:../Libraries/XMCLib/src/xmc_dsd.c ****                              int16_t* dsd_result,
+ 315:../Libraries/XMCLib/src/xmc_dsd.c ****                              uint8_t* dsd_filter_count,
+ 316:../Libraries/XMCLib/src/xmc_dsd.c ****                              uint8_t* dsd_integration_count)
+ 317:../Libraries/XMCLib/src/xmc_dsd.c **** {
+ 823              	 .loc 1 317 0
+ 824              	 .cfi_startproc
+ 825              	 
+ 826              	 
+ 827              	 
+ 828 0000 80B4     	 push {r7}
+ 829              	.LCFI73:
+ 830              	 .cfi_def_cfa_offset 4
+ 831              	 .cfi_offset 7,-4
+ 832 0002 87B0     	 sub sp,sp,#28
+ 833              	.LCFI74:
+ 834              	 .cfi_def_cfa_offset 32
+ 835 0004 00AF     	 add r7,sp,#0
+ 836              	.LCFI75:
+ 837              	 .cfi_def_cfa_register 7
+ 838 0006 F860     	 str r0,[r7,#12]
+ 839 0008 B960     	 str r1,[r7,#8]
+ 840 000a 7A60     	 str r2,[r7,#4]
+ 841 000c 3B60     	 str r3,[r7]
+ 318:../Libraries/XMCLib/src/xmc_dsd.c ****   uint32_t timestamp;
+ 319:../Libraries/XMCLib/src/xmc_dsd.c ****   uint16_t result;
+ 320:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 321:../Libraries/XMCLib/src/xmc_dsd.c ****   timestamp = channel->TSTMP;
+ 842              	 .loc 1 321 0
+ 843 000e FB68     	 ldr r3,[r7,#12]
+ 844 0010 1B6D     	 ldr r3,[r3,#80]
+ 845 0012 7B61     	 str r3,[r7,#20]
+ 322:../Libraries/XMCLib/src/xmc_dsd.c ****   result = (uint16_t)((uint32_t)timestamp & DSD_CH_TSTMP_RESULT_Msk);
+ 846              	 .loc 1 322 0
+ 847 0014 7B69     	 ldr r3,[r7,#20]
+ 848 0016 7B82     	 strh r3,[r7,#18]
+ 323:../Libraries/XMCLib/src/xmc_dsd.c ****   *dsd_result = (int16_t)(result);
+ 849              	 .loc 1 323 0
+ 850 0018 7A8A     	 ldrh r2,[r7,#18]
+ 851 001a BB68     	 ldr r3,[r7,#8]
+ 852 001c 1A80     	 strh r2,[r3]
+ 324:../Libraries/XMCLib/src/xmc_dsd.c ****   *dsd_filter_count = (uint8_t) ((timestamp & (uint32_t)DSD_CH_TSTMP_CFMDCNT_Msk)>>(uint32_t)DSD_CH
+ 853              	 .loc 1 324 0
+ 854 001e 7B69     	 ldr r3,[r7,#20]
+ 855 0020 03F47F03 	 and r3,r3,#16711680
+ 856 0024 1B0C     	 lsrs r3,r3,#16
+ 857 0026 DAB2     	 uxtb r2,r3
+ 858 0028 7B68     	 ldr r3,[r7,#4]
+ 859 002a 1A70     	 strb r2,[r3]
+ 325:../Libraries/XMCLib/src/xmc_dsd.c ****   *dsd_integration_count = (uint8_t) ((timestamp & (uint32_t)DSD_CH_TSTMP_NVALCNT_Msk)>>(uint32_t)D
+ 860              	 .loc 1 325 0
+ 861 002c 7B69     	 ldr r3,[r7,#20]
+ 862 002e 03F07C53 	 and r3,r3,#1056964608
+ 863 0032 1B0E     	 lsrs r3,r3,#24
+ 864 0034 DAB2     	 uxtb r2,r3
+ 865 0036 3B68     	 ldr r3,[r7]
+ 866 0038 1A70     	 strb r2,[r3]
+ 326:../Libraries/XMCLib/src/xmc_dsd.c **** }
+ 867              	 .loc 1 326 0
+ 868 003a 1C37     	 adds r7,r7,#28
+ 869              	.LCFI76:
+ 870              	 .cfi_def_cfa_offset 4
+ 871 003c BD46     	 mov sp,r7
+ 872              	.LCFI77:
+ 873              	 .cfi_def_cfa_register 13
+ 874              	 
+ 875 003e 5DF8047B 	 ldr r7,[sp],#4
+ 876              	.LCFI78:
+ 877              	 .cfi_restore 7
+ 878              	 .cfi_def_cfa_offset 0
+ 879 0042 7047     	 bx lr
+ 880              	 .cfi_endproc
+ 881              	.LFE178:
+ 883              	 .section .text.XMC_DSD_CH_GetResult_TS_Time,"ax",%progbits
+ 884              	 .align 2
+ 885              	 .global XMC_DSD_CH_GetResult_TS_Time
+ 886              	 .thumb
+ 887              	 .thumb_func
+ 889              	XMC_DSD_CH_GetResult_TS_Time:
+ 890              	.LFB179:
+ 327:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 328:../Libraries/XMCLib/src/xmc_dsd.c **** /* API to get the result of the last conversion with the time */
+ 329:../Libraries/XMCLib/src/xmc_dsd.c **** void XMC_DSD_CH_GetResult_TS_Time(XMC_DSD_CH_t* const channel, int16_t* dsd_Result, uint32_t* time)
+ 330:../Libraries/XMCLib/src/xmc_dsd.c **** {
+ 891              	 .loc 1 330 0
+ 892              	 .cfi_startproc
+ 893              	 
+ 894              	 
+ 895              	 
+ 896 0000 80B4     	 push {r7}
+ 897              	.LCFI79:
+ 898              	 .cfi_def_cfa_offset 4
+ 899              	 .cfi_offset 7,-4
+ 900 0002 89B0     	 sub sp,sp,#36
+ 901              	.LCFI80:
+ 902              	 .cfi_def_cfa_offset 40
+ 903 0004 00AF     	 add r7,sp,#0
+ 904              	.LCFI81:
+ 905              	 .cfi_def_cfa_register 7
+ 906 0006 F860     	 str r0,[r7,#12]
+ 907 0008 B960     	 str r1,[r7,#8]
+ 908 000a 7A60     	 str r2,[r7,#4]
+ 331:../Libraries/XMCLib/src/xmc_dsd.c ****   uint32_t timestamp;
+ 332:../Libraries/XMCLib/src/xmc_dsd.c ****   uint16_t filter_count;
+ 333:../Libraries/XMCLib/src/xmc_dsd.c ****   uint16_t integrator_count;
+ 334:../Libraries/XMCLib/src/xmc_dsd.c ****   uint16_t decimation;
+ 335:../Libraries/XMCLib/src/xmc_dsd.c ****   uint16_t result;
+ 336:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 337:../Libraries/XMCLib/src/xmc_dsd.c ****   timestamp = channel->TSTMP;
+ 909              	 .loc 1 337 0
+ 910 000c FB68     	 ldr r3,[r7,#12]
+ 911 000e 1B6D     	 ldr r3,[r3,#80]
+ 912 0010 BB61     	 str r3,[r7,#24]
+ 338:../Libraries/XMCLib/src/xmc_dsd.c ****   decimation = (uint16_t)(channel->FCFGC & DSD_CH_FCFGC_CFMDF_Msk);
+ 913              	 .loc 1 338 0
+ 914 0012 FB68     	 ldr r3,[r7,#12]
+ 915 0014 5B69     	 ldr r3,[r3,#20]
+ 916 0016 9BB2     	 uxth r3,r3
+ 917 0018 DBB2     	 uxtb r3,r3
+ 918 001a FB82     	 strh r3,[r7,#22]
+ 339:../Libraries/XMCLib/src/xmc_dsd.c ****   filter_count = (uint16_t)((timestamp & DSD_CH_TSTMP_CFMDCNT_Msk)>>DSD_CH_TSTMP_CFMDCNT_Pos);
+ 919              	 .loc 1 339 0
+ 920 001c BB69     	 ldr r3,[r7,#24]
+ 921 001e 03F47F03 	 and r3,r3,#16711680
+ 922 0022 1B0C     	 lsrs r3,r3,#16
+ 923 0024 BB82     	 strh r3,[r7,#20]
+ 340:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 341:../Libraries/XMCLib/src/xmc_dsd.c ****   /* Integration enabled? */
+ 342:../Libraries/XMCLib/src/xmc_dsd.c ****   if ((channel->IWCTR & DSD_CH_IWCTR_INTEN_Msk))
+ 924              	 .loc 1 342 0
+ 925 0026 FB68     	 ldr r3,[r7,#12]
+ 926 0028 1B6A     	 ldr r3,[r3,#32]
+ 927 002a 03F08003 	 and r3,r3,#128
+ 928 002e 002B     	 cmp r3,#0
+ 929 0030 17D0     	 beq .L26
+ 343:../Libraries/XMCLib/src/xmc_dsd.c ****   {
+ 344:../Libraries/XMCLib/src/xmc_dsd.c ****     integrator_count = (uint16_t) ((timestamp & DSD_CH_TSTMP_NVALCNT_Msk)>>DSD_CH_TSTMP_NVALCNT_Pos
+ 930              	 .loc 1 344 0
+ 931 0032 BB69     	 ldr r3,[r7,#24]
+ 932 0034 03F07C53 	 and r3,r3,#1056964608
+ 933 0038 1B0E     	 lsrs r3,r3,#24
+ 934 003a FB83     	 strh r3,[r7,#30]
+ 345:../Libraries/XMCLib/src/xmc_dsd.c **** 
+ 346:../Libraries/XMCLib/src/xmc_dsd.c ****     /*See Errata number: xxyy */
+ 347:../Libraries/XMCLib/src/xmc_dsd.c ****     if (filter_count == decimation)
+ 935              	 .loc 1 347 0
+ 936 003c BA8A     	 ldrh r2,[r7,#20]
+ 937 003e FB8A     	 ldrh r3,[r7,#22]
+ 938 0040 9A42     	 cmp r2,r3
+ 939 0042 02D1     	 bne .L27
+ 348:../Libraries/XMCLib/src/xmc_dsd.c ****     {
+ 349:../Libraries/XMCLib/src/xmc_dsd.c ****       integrator_count++;
+ 940              	 .loc 1 349 0
+ 941 0044 FB8B     	 ldrh r3,[r7,#30]
+ 942 0046 0133     	 adds r3,r3,#1
+ 943 0048 FB83     	 strh r3,[r7,#30]
+ 944              	.L27:
+ 350:../Libraries/XMCLib/src/xmc_dsd.c ****     }
+ 351:../Libraries/XMCLib/src/xmc_dsd.c ****     *time = (uint32_t)(((uint32_t) integrator_count * ((uint32_t) decimation + 1U)) + (uint32_t) ((
+ 945              	 .loc 1 351 0
+ 946 004a FB8B     	 ldrh r3,[r7,#30]
+ 947 004c FA8A     	 ldrh r2,[r7,#22]
+ 948 004e 0132     	 adds r2,r2,#1
+ 949 0050 02FB03F2 	 mul r2,r2,r3
+ 950 0054 F98A     	 ldrh r1,[r7,#22]
+ 951 0056 BB8A     	 ldrh r3,[r7,#20]
+ 952 0058 CB1A     	 subs r3,r1,r3
+ 953 005a 1A44     	 add r2,r2,r3
+ 954 005c 7B68     	 ldr r3,[r7,#4]
+ 955 005e 1A60     	 str r2,[r3]
+ 956 0060 04E0     	 b .L28
+ 957              	.L26:
+ 352:../Libraries/XMCLib/src/xmc_dsd.c ****   }
+ 353:../Libraries/XMCLib/src/xmc_dsd.c ****   else
+ 354:../Libraries/XMCLib/src/xmc_dsd.c ****   {
+ 355:../Libraries/XMCLib/src/xmc_dsd.c ****     *time = (uint32_t) ((uint32_t)decimation - filter_count);
+ 958              	 .loc 1 355 0
+ 959 0062 FA8A     	 ldrh r2,[r7,#22]
+ 960 0064 BB8A     	 ldrh r3,[r7,#20]
+ 961 0066 D21A     	 subs r2,r2,r3
+ 962 0068 7B68     	 ldr r3,[r7,#4]
+ 963 006a 1A60     	 str r2,[r3]
+ 964              	.L28:
+ 356:../Libraries/XMCLib/src/xmc_dsd.c ****   }
+ 357:../Libraries/XMCLib/src/xmc_dsd.c ****   result = (uint16_t)((uint32_t)timestamp & DSD_CH_TSTMP_RESULT_Msk);
+ 965              	 .loc 1 357 0
+ 966 006c BB69     	 ldr r3,[r7,#24]
+ 967 006e 7B82     	 strh r3,[r7,#18]
+ 358:../Libraries/XMCLib/src/xmc_dsd.c ****   *dsd_Result = (int16_t)(result);
+ 968              	 .loc 1 358 0
+ 969 0070 7A8A     	 ldrh r2,[r7,#18]
+ 970 0072 BB68     	 ldr r3,[r7,#8]
+ 971 0074 1A80     	 strh r2,[r3]
+ 359:../Libraries/XMCLib/src/xmc_dsd.c **** }
+ 972              	 .loc 1 359 0
+ 973 0076 2437     	 adds r7,r7,#36
+ 974              	.LCFI82:
+ 975              	 .cfi_def_cfa_offset 4
+ 976 0078 BD46     	 mov sp,r7
+ 977              	.LCFI83:
+ 978              	 .cfi_def_cfa_register 13
+ 979              	 
+ 980 007a 5DF8047B 	 ldr r7,[sp],#4
+ 981              	.LCFI84:
+ 982              	 .cfi_restore 7
+ 983              	 .cfi_def_cfa_offset 0
+ 984 007e 7047     	 bx lr
+ 985              	 .cfi_endproc
+ 986              	.LFE179:
+ 988              	 .text
+ 989              	.Letext0:
+ 990              	 .file 2 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 991              	 .file 3 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 992              	 .file 4 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Infineon/XMC4500_series/Include/XMC4500.h"
+ 993              	 .file 5 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc_dsd.h"
+ 994              	 .file 6 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc4_scu.h"
+ 995              	 .file 7 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include/core_cm4.h"
+ 996              	 .file 8 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Infineon/XMC4500_series/Include/system_XMC4500.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 xmc_dsd.c
+    {standard input}:19     .text.XMC_DSD_Enable:00000000 $t
+    {standard input}:24     .text.XMC_DSD_Enable:00000000 XMC_DSD_Enable
+    {standard input}:59     .text.XMC_DSD_Disable:00000000 $t
+    {standard input}:64     .text.XMC_DSD_Disable:00000000 XMC_DSD_Disable
+    {standard input}:98     .text.XMC_DSD_EnableClock:00000000 $t
+    {standard input}:103    .text.XMC_DSD_EnableClock:00000000 XMC_DSD_EnableClock
+    {standard input}:150    .text.XMC_DSD_DisableClock:00000000 $t
+    {standard input}:155    .text.XMC_DSD_DisableClock:00000000 XMC_DSD_DisableClock
+    {standard input}:202    .text.XMC_DSD_Init:00000000 $t
+    {standard input}:207    .text.XMC_DSD_Init:00000000 XMC_DSD_Init
+    {standard input}:244    .text.XMC_DSD_IsEnabled:00000000 $t
+    {standard input}:249    .text.XMC_DSD_IsEnabled:00000000 XMC_DSD_IsEnabled
+    {standard input}:300    .text.XMC_DSD_Generator_Init:00000000 $t
+    {standard input}:305    .text.XMC_DSD_Generator_Init:00000000 XMC_DSD_Generator_Init
+    {standard input}:352    .text.XMC_DSD_CH_Init:00000000 $t
+    {standard input}:357    .text.XMC_DSD_CH_Init:00000000 XMC_DSD_CH_Init
+    {standard input}:465    .text.XMC_DSD_CH_MainFilter_Init:00000000 XMC_DSD_CH_MainFilter_Init
+    {standard input}:615    .text.XMC_DSD_CH_AuxFilter_Init:00000000 XMC_DSD_CH_AuxFilter_Init
+    {standard input}:673    .text.XMC_DSD_CH_Integrator_Init:00000000 XMC_DSD_CH_Integrator_Init
+    {standard input}:758    .text.XMC_DSD_CH_Rectify_Init:00000000 XMC_DSD_CH_Rectify_Init
+    {standard input}:555    .text.XMC_DSD_CH_Timestamp_Init:00000000 XMC_DSD_CH_Timestamp_Init
+    {standard input}:460    .text.XMC_DSD_CH_MainFilter_Init:00000000 $t
+    {standard input}:550    .text.XMC_DSD_CH_Timestamp_Init:00000000 $t
+    {standard input}:610    .text.XMC_DSD_CH_AuxFilter_Init:00000000 $t
+    {standard input}:668    .text.XMC_DSD_CH_Integrator_Init:00000000 $t
+    {standard input}:753    .text.XMC_DSD_CH_Rectify_Init:00000000 $t
+    {standard input}:816    .text.XMC_DSD_CH_GetResult_TS:00000000 $t
+    {standard input}:821    .text.XMC_DSD_CH_GetResult_TS:00000000 XMC_DSD_CH_GetResult_TS
+    {standard input}:884    .text.XMC_DSD_CH_GetResult_TS_Time:00000000 $t
+    {standard input}:889    .text.XMC_DSD_CH_GetResult_TS_Time:00000000 XMC_DSD_CH_GetResult_TS_Time
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+XMC_SCU_RESET_DeassertPeripheralReset
+XMC_SCU_RESET_AssertPeripheralReset
+XMC_SCU_RESET_IsPeripheralResetAsserted

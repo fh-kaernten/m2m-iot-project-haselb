@@ -1,0 +1,35 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .fpu softvfp
+   4              	 .eabi_attribute 20,1
+   5              	 .eabi_attribute 21,1
+   6              	 .eabi_attribute 23,3
+   7              	 .eabi_attribute 24,1
+   8              	 .eabi_attribute 25,1
+   9              	 .eabi_attribute 26,1
+  10              	 .eabi_attribute 30,6
+  11              	 .eabi_attribute 34,1
+  12              	 .eabi_attribute 18,4
+  13              	 .thumb
+  14              	 .file "systimer_conf.c"
+  15              	 .text
+  16              	.Ltext0:
+  17              	 .cfi_sections .debug_frame
+  18              	 .global SYSTIMER_0
+  19              	 .section .bss.SYSTIMER_0,"aw",%nobits
+  20              	 .align 2
+  23              	SYSTIMER_0:
+  24 0000 00       	 .space 1
+  25 0001 000000   	 .text
+  26              	.Letext0:
+  27              	 .file 1 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+  28              	 .file 2 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+  29              	 .file 3 "../Dave/Generated/SYSTIMER/systimer.h"
+  30              	 .file 4 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include/core_cm4.h"
+  31              	 .file 5 "../Dave/Generated/SYSTIMER/systimer_conf.c"
+DEFINED SYMBOLS
+                            *ABS*:00000000 systimer_conf.c
+    {standard input}:23     .bss.SYSTIMER_0:00000000 SYSTIMER_0
+    {standard input}:20     .bss.SYSTIMER_0:00000000 $d
+
+NO UNDEFINED SYMBOLS

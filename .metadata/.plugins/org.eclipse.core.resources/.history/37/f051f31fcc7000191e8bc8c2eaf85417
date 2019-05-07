@@ -1,0 +1,120 @@
+/*
+ * LM75.c
+ *
+ *  Created on: 24.11.2014
+ *      Author: haselb
+ */
+// Writes all second LM75 temperature data with 57600bps N81P to UART001
+/* Declarations from DAVE3 Code Generation */
+#include <DAVE.h>
+#include "HAL/hal_i2c.h"
+#include "Source/Has_Misc.h"
+#include "LM76.h"
+
+/*
+ * On XMC_MMI-Board both Jumpers JP1 and JP2 are in right position (0)
+ * Device-ID in 8-bit Notation 10010000b equates to 0x90U
+ * --------------------------------
+ *    Group	      |   |   |ADR|R/W|
+ *  7   6   5   4   3   2   1   0
+ *| 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 |
+ */
+
+/* struct for temperature sensor; start with default values */
+struct lm76 S_LM76=
+{
+		.DevID =		0x90U,		/* I2C-Dev.Addr. in 8 bit notation */
+		.location =		0x01U,		/* where is the sensor located	*/
+		.status =		0x00U,		/* different states, 0x00 is OK	*/
+		.temp.ave_value = 20.0f,	/* default value				*/
+		.temp.max_value = 40.0f,	/* max value for temp? 			*/
+		.temp.min_value = -25.0f,	/* min value - brr 				*/
+		.temp.ave_value_old = 0.0f,		/* take same value as ave_value	*/
+		.temp.ave_factor= 8U,		/* weight for average filter	*/
+};
+
+
+/*!
+ * @brief 	   Function for reading LM76 Device on I2C Bus.
+ * @param[in]  DevID
+ * @param[out] return_value in raw format
+ * @retval     DEVICE_READ_ERROR if error occurs
+ * 			   DEVICE_SUCCESSFUL if success
+ * @pre        uses I2C_Master APP, initiated by DAVE.
+ * @post       Function updates global variable @ref mainloop_ticks.
+ * @attention  enable all Errors I2C_Master in DAVE App and
+ * @Note	   A Software Watchdog is initiated to prevent from stucking in while loop in case of failure.
+ * invoked by the ISR generated from SYSTIMER.
+ */
+uint8_t read_LM76(uint8_t DevID, uint16_t *return_value){
+
+	uint8_t tx_data=0x00;
+	uint8_t rx_data[2];
+	uint16_t DataReceived = 0;
+
+// 	attach ID_LM76 address
+// 	send start condition
+// 	select temperature register data=0x00
+//	Write data to DEVICE
+//	leave I2C bus open
+	Soft_WDG_1(ON);
+    I2C_MASTER_Transmit(&I2C_MASTER_0,true,DevID,&tx_data,1,false);
+    while((f.tx_completion == 0) && (f.I2C_NACK == 0) && (f.eject_at_I2C_NACK == 0));
+    f.tx_completion = 0;
+    Soft_WDG_1(OFF);
+
+    if(f.I2C_NACK || f.eject_at_I2C_NACK)
+        {
+        	 f.I2C_NACK=0;
+        	 f.eject_at_I2C_NACK=0;
+        	 return DEVICE_READ_ERROR;
+        }
+//	send repeated start condition
+//  Read content of Register 0x00 from DEVICE and place it in rx_data[0] and rx_data[1]
+//	close I2C BUS
+    Soft_WDG_1(ON);
+    I2C_MASTER_Receive(&I2C_MASTER_0,true,DevID,rx_data,2,true,true);
+    while((f.rx_completion == 0) && (f.I2C_NACK == 0) && (f.eject_at_I2C_NACK == 0));
+    f.rx_completion = 0;
+    Soft_WDG_1(OFF);
+
+    if(f.I2C_NACK || f.eject_at_I2C_NACK)
+        {
+          	f.I2C_NACK=0;
+            f.eject_at_I2C_NACK=0;
+            return DEVICE_READ_ERROR;
+        }
+
+    // prepare 13Bit temperature value two's complement notation
+    //|-----------upper_byte MSByte[0]----------|-------lower_byteLSByte[1]-------|
+    // D15  D14   D13  D12  D11  D10   D9   D8   D7   D6   D5   D4  D3  D2  D1  D0
+    //Sign  MSB Bit10 Bit9 Bit8 Bit7 Bit6 Bit5 Bit4 Bit3 Bit2 Bit1 Bit0  X   X   X    //LM76
+
+    //shift 8 bit bytes to proper 16bit position
+	DataReceived = rx_data[1] >> 3;
+	DataReceived |= rx_data[0] << 5;
+
+    (*return_value)=DataReceived;
+
+    XMC_DEBUG("main: Application OK");
+    return DEVICE_SUCCESSFUL;
+}
+
+/*!
+ * @brief 	   Main function for updating and calculating LM76 Temperature Sensors value.
+ * @param[in]  None
+ * @param[out] None
+ * @retval     void
+ * @pre        uses @read_LM76() for updating raw_value.
+ * @post       None
+ * @attention  call routine NEVER more than once a second, device delivers then all time same temperature value!
+ * @note       acc. to datasheet convert from UINT to INT cast to float multiply with 0.0625
+ */
+void update_LM76(void)
+{
+
+	S_LM76.status = read_LM76(S_LM76.DevID, &S_LM76.temp.raw_value);
+	if(S_LM76.temp.raw_value & 0x1000U) S_LM76.temp.raw_value |= 0xF000U; //fill up MSB to fit 2`s complement notation
+	S_LM76.temp.ave_value=(float)(S_LM76.temp.raw_value*0.0625); // consult datasheet for calculation
+	val_average(S_LM76.temp.ave_value,S_LM76.temp.ave_value_old,S_LM76.temp.ave_factor);
+}

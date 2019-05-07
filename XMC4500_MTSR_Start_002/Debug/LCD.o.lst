@@ -1,0 +1,873 @@
+   1              	 .syntax unified
+   2              	 .cpu cortex-m4
+   3              	 .fpu softvfp
+   4              	 .eabi_attribute 20,1
+   5              	 .eabi_attribute 21,1
+   6              	 .eabi_attribute 23,3
+   7              	 .eabi_attribute 24,1
+   8              	 .eabi_attribute 25,1
+   9              	 .eabi_attribute 26,1
+  10              	 .eabi_attribute 30,6
+  11              	 .eabi_attribute 34,1
+  12              	 .eabi_attribute 18,4
+  13              	 .thumb
+  14              	 .file "LCD.c"
+  15              	 .text
+  16              	.Ltext0:
+  17              	 .cfi_sections .debug_frame
+  18              	 .comm lm76,28,4
+  19              	 .comm LCDBuffer,41,4
+  20              	 .section .text.LCD_init,"ax",%progbits
+  21              	 .align 2
+  22              	 .global LCD_init
+  23              	 .thumb
+  24              	 .thumb_func
+  26              	LCD_init:
+  27              	.LFB335:
+  28              	 .file 1 "../LCD.c"
+   1:../LCD.c      **** /*
+   2:../LCD.c      ****  * LCD.c
+   3:../LCD.c      ****  *
+   4:../LCD.c      ****  *  Created on: 06.12.2014
+   5:../LCD.c      ****  *      Author: haselb
+   6:../LCD.c      ****  */
+   7:../LCD.c      **** #include <DAVE.h>			//Declarations from DAVE Code Generation (includes SFR declaration)
+   8:../LCD.c      **** #include <stdio.h>			//requested by sprintf
+   9:../LCD.c      **** #include "LCD.h"
+  10:../LCD.c      **** #include "has_Misc.h"
+  11:../LCD.c      **** #include "LM76.h"
+  12:../LCD.c      **** 
+  13:../LCD.c      **** 
+  14:../LCD.c      **** 
+  15:../LCD.c      **** 
+  16:../LCD.c      **** 
+  17:../LCD.c      **** char LCDBuffer[LCD_local_display_width+1];
+  18:../LCD.c      **** 
+  19:../LCD.c      **** /*!
+  20:../LCD.c      ****  * @brief 	   Function for initializing LC-Display, 4-bit parallel mode
+  21:../LCD.c      ****  * @param[in]  None
+  22:../LCD.c      ****  * @param[out] None
+  23:../LCD.c      ****  * @retval     void
+  24:../LCD.c      ****  * @pre        requires BUS_IO-App
+  25:../LCD.c      ****  * @post       None
+  26:../LCD.c      ****  * @attention  None
+  27:../LCD.c      ****  * @note       This routine initializes a HD44780 compatible LCD.
+  28:../LCD.c      ****  * It needs a delay function @ref delay_100us().
+  29:../LCD.c      ****  */
+  30:../LCD.c      ****  void LCD_init(void)
+  31:../LCD.c      ****  {
+  29              	 .loc 1 31 0
+  30              	 .cfi_startproc
+  31              	 
+  32              	 
+  33 0000 80B5     	 push {r7,lr}
+  34              	.LCFI0:
+  35              	 .cfi_def_cfa_offset 8
+  36              	 .cfi_offset 7,-8
+  37              	 .cfi_offset 14,-4
+  38 0002 82B0     	 sub sp,sp,#8
+  39              	.LCFI1:
+  40              	 .cfi_def_cfa_offset 16
+  41 0004 00AF     	 add r7,sp,#0
+  42              	.LCFI2:
+  43              	 .cfi_def_cfa_register 7
+  32:../LCD.c      ****  	//Step 1: wait for power stabilization 500ms
+  33:../LCD.c      **** 	 delay100us(5000);   //wait after Power on device
+  44              	 .loc 1 33 0
+  45 0006 41F28830 	 movw r0,#5000
+  46 000a FFF7FEFF 	 bl delay100us
+  47              	.LBB2:
+  34:../LCD.c      **** 
+  35:../LCD.c      **** 	LCD_RS_Clr;
+  36:../LCD.c      **** 	LCD_RW_Clr;
+  37:../LCD.c      **** 	// 0000 five times
+  38:../LCD.c      **** 	for(int i=0;i<10;i++)
+  48              	 .loc 1 38 0
+  49 000e 0023     	 movs r3,#0
+  50 0010 7B60     	 str r3,[r7,#4]
+  51 0012 0DE0     	 b .L2
+  52              	.L3:
+  39:../LCD.c      **** 	{
+  40:../LCD.c      **** 		BUS_IO_Write(&BUS_IO_0,0x0|LCD_EN_Set);
+  53              	 .loc 1 40 0 discriminator 3
+  54 0014 4A48     	 ldr r0,.L6
+  55 0016 1021     	 movs r1,#16
+  56 0018 FFF7FEFF 	 bl BUS_IO_Write
+  41:../LCD.c      **** 		BUS_IO_Write(&BUS_IO_0,0x0&LCD_EN_Clr);
+  57              	 .loc 1 41 0 discriminator 3
+  58 001c 4848     	 ldr r0,.L6
+  59 001e 0021     	 movs r1,#0
+  60 0020 FFF7FEFF 	 bl BUS_IO_Write
+  42:../LCD.c      **** 		delay100us(100);
+  61              	 .loc 1 42 0 discriminator 3
+  62 0024 6420     	 movs r0,#100
+  63 0026 FFF7FEFF 	 bl delay100us
+  38:../LCD.c      **** 	{
+  64              	 .loc 1 38 0 discriminator 3
+  65 002a 7B68     	 ldr r3,[r7,#4]
+  66 002c 0133     	 adds r3,r3,#1
+  67 002e 7B60     	 str r3,[r7,#4]
+  68              	.L2:
+  38:../LCD.c      **** 	{
+  69              	 .loc 1 38 0 is_stmt 0 discriminator 1
+  70 0030 7B68     	 ldr r3,[r7,#4]
+  71 0032 092B     	 cmp r3,#9
+  72 0034 EEDD     	 ble .L3
+  73              	.LBE2:
+  43:../LCD.c      **** 	}
+  44:../LCD.c      **** 
+  45:../LCD.c      **** 	delay100us(5000);   //wait after Power on device
+  74              	 .loc 1 45 0 is_stmt 1
+  75 0036 41F28830 	 movw r0,#5000
+  76 003a FFF7FEFF 	 bl delay100us
+  46:../LCD.c      **** // Step 2: Function set
+  47:../LCD.c      **** 
+  48:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x2|LCD_EN_Set);
+  77              	 .loc 1 48 0
+  78 003e 4048     	 ldr r0,.L6
+  79 0040 1221     	 movs r1,#18
+  80 0042 FFF7FEFF 	 bl BUS_IO_Write
+  49:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x2&LCD_EN_Clr);
+  81              	 .loc 1 49 0
+  82 0046 3E48     	 ldr r0,.L6
+  83 0048 0221     	 movs r1,#2
+  84 004a FFF7FEFF 	 bl BUS_IO_Write
+  50:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x2|LCD_EN_Set);
+  85              	 .loc 1 50 0
+  86 004e 3C48     	 ldr r0,.L6
+  87 0050 1221     	 movs r1,#18
+  88 0052 FFF7FEFF 	 bl BUS_IO_Write
+  51:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x2&LCD_EN_Clr);
+  89              	 .loc 1 51 0
+  90 0056 3A48     	 ldr r0,.L6
+  91 0058 0221     	 movs r1,#2
+  92 005a FFF7FEFF 	 bl BUS_IO_Write
+  52:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0xB|LCD_EN_Set);
+  93              	 .loc 1 52 0
+  94 005e 3848     	 ldr r0,.L6
+  95 0060 1B21     	 movs r1,#27
+  96 0062 FFF7FEFF 	 bl BUS_IO_Write
+  53:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0xB&LCD_EN_Clr);
+  97              	 .loc 1 53 0
+  98 0066 3648     	 ldr r0,.L6
+  99 0068 0B21     	 movs r1,#11
+ 100 006a FFF7FEFF 	 bl BUS_IO_Write
+  54:../LCD.c      ****  	 delay100us(100);
+ 101              	 .loc 1 54 0
+ 102 006e 6420     	 movs r0,#100
+ 103 0070 FFF7FEFF 	 bl delay100us
+  55:../LCD.c      ****  	//BussyFlag();
+  56:../LCD.c      **** 
+  57:../LCD.c      **** 
+  58:../LCD.c      **** //Step 3: Display ON/OFF Control
+  59:../LCD.c      **** 
+  60:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x0|LCD_EN_Set);
+ 104              	 .loc 1 60 0
+ 105 0074 3248     	 ldr r0,.L6
+ 106 0076 1021     	 movs r1,#16
+ 107 0078 FFF7FEFF 	 bl BUS_IO_Write
+  61:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x0&LCD_EN_Clr);
+ 108              	 .loc 1 61 0
+ 109 007c 3048     	 ldr r0,.L6
+ 110 007e 0021     	 movs r1,#0
+ 111 0080 FFF7FEFF 	 bl BUS_IO_Write
+  62:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0xC|LCD_EN_Set);
+ 112              	 .loc 1 62 0
+ 113 0084 2E48     	 ldr r0,.L6
+ 114 0086 1C21     	 movs r1,#28
+ 115 0088 FFF7FEFF 	 bl BUS_IO_Write
+  63:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0xC&LCD_EN_Clr);
+ 116              	 .loc 1 63 0
+ 117 008c 2C48     	 ldr r0,.L6
+ 118 008e 0C21     	 movs r1,#12
+ 119 0090 FFF7FEFF 	 bl BUS_IO_Write
+  64:../LCD.c      ****  	delay100us(5);
+ 120              	 .loc 1 64 0
+ 121 0094 0520     	 movs r0,#5
+ 122 0096 FFF7FEFF 	 bl delay100us
+  65:../LCD.c      **** 
+  66:../LCD.c      **** 
+  67:../LCD.c      **** // 	Step 4: Display Clear
+  68:../LCD.c      **** 
+  69:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x0|LCD_EN_Set);
+ 123              	 .loc 1 69 0
+ 124 009a 2948     	 ldr r0,.L6
+ 125 009c 1021     	 movs r1,#16
+ 126 009e FFF7FEFF 	 bl BUS_IO_Write
+  70:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x0&LCD_EN_Clr);
+ 127              	 .loc 1 70 0
+ 128 00a2 2748     	 ldr r0,.L6
+ 129 00a4 0021     	 movs r1,#0
+ 130 00a6 FFF7FEFF 	 bl BUS_IO_Write
+  71:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x1|LCD_EN_Set);
+ 131              	 .loc 1 71 0
+ 132 00aa 2548     	 ldr r0,.L6
+ 133 00ac 1121     	 movs r1,#17
+ 134 00ae FFF7FEFF 	 bl BUS_IO_Write
+  72:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x1&LCD_EN_Clr);
+ 135              	 .loc 1 72 0
+ 136 00b2 2348     	 ldr r0,.L6
+ 137 00b4 0121     	 movs r1,#1
+ 138 00b6 FFF7FEFF 	 bl BUS_IO_Write
+  73:../LCD.c      ****  	delay100us(500);
+ 139              	 .loc 1 73 0
+ 140 00ba 4FF4FA70 	 mov r0,#500
+ 141 00be FFF7FEFF 	 bl delay100us
+  74:../LCD.c      ****  	//BussyFlag();
+  75:../LCD.c      **** 
+  76:../LCD.c      **** // 	Step 5: Return Home
+  77:../LCD.c      **** 
+  78:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x0|LCD_EN_Set);
+ 142              	 .loc 1 78 0
+ 143 00c2 1F48     	 ldr r0,.L6
+ 144 00c4 1021     	 movs r1,#16
+ 145 00c6 FFF7FEFF 	 bl BUS_IO_Write
+  79:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x0&LCD_EN_Clr);
+ 146              	 .loc 1 79 0
+ 147 00ca 1D48     	 ldr r0,.L6
+ 148 00cc 0021     	 movs r1,#0
+ 149 00ce FFF7FEFF 	 bl BUS_IO_Write
+  80:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x2|LCD_EN_Set);
+ 150              	 .loc 1 80 0
+ 151 00d2 1B48     	 ldr r0,.L6
+ 152 00d4 1221     	 movs r1,#18
+ 153 00d6 FFF7FEFF 	 bl BUS_IO_Write
+  81:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x2&LCD_EN_Clr);
+ 154              	 .loc 1 81 0
+ 155 00da 1948     	 ldr r0,.L6
+ 156 00dc 0221     	 movs r1,#2
+ 157 00de FFF7FEFF 	 bl BUS_IO_Write
+  82:../LCD.c      ****  	delay100us(500);
+ 158              	 .loc 1 82 0
+ 159 00e2 4FF4FA70 	 mov r0,#500
+ 160 00e6 FFF7FEFF 	 bl delay100us
+  83:../LCD.c      **** 
+  84:../LCD.c      **** 
+  85:../LCD.c      **** // 	Step 6: Entry Mode Set
+  86:../LCD.c      **** 
+  87:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x0|LCD_EN_Set);
+ 161              	 .loc 1 87 0
+ 162 00ea 1548     	 ldr r0,.L6
+ 163 00ec 1021     	 movs r1,#16
+ 164 00ee FFF7FEFF 	 bl BUS_IO_Write
+  88:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x0&LCD_EN_Clr);
+ 165              	 .loc 1 88 0
+ 166 00f2 1348     	 ldr r0,.L6
+ 167 00f4 0021     	 movs r1,#0
+ 168 00f6 FFF7FEFF 	 bl BUS_IO_Write
+  89:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x6|LCD_EN_Set);
+ 169              	 .loc 1 89 0
+ 170 00fa 1148     	 ldr r0,.L6
+ 171 00fc 1621     	 movs r1,#22
+ 172 00fe FFF7FEFF 	 bl BUS_IO_Write
+  90:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x6&LCD_EN_Clr);
+ 173              	 .loc 1 90 0
+ 174 0102 0F48     	 ldr r0,.L6
+ 175 0104 0621     	 movs r1,#6
+ 176 0106 FFF7FEFF 	 bl BUS_IO_Write
+  91:../LCD.c      ****  	delay100us(1000);
+ 177              	 .loc 1 91 0
+ 178 010a 4FF47A70 	 mov r0,#1000
+ 179 010e FFF7FEFF 	 bl delay100us
+ 180              	.LBB3:
+  92:../LCD.c      **** 
+  93:../LCD.c      **** 	// 0000 five times
+  94:../LCD.c      **** 	for(int i=0;i<6;i++)
+ 181              	 .loc 1 94 0
+ 182 0112 0023     	 movs r3,#0
+ 183 0114 3B60     	 str r3,[r7]
+ 184 0116 0DE0     	 b .L4
+ 185              	.L5:
+  95:../LCD.c      **** 	{
+  96:../LCD.c      **** 		BUS_IO_Write(&BUS_IO_0,0x0|LCD_EN_Set);
+ 186              	 .loc 1 96 0 discriminator 3
+ 187 0118 0948     	 ldr r0,.L6
+ 188 011a 1021     	 movs r1,#16
+ 189 011c FFF7FEFF 	 bl BUS_IO_Write
+  97:../LCD.c      **** 		BUS_IO_Write(&BUS_IO_0,0x0&LCD_EN_Clr);
+ 190              	 .loc 1 97 0 discriminator 3
+ 191 0120 0748     	 ldr r0,.L6
+ 192 0122 0021     	 movs r1,#0
+ 193 0124 FFF7FEFF 	 bl BUS_IO_Write
+  98:../LCD.c      **** 		delay100us(100);
+ 194              	 .loc 1 98 0 discriminator 3
+ 195 0128 6420     	 movs r0,#100
+ 196 012a FFF7FEFF 	 bl delay100us
+  94:../LCD.c      **** 	{
+ 197              	 .loc 1 94 0 discriminator 3
+ 198 012e 3B68     	 ldr r3,[r7]
+ 199 0130 0133     	 adds r3,r3,#1
+ 200 0132 3B60     	 str r3,[r7]
+ 201              	.L4:
+  94:../LCD.c      **** 	{
+ 202              	 .loc 1 94 0 is_stmt 0 discriminator 1
+ 203 0134 3B68     	 ldr r3,[r7]
+ 204 0136 052B     	 cmp r3,#5
+ 205 0138 EEDD     	 ble .L5
+ 206              	.LBE3:
+  99:../LCD.c      **** 	}
+ 100:../LCD.c      **** 
+ 101:../LCD.c      **** 
+ 102:../LCD.c      ****  }
+ 207              	 .loc 1 102 0 is_stmt 1
+ 208 013a 0837     	 adds r7,r7,#8
+ 209              	.LCFI3:
+ 210              	 .cfi_def_cfa_offset 8
+ 211 013c BD46     	 mov sp,r7
+ 212              	.LCFI4:
+ 213              	 .cfi_def_cfa_register 13
+ 214              	 
+ 215 013e 80BD     	 pop {r7,pc}
+ 216              	.L7:
+ 217              	 .align 2
+ 218              	.L6:
+ 219 0140 00000000 	 .word BUS_IO_0
+ 220              	 .cfi_endproc
+ 221              	.LFE335:
+ 223              	 .section .text.LCD_clearlines,"ax",%progbits
+ 224              	 .align 2
+ 225              	 .global LCD_clearlines
+ 226              	 .thumb
+ 227              	 .thumb_func
+ 229              	LCD_clearlines:
+ 230              	.LFB336:
+ 103:../LCD.c      **** 
+ 104:../LCD.c      **** /*!
+ 105:../LCD.c      ****  * @brief 	   Function to clear LCD.
+ 106:../LCD.c      ****  * @param[in]  None
+ 107:../LCD.c      ****  * @param[out] None
+ 108:../LCD.c      ****  * @retval     void
+ 109:../LCD.c      ****  * @pre        requires BUS_IO-App
+ 110:../LCD.c      ****  * @post       None
+ 111:../LCD.c      ****  * @attention  None
+ 112:../LCD.c      ****  * @note       This routine clears all lines of LCD.
+ 113:../LCD.c      ****  */
+ 114:../LCD.c      ****  void LCD_clearlines (void)
+ 115:../LCD.c      ****  {
+ 231              	 .loc 1 115 0
+ 232              	 .cfi_startproc
+ 233              	 
+ 234              	 
+ 235 0000 80B5     	 push {r7,lr}
+ 236              	.LCFI5:
+ 237              	 .cfi_def_cfa_offset 8
+ 238              	 .cfi_offset 7,-8
+ 239              	 .cfi_offset 14,-4
+ 240 0002 00AF     	 add r7,sp,#0
+ 241              	.LCFI6:
+ 242              	 .cfi_def_cfa_register 7
+ 116:../LCD.c      **** // Write command CLS(0x01) to LCD-Display
+ 117:../LCD.c      **** 
+ 118:../LCD.c      **** 
+ 119:../LCD.c      **** 	 	BUS_IO_Write(&BUS_IO_0,0x0|LCD_EN_Set);
+ 243              	 .loc 1 119 0
+ 244 0004 1048     	 ldr r0,.L9
+ 245 0006 1021     	 movs r1,#16
+ 246 0008 FFF7FEFF 	 bl BUS_IO_Write
+ 120:../LCD.c      **** 	 	BUS_IO_Write(&BUS_IO_0,0x0&LCD_EN_Clr);
+ 247              	 .loc 1 120 0
+ 248 000c 0E48     	 ldr r0,.L9
+ 249 000e 0021     	 movs r1,#0
+ 250 0010 FFF7FEFF 	 bl BUS_IO_Write
+ 121:../LCD.c      **** 	 	BUS_IO_Write(&BUS_IO_0,0x1|LCD_EN_Set);
+ 251              	 .loc 1 121 0
+ 252 0014 0C48     	 ldr r0,.L9
+ 253 0016 1121     	 movs r1,#17
+ 254 0018 FFF7FEFF 	 bl BUS_IO_Write
+ 122:../LCD.c      **** 	 	BUS_IO_Write(&BUS_IO_0,0x1&LCD_EN_Clr);
+ 255              	 .loc 1 122 0
+ 256 001c 0A48     	 ldr r0,.L9
+ 257 001e 0121     	 movs r1,#1
+ 258 0020 FFF7FEFF 	 bl BUS_IO_Write
+ 123:../LCD.c      **** 	 	BUS_IO_Write(&BUS_IO_0,0x0|LCD_EN_Set);
+ 259              	 .loc 1 123 0
+ 260 0024 0848     	 ldr r0,.L9
+ 261 0026 1021     	 movs r1,#16
+ 262 0028 FFF7FEFF 	 bl BUS_IO_Write
+ 124:../LCD.c      **** 	 	BUS_IO_Write(&BUS_IO_0,0x0&LCD_EN_Clr);
+ 263              	 .loc 1 124 0
+ 264 002c 0648     	 ldr r0,.L9
+ 265 002e 0021     	 movs r1,#0
+ 266 0030 FFF7FEFF 	 bl BUS_IO_Write
+ 125:../LCD.c      **** 	 	BUS_IO_Write(&BUS_IO_0,0x2|LCD_EN_Set);
+ 267              	 .loc 1 125 0
+ 268 0034 0448     	 ldr r0,.L9
+ 269 0036 1221     	 movs r1,#18
+ 270 0038 FFF7FEFF 	 bl BUS_IO_Write
+ 126:../LCD.c      **** 	 	BUS_IO_Write(&BUS_IO_0,0x2&LCD_EN_Clr);
+ 271              	 .loc 1 126 0
+ 272 003c 0248     	 ldr r0,.L9
+ 273 003e 0221     	 movs r1,#2
+ 274 0040 FFF7FEFF 	 bl BUS_IO_Write
+ 127:../LCD.c      ****  }
+ 275              	 .loc 1 127 0
+ 276 0044 80BD     	 pop {r7,pc}
+ 277              	.L10:
+ 278 0046 00BF     	 .align 2
+ 279              	.L9:
+ 280 0048 00000000 	 .word BUS_IO_0
+ 281              	 .cfi_endproc
+ 282              	.LFE336:
+ 284              	 .section .text.LCD_text,"ax",%progbits
+ 285              	 .align 2
+ 286              	 .global LCD_text
+ 287              	 .thumb
+ 288              	 .thumb_func
+ 290              	LCD_text:
+ 291              	.LFB337:
+ 128:../LCD.c      **** 
+ 129:../LCD.c      **** /*!
+ 130:../LCD.c      ****  * @brief 	   Function writes a ASCII string to LCD.
+ 131:../LCD.c      ****  * @param[in]  char LCDLine;   upper or lower display line (range 0 and 1)
+ 132:../LCD.c      ****  * @param[in]  char LCDColumn; where text starts (range 0 to LCD_local_display_width-1)
+ 133:../LCD.c      ****  * @param[in]  char* LCDInfo; text string in ASCII notation @par
+ 134:../LCD.c      ****  * @param[out] None
+ 135:../LCD.c      ****  * @retval     void
+ 136:../LCD.c      ****  * @pre        requires BUS_IO-App
+ 137:../LCD.c      ****  * @post       None
+ 138:../LCD.c      ****  * @attention  A  buffer
+ 139:../LCD.c      ****  * @note       This routine writes ASCII text to LCD.
+ 140:../LCD.c      ****  */
+ 141:../LCD.c      ****  void LCD_text (unsigned char LCDLine, uint16_t LCDColumn, char *LCDInfo)
+ 142:../LCD.c      ****  {
+ 292              	 .loc 1 142 0
+ 293              	 .cfi_startproc
+ 294              	 
+ 295              	 
+ 296 0000 80B5     	 push {r7,lr}
+ 297              	.LCFI7:
+ 298              	 .cfi_def_cfa_offset 8
+ 299              	 .cfi_offset 7,-8
+ 300              	 .cfi_offset 14,-4
+ 301 0002 84B0     	 sub sp,sp,#16
+ 302              	.LCFI8:
+ 303              	 .cfi_def_cfa_offset 24
+ 304 0004 00AF     	 add r7,sp,#0
+ 305              	.LCFI9:
+ 306              	 .cfi_def_cfa_register 7
+ 307 0006 0346     	 mov r3,r0
+ 308 0008 3A60     	 str r2,[r7]
+ 309 000a FB71     	 strb r3,[r7,#7]
+ 310 000c 0B46     	 mov r3,r1
+ 311 000e BB80     	 strh r3,[r7,#4]
+ 143:../LCD.c      ****   uint16_t i = 0;
+ 312              	 .loc 1 143 0
+ 313 0010 0023     	 movs r3,#0
+ 314 0012 FB81     	 strh r3,[r7,#14]
+ 144:../LCD.c      **** //  uint16_t LCD_local_Character = 0;
+ 145:../LCD.c      ****   uint16_t LCD_Data=0x0;
+ 315              	 .loc 1 145 0
+ 316 0014 0023     	 movs r3,#0
+ 317 0016 BB81     	 strh r3,[r7,#12]
+ 146:../LCD.c      **** 
+ 147:../LCD.c      ****   if(LCDLine != 1) {LCDLine=0;}
+ 318              	 .loc 1 147 0
+ 319 0018 FB79     	 ldrb r3,[r7,#7]
+ 320 001a 012B     	 cmp r3,#1
+ 321 001c 01D0     	 beq .L12
+ 322              	 .loc 1 147 0 is_stmt 0 discriminator 1
+ 323 001e 0023     	 movs r3,#0
+ 324 0020 FB71     	 strb r3,[r7,#7]
+ 325              	.L12:
+ 148:../LCD.c      **** 
+ 149:../LCD.c      **** 
+ 150:../LCD.c      ****    	LCD_Data|=0x8;		//LCD_D7_Set;
+ 326              	 .loc 1 150 0 is_stmt 1
+ 327 0022 BB89     	 ldrh r3,[r7,#12]
+ 328 0024 43F00803 	 orr r3,r3,#8
+ 329 0028 BB81     	 strh r3,[r7,#12]
+ 151:../LCD.c      **** 
+ 152:../LCD.c      ****  	if(LCDLine == 0){
+ 330              	 .loc 1 152 0
+ 331 002a FB79     	 ldrb r3,[r7,#7]
+ 332 002c 002B     	 cmp r3,#0
+ 333 002e 04D1     	 bne .L13
+ 153:../LCD.c      ****  		LCD_Data&=0xB;	//LCD_D6_Clr;first line
+ 334              	 .loc 1 153 0
+ 335 0030 BB89     	 ldrh r3,[r7,#12]
+ 336 0032 03F00B03 	 and r3,r3,#11
+ 337 0036 BB81     	 strh r3,[r7,#12]
+ 338 0038 03E0     	 b .L14
+ 339              	.L13:
+ 154:../LCD.c      ****  	}
+ 155:../LCD.c      ****  	else{
+ 156:../LCD.c      ****  		LCD_Data|=0x4;	//LCD_D6_Set;second line
+ 340              	 .loc 1 156 0
+ 341 003a BB89     	 ldrh r3,[r7,#12]
+ 342 003c 43F00403 	 orr r3,r3,#4
+ 343 0040 BB81     	 strh r3,[r7,#12]
+ 344              	.L14:
+ 157:../LCD.c      ****  	}
+ 158:../LCD.c      **** 
+ 159:../LCD.c      **** 
+ 160:../LCD.c      ****  	if (LCDColumn > LCD_local_display_width)
+ 345              	 .loc 1 160 0
+ 346 0042 BB88     	 ldrh r3,[r7,#4]
+ 347 0044 282B     	 cmp r3,#40
+ 348 0046 05D8     	 bhi .L16
+ 161:../LCD.c      ****  		LCD_Data|=0x0; //beyond LCD_local_display_width start at beginning of line
+ 162:../LCD.c      ****  	else
+ 163:../LCD.c      **** 
+ 164:../LCD.c      ****     LCD_Data|=LCDColumn >>4;
+ 349              	 .loc 1 164 0
+ 350 0048 BB88     	 ldrh r3,[r7,#4]
+ 351 004a 1B09     	 lsrs r3,r3,#4
+ 352 004c 9AB2     	 uxth r2,r3
+ 353 004e BB89     	 ldrh r3,[r7,#12]
+ 354 0050 1343     	 orrs r3,r3,r2
+ 355 0052 BB81     	 strh r3,[r7,#12]
+ 356              	.L16:
+ 165:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,LCD_Data|LCD_EN_Set);
+ 357              	 .loc 1 165 0
+ 358 0054 BB89     	 ldrh r3,[r7,#12]
+ 359 0056 43F01003 	 orr r3,r3,#16
+ 360 005a 9BB2     	 uxth r3,r3
+ 361 005c 3A48     	 ldr r0,.L20
+ 362 005e 1946     	 mov r1,r3
+ 363 0060 FFF7FEFF 	 bl BUS_IO_Write
+ 166:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,LCD_Data&LCD_EN_Clr);
+ 364              	 .loc 1 166 0
+ 365 0064 BB89     	 ldrh r3,[r7,#12]
+ 366 0066 03F0EF03 	 and r3,r3,#239
+ 367 006a 9BB2     	 uxth r3,r3
+ 368 006c 3648     	 ldr r0,.L20
+ 369 006e 1946     	 mov r1,r3
+ 370 0070 FFF7FEFF 	 bl BUS_IO_Write
+ 167:../LCD.c      ****  	LCD_Data = 0x0F&LCDColumn ;
+ 371              	 .loc 1 167 0
+ 372 0074 BB88     	 ldrh r3,[r7,#4]
+ 373 0076 03F00F03 	 and r3,r3,#15
+ 374 007a BB81     	 strh r3,[r7,#12]
+ 168:../LCD.c      **** 
+ 169:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,LCD_Data|LCD_EN_Set);
+ 375              	 .loc 1 169 0
+ 376 007c BB89     	 ldrh r3,[r7,#12]
+ 377 007e 43F01003 	 orr r3,r3,#16
+ 378 0082 9BB2     	 uxth r3,r3
+ 379 0084 3048     	 ldr r0,.L20
+ 380 0086 1946     	 mov r1,r3
+ 381 0088 FFF7FEFF 	 bl BUS_IO_Write
+ 170:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,LCD_Data&LCD_EN_Clr);
+ 382              	 .loc 1 170 0
+ 383 008c BB89     	 ldrh r3,[r7,#12]
+ 384 008e 03F0EF03 	 and r3,r3,#239
+ 385 0092 9BB2     	 uxth r3,r3
+ 386 0094 2C48     	 ldr r0,.L20
+ 387 0096 1946     	 mov r1,r3
+ 388 0098 FFF7FEFF 	 bl BUS_IO_Write
+ 171:../LCD.c      ****  	i = 0;
+ 389              	 .loc 1 171 0
+ 390 009c 0023     	 movs r3,#0
+ 391 009e FB81     	 strh r3,[r7,#14]
+ 172:../LCD.c      ****  	while((LCDInfo[i] != '\0') && (i < LCD_local_display_width))
+ 392              	 .loc 1 172 0
+ 393 00a0 41E0     	 b .L17
+ 394              	.L19:
+ 173:../LCD.c      ****  	{
+ 174:../LCD.c      ****  		LCD_Data=0x0F&LCDInfo[i]>>4; // assign character
+ 395              	 .loc 1 174 0
+ 396 00a2 FB89     	 ldrh r3,[r7,#14]
+ 397 00a4 3A68     	 ldr r2,[r7]
+ 398 00a6 1344     	 add r3,r3,r2
+ 399 00a8 1B78     	 ldrb r3,[r3]
+ 400 00aa 1B09     	 lsrs r3,r3,#4
+ 401 00ac DBB2     	 uxtb r3,r3
+ 402 00ae BB81     	 strh r3,[r7,#12]
+ 175:../LCD.c      ****  		BUS_IO_Write(&BUS_IO_0,LCD_Data|LCD_RS_Set);
+ 403              	 .loc 1 175 0
+ 404 00b0 BB89     	 ldrh r3,[r7,#12]
+ 405 00b2 43F02003 	 orr r3,r3,#32
+ 406 00b6 9BB2     	 uxth r3,r3
+ 407 00b8 2348     	 ldr r0,.L20
+ 408 00ba 1946     	 mov r1,r3
+ 409 00bc FFF7FEFF 	 bl BUS_IO_Write
+ 176:../LCD.c      ****  		BUS_IO_Write(&BUS_IO_0,LCD_Data|LCD_EN_Set);
+ 410              	 .loc 1 176 0
+ 411 00c0 BB89     	 ldrh r3,[r7,#12]
+ 412 00c2 43F01003 	 orr r3,r3,#16
+ 413 00c6 9BB2     	 uxth r3,r3
+ 414 00c8 1F48     	 ldr r0,.L20
+ 415 00ca 1946     	 mov r1,r3
+ 416 00cc FFF7FEFF 	 bl BUS_IO_Write
+ 177:../LCD.c      ****  		BUS_IO_Write(&BUS_IO_0,LCD_Data&LCD_EN_Clr);
+ 417              	 .loc 1 177 0
+ 418 00d0 BB89     	 ldrh r3,[r7,#12]
+ 419 00d2 03F0EF03 	 and r3,r3,#239
+ 420 00d6 9BB2     	 uxth r3,r3
+ 421 00d8 1B48     	 ldr r0,.L20
+ 422 00da 1946     	 mov r1,r3
+ 423 00dc FFF7FEFF 	 bl BUS_IO_Write
+ 178:../LCD.c      ****  		LCD_Data=0x0F&LCDInfo[i]; // assign character
+ 424              	 .loc 1 178 0
+ 425 00e0 FB89     	 ldrh r3,[r7,#14]
+ 426 00e2 3A68     	 ldr r2,[r7]
+ 427 00e4 1344     	 add r3,r3,r2
+ 428 00e6 1B78     	 ldrb r3,[r3]
+ 429 00e8 9BB2     	 uxth r3,r3
+ 430 00ea 03F00F03 	 and r3,r3,#15
+ 431 00ee BB81     	 strh r3,[r7,#12]
+ 179:../LCD.c      ****  		BUS_IO_Write(&BUS_IO_0,LCD_Data|LCD_RS_Set);
+ 432              	 .loc 1 179 0
+ 433 00f0 BB89     	 ldrh r3,[r7,#12]
+ 434 00f2 43F02003 	 orr r3,r3,#32
+ 435 00f6 9BB2     	 uxth r3,r3
+ 436 00f8 1348     	 ldr r0,.L20
+ 437 00fa 1946     	 mov r1,r3
+ 438 00fc FFF7FEFF 	 bl BUS_IO_Write
+ 180:../LCD.c      ****  		BUS_IO_Write(&BUS_IO_0,LCD_Data|LCD_EN_Set);
+ 439              	 .loc 1 180 0
+ 440 0100 BB89     	 ldrh r3,[r7,#12]
+ 441 0102 43F01003 	 orr r3,r3,#16
+ 442 0106 9BB2     	 uxth r3,r3
+ 443 0108 0F48     	 ldr r0,.L20
+ 444 010a 1946     	 mov r1,r3
+ 445 010c FFF7FEFF 	 bl BUS_IO_Write
+ 181:../LCD.c      ****  		BUS_IO_Write(&BUS_IO_0,LCD_Data&LCD_EN_Clr);
+ 446              	 .loc 1 181 0
+ 447 0110 BB89     	 ldrh r3,[r7,#12]
+ 448 0112 03F0EF03 	 and r3,r3,#239
+ 449 0116 9BB2     	 uxth r3,r3
+ 450 0118 0B48     	 ldr r0,.L20
+ 451 011a 1946     	 mov r1,r3
+ 452 011c FFF7FEFF 	 bl BUS_IO_Write
+ 182:../LCD.c      **** 
+ 183:../LCD.c      ****  		i++;
+ 453              	 .loc 1 183 0
+ 454 0120 FB89     	 ldrh r3,[r7,#14]
+ 455 0122 0133     	 adds r3,r3,#1
+ 456 0124 FB81     	 strh r3,[r7,#14]
+ 457              	.L17:
+ 172:../LCD.c      ****  	{
+ 458              	 .loc 1 172 0
+ 459 0126 FB89     	 ldrh r3,[r7,#14]
+ 460 0128 3A68     	 ldr r2,[r7]
+ 461 012a 1344     	 add r3,r3,r2
+ 462 012c 1B78     	 ldrb r3,[r3]
+ 463 012e 002B     	 cmp r3,#0
+ 464 0130 02D0     	 beq .L18
+ 172:../LCD.c      ****  	{
+ 465              	 .loc 1 172 0 is_stmt 0 discriminator 1
+ 466 0132 FB89     	 ldrh r3,[r7,#14]
+ 467 0134 272B     	 cmp r3,#39
+ 468 0136 B4D9     	 bls .L19
+ 469              	.L18:
+ 184:../LCD.c      ****  	}
+ 185:../LCD.c      ****  	//LCD_RS_Clr;
+ 186:../LCD.c      ****  	BUS_IO_Write(&BUS_IO_0,0x0);
+ 470              	 .loc 1 186 0 is_stmt 1
+ 471 0138 0348     	 ldr r0,.L20
+ 472 013a 0021     	 movs r1,#0
+ 473 013c FFF7FEFF 	 bl BUS_IO_Write
+ 187:../LCD.c      ****  }
+ 474              	 .loc 1 187 0
+ 475 0140 1037     	 adds r7,r7,#16
+ 476              	.LCFI10:
+ 477              	 .cfi_def_cfa_offset 8
+ 478 0142 BD46     	 mov sp,r7
+ 479              	.LCFI11:
+ 480              	 .cfi_def_cfa_register 13
+ 481              	 
+ 482 0144 80BD     	 pop {r7,pc}
+ 483              	.L21:
+ 484 0146 00BF     	 .align 2
+ 485              	.L20:
+ 486 0148 00000000 	 .word BUS_IO_0
+ 487              	 .cfi_endproc
+ 488              	.LFE337:
+ 490              	 .global __aeabi_f2d
+ 491              	 .section .rodata
+ 492              	 .align 2
+ 493              	.LC0:
+ 494 0000 2534642E 	 .ascii "%4d.%02d.%02d. %02d:%02d:%02d Temp:%+05.2f'C    \000"
+ 494      25303264 
+ 494      2E253032 
+ 494      642E2025 
+ 494      3032643A 
+ 495 0031 000000   	 .section .text.update_LCD,"ax",%progbits
+ 496              	 .align 2
+ 497              	 .global update_LCD
+ 498              	 .thumb
+ 499              	 .thumb_func
+ 501              	update_LCD:
+ 502              	.LFB338:
+ 188:../LCD.c      **** 
+ 189:../LCD.c      **** /*!
+ 190:../LCD.c      ****  * @brief 	   Function is invoked in mainloop to update LCD context.
+ 191:../LCD.c      ****  * @param[in]  None
+ 192:../LCD.c      ****  * @param[out] None
+ 193:../LCD.c      ****  * @retval     void
+ 194:../LCD.c      ****  * @pre        requires @ref LCD_text()
+ 195:../LCD.c      ****  * @post       None
+ 196:../LCD.c      ****  * @attention  None
+ 197:../LCD.c      ****  * @note       The ASCII notation is built by @ref sprintf; the used buffer is global.
+ 198:../LCD.c      ****  */
+ 199:../LCD.c      **** void update_LCD(void)
+ 200:../LCD.c      **** {
+ 503              	 .loc 1 200 0
+ 504              	 .cfi_startproc
+ 505              	 
+ 506              	 
+ 507 0000 2DE9F047 	 push {r4,r5,r6,r7,r8,r9,r10,lr}
+ 508              	.LCFI12:
+ 509              	 .cfi_def_cfa_offset 32
+ 510              	 .cfi_offset 4,-32
+ 511              	 .cfi_offset 5,-28
+ 512              	 .cfi_offset 6,-24
+ 513              	 .cfi_offset 7,-20
+ 514              	 .cfi_offset 8,-16
+ 515              	 .cfi_offset 9,-12
+ 516              	 .cfi_offset 10,-8
+ 517              	 .cfi_offset 14,-4
+ 518 0004 86B0     	 sub sp,sp,#24
+ 519              	.LCFI13:
+ 520              	 .cfi_def_cfa_offset 56
+ 521 0006 06AF     	 add r7,sp,#24
+ 522              	.LCFI14:
+ 523              	 .cfi_def_cfa 7,32
+ 201:../LCD.c      **** 	//serve first LCD line
+ 202:../LCD.c      **** 
+ 203:../LCD.c      **** 	RTC_GetTime(&timeval);	//synch time
+ 524              	 .loc 1 203 0
+ 525 0008 1F48     	 ldr r0,.L23
+ 526 000a FFF7FEFF 	 bl RTC_GetTime
+ 204:../LCD.c      **** 	sprintf(LCDBuffer,"%4d.%02d.%02d. %02d:%02d:%02d Temp:%+05.2f'C    ",
+ 205:../LCD.c      **** 			timeval.year,
+ 527              	 .loc 1 205 0
+ 528 000e 1E4B     	 ldr r3,.L23
+ 529 0010 DB88     	 ldrh r3,[r3,#6]
+ 204:../LCD.c      **** 	sprintf(LCDBuffer,"%4d.%02d.%02d. %02d:%02d:%02d Temp:%+05.2f'C    ",
+ 530              	 .loc 1 204 0
+ 531 0012 9A46     	 mov r10,r3
+ 206:../LCD.c      **** 			timeval.month,
+ 532              	 .loc 1 206 0
+ 533 0014 1C4B     	 ldr r3,.L23
+ 534 0016 5B79     	 ldrb r3,[r3,#5]
+ 535 0018 C3F30303 	 ubfx r3,r3,#0,#4
+ 536 001c DBB2     	 uxtb r3,r3
+ 204:../LCD.c      **** 	sprintf(LCDBuffer,"%4d.%02d.%02d. %02d:%02d:%02d Temp:%+05.2f'C    ",
+ 537              	 .loc 1 204 0
+ 538 001e 9946     	 mov r9,r3
+ 207:../LCD.c      **** 			timeval.days,
+ 539              	 .loc 1 207 0
+ 540 0020 194B     	 ldr r3,.L23
+ 541 0022 DB78     	 ldrb r3,[r3,#3]
+ 542 0024 C3F30403 	 ubfx r3,r3,#0,#5
+ 543 0028 DBB2     	 uxtb r3,r3
+ 204:../LCD.c      **** 	sprintf(LCDBuffer,"%4d.%02d.%02d. %02d:%02d:%02d Temp:%+05.2f'C    ",
+ 544              	 .loc 1 204 0
+ 545 002a 9846     	 mov r8,r3
+ 208:../LCD.c      **** 			timeval.hours,
+ 546              	 .loc 1 208 0
+ 547 002c 164B     	 ldr r3,.L23
+ 548 002e 9B78     	 ldrb r3,[r3,#2]
+ 549 0030 C3F30403 	 ubfx r3,r3,#0,#5
+ 550 0034 DBB2     	 uxtb r3,r3
+ 204:../LCD.c      **** 			timeval.year,
+ 551              	 .loc 1 204 0
+ 552 0036 1E46     	 mov r6,r3
+ 209:../LCD.c      **** 			timeval.minutes,
+ 553              	 .loc 1 209 0
+ 554 0038 134B     	 ldr r3,.L23
+ 555 003a 5B78     	 ldrb r3,[r3,#1]
+ 556 003c C3F30503 	 ubfx r3,r3,#0,#6
+ 557 0040 DBB2     	 uxtb r3,r3
+ 204:../LCD.c      **** 			timeval.year,
+ 558              	 .loc 1 204 0
+ 559 0042 1D46     	 mov r5,r3
+ 210:../LCD.c      **** 			timeval.seconds,
+ 560              	 .loc 1 210 0
+ 561 0044 104B     	 ldr r3,.L23
+ 562 0046 1B78     	 ldrb r3,[r3]
+ 563 0048 C3F30503 	 ubfx r3,r3,#0,#6
+ 564 004c DBB2     	 uxtb r3,r3
+ 204:../LCD.c      **** 			timeval.year,
+ 565              	 .loc 1 204 0
+ 566 004e 1C46     	 mov r4,r3
+ 211:../LCD.c      **** 			S_LM76.temp.ave_value);
+ 567              	 .loc 1 211 0
+ 568 0050 0E4B     	 ldr r3,.L23+4
+ 569 0052 5B68     	 ldr r3,[r3,#4]
+ 204:../LCD.c      **** 			timeval.year,
+ 570              	 .loc 1 204 0
+ 571 0054 1846     	 mov r0,r3
+ 572 0056 FFF7FEFF 	 bl __aeabi_f2d
+ 573 005a 0246     	 mov r2,r0
+ 574 005c 0B46     	 mov r3,r1
+ 575 005e CDF80080 	 str r8,[sp]
+ 576 0062 0196     	 str r6,[sp,#4]
+ 577 0064 0295     	 str r5,[sp,#8]
+ 578 0066 0394     	 str r4,[sp,#12]
+ 579 0068 CDE90423 	 strd r2,[sp,#16]
+ 580 006c 0848     	 ldr r0,.L23+8
+ 581 006e 0949     	 ldr r1,.L23+12
+ 582 0070 5246     	 mov r2,r10
+ 583 0072 4B46     	 mov r3,r9
+ 584 0074 FFF7FEFF 	 bl sprintf
+ 212:../LCD.c      **** 	LCD_text(0,0,LCDBuffer);
+ 585              	 .loc 1 212 0
+ 586 0078 0020     	 movs r0,#0
+ 587 007a 0021     	 movs r1,#0
+ 588 007c 044A     	 ldr r2,.L23+8
+ 589 007e FFF7FEFF 	 bl LCD_text
+ 213:../LCD.c      **** 
+ 214:../LCD.c      **** 	//serve second line
+ 215:../LCD.c      **** 	//sprintf(LCDBuffer,"NTP accesses: %d, ",amount_of_ntp_accesses);
+ 216:../LCD.c      **** 	//LCD_text(1,0,LCDBuffer);
+ 217:../LCD.c      **** }
+ 590              	 .loc 1 217 0
+ 591 0082 BD46     	 mov sp,r7
+ 592              	.LCFI15:
+ 593              	 .cfi_def_cfa_register 13
+ 594              	 
+ 595 0084 BDE8F087 	 pop {r4,r5,r6,r7,r8,r9,r10,pc}
+ 596              	.L24:
+ 597              	 .align 2
+ 598              	.L23:
+ 599 0088 00000000 	 .word timeval
+ 600 008c 00000000 	 .word S_LM76
+ 601 0090 00000000 	 .word LCDBuffer
+ 602 0094 00000000 	 .word .LC0
+ 603              	 .cfi_endproc
+ 604              	.LFE338:
+ 606              	 .text
+ 607              	.Letext0:
+ 608              	 .file 2 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\machine\\_default_types.h"
+ 609              	 .file 3 "c:\\davev4-64bit\\dave-ide-4.4.2-64bit\\eclipse\\arm-gcc-49\\arm-none-eabi\\include\\stdint.h"
+ 610              	 .file 4 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc_gpio.h"
+ 611              	 .file 5 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc4_gpio.h"
+ 612              	 .file 6 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc_usic.h"
+ 613              	 .file 7 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/XMCLib/inc/xmc_rtc.h"
+ 614              	 .file 8 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Dave/Generated/BUS_IO/bus_io.h"
+ 615              	 .file 9 "../has_Misc.h"
+ 616              	 .file 10 "../LM76.h"
+ 617              	 .file 11 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Include/core_cm4.h"
+ 618              	 .file 12 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Libraries/CMSIS/Infineon/XMC4500_series/Include/system_XMC4500.h"
+ 619              	 .file 13 "C:/Workspaces/DAVE-4.4.2-64Bit/fh-kaernten/DAVE_M2M_1/XMC4500_MTSR_Start_002/Dave/Generated/BUS_IO/bus_io_extern.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 LCD.c
+                            *COM*:0000001c lm76
+                            *COM*:00000029 LCDBuffer
+    {standard input}:21     .text.LCD_init:00000000 $t
+    {standard input}:26     .text.LCD_init:00000000 LCD_init
+    {standard input}:219    .text.LCD_init:00000140 $d
+    {standard input}:224    .text.LCD_clearlines:00000000 $t
+    {standard input}:229    .text.LCD_clearlines:00000000 LCD_clearlines
+    {standard input}:280    .text.LCD_clearlines:00000048 $d
+    {standard input}:285    .text.LCD_text:00000000 $t
+    {standard input}:290    .text.LCD_text:00000000 LCD_text
+    {standard input}:486    .text.LCD_text:00000148 $d
+    {standard input}:492    .rodata:00000000 $d
+    {standard input}:496    .text.update_LCD:00000000 $t
+    {standard input}:501    .text.update_LCD:00000000 update_LCD
+    {standard input}:599    .text.update_LCD:00000088 $d
+                     .debug_frame:00000010 $d
+
+UNDEFINED SYMBOLS
+delay100us
+BUS_IO_Write
+BUS_IO_0
+__aeabi_f2d
+RTC_GetTime
+sprintf
+timeval
+S_LM76
